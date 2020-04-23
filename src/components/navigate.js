@@ -78,7 +78,6 @@ async function ToLogin(urlParam) {
         cookie.save('name', username);
         cookie.save('avatarUrl', avatar_url);
         cookie.save('token',token);
-        console.log(token);
     }
     return person_info;
 }
