@@ -6,4 +6,4 @@ before_install:
     -in id_rsa.enc -out ~/.ssh/id_rsa -d
   - chmod 600 ~/.ssh/id_rsa
 script:
-  - ssh root@106.12.27.104 -o StrictHostKeyChecking=no 'cd /root/Forum-Project && git remote update origin --prune && npm install && npm run build && \cp -rf build /root/front-end/ && cd /root/front-end && docker-compose stop && docker-compose up -d'
+  - ssh root@106.12.27.104 -o StrictHostKeyChecking=no 'cd /root/Forum-Project && git pull && npm install && npm run build && \cp -rf build /root/front-end/ && cd /root/front-end && docker-compose stop && docker-compose up -d'
