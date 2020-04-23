@@ -85,7 +85,7 @@ async sendEmail(emailAddress){
 //发送邮件
 applyEmail(){
    let email = this.state.email;
-   if(true||this.sendEmail(email)){
+   if(this.sendEmail(email)){
        this.count();
    }
 }
