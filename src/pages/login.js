@@ -30,6 +30,7 @@ class Login extends React.Component{
    }
    //调用后端邮箱api
   async submit(){
+     console.log(this.state);
      //非登录状态传输数据的方式:使用formData
      let formData = new FormData();
      formData.append('password',this.state.password);

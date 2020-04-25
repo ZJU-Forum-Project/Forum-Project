@@ -50,6 +50,11 @@ const notLogin = (
              </Link>
         </Menu.Item>
         <Menu.Item className="userCenterItemStyle">
+            <Link to="/personinfo">
+	     <Button className="e-button" type="primary"> 个 人 中 心 </Button>
+             </Link>
+        </Menu.Item>
+        <Menu.Item className="userCenterItemStyle">
             <a href={loginGithubUrl}><Button className="e-button" type="primary">GitHub登录</Button></a>
         </Menu.Item>
         <Menu.Item className="userCenterItemStyle">
@@ -78,6 +83,7 @@ async function ToLogin(urlParam) {
         cookie.save('name', username);
         cookie.save('avatarUrl', avatar_url);
         cookie.save('token',token);
+        console.log(token);
     }
     return person_info;
 }

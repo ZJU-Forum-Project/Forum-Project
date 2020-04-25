@@ -31,6 +31,7 @@ constructor(props){
 //提交函数
 async submit(){
    let formData = new FormData();
+   console.log(this.state)
    //非登录状态传输数据的方式
    formData.append('email',this.state.email);
    formData.append('name',this.state.name);
@@ -39,6 +40,7 @@ async submit(){
    let register_return=(await axios.post('/api/register',formData)).data;//调用后端register接口，返回消息
    let success=register_return.state;
    if(success){
+      console.log(register_return);
       alert(register_return.message);//返回信息
       //加入cookie给跳转页面（token表示已登录)
       cookie.save("token",register_return.authorizeToken);
@@ -83,7 +85,7 @@ async sendEmail(emailAddress){
 //发送邮件
 applyEmail(){
    let email = this.state.email;
-   if(this.sendEmail(email)){
+   if(true||this.sendEmail(email)){
        this.count();
    }
 }
