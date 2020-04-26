@@ -99,6 +99,7 @@ class modifyinfo extends React.Component{
 
     //向后端发送token，接收InfoMessage类对象。若查询成功则将各项值加载到组件的state中，否则弹窗提示原因。
     async load_info(){
+        console.log("load_info() is called");
 
         //读入cookie中的token
         let token=cookie.load('token');
