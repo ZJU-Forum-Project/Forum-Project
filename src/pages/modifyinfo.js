@@ -99,14 +99,19 @@ class modifyinfo extends React.Component{
 
     //向后端发送token，接收InfoMessage类对象。若查询成功则将各项值加载到组件的state中，否则弹窗提示原因。
     async load_info(){
+
         //读入cookie中的token
         let token=cookie.load('token');
+        console.log("token: "+token);
+
         let formData = new FormData();
         //非登录状态传输数据的方式
-        formData.append('token',token);
+        formData.append('authorizeToken',token);
 
         //调用后端queryinfo接口，发送token,返回InfoMessage类对象
         let query_return=(await axios.post('/api/queryinfo',formData)).data;
+
+        console.log("%o",query_return);
         
         //如果查询失败，弹窗提示原因
         if(query_return.data.state == false){
@@ -133,12 +138,17 @@ class modifyinfo extends React.Component{
                 signature: query_return.data.signature,
             }); 
         }
+        console.log("Query Success!");
+        console.log("%o",this.state);
+
     }
 
 
 
     //点击提交时，调用后端api，将修改后的数据传给服务器
     async submit(){
+        console.log("submit() is called");
+
         let formData = new FormData();
 
         //读入cookie中的token
@@ -160,7 +170,7 @@ class modifyinfo extends React.Component{
         let signature=this.state.signature;
         
         //非登录状态传输数据的方式
-        formData.append('token',token);
+        formData.append('authorizeToken',token);
         formData.append('birth',birth);
         formData.append('birth_hidden',birth_hidden);
         formData.append('gender',gender);
@@ -175,8 +185,12 @@ class modifyinfo extends React.Component{
         formData.append('organization_hidden',organization_hidden);
         formData.append('signature',signature);
 
+        console.log("%o",formData);
+
         //调用后端queryinfo接口，发送信息,返回InfoMessage类对象
         let edit_return=(await axios.post('/api/editinfo',formData)).data;
+
+        console.log("%o",edit_return);
         
         //如果查询失败，弹窗提示原因
         if(edit_return.data.state == false){
@@ -191,7 +205,10 @@ class modifyinfo extends React.Component{
 
     //在渲染前调用
     componentWillMount(){
+        console.log("componentWillMount() is called");
+
         if(cookie.load("token")){
+            console.log("call load_info()");
             this.load_info(); 
         }
     }

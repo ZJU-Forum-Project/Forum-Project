@@ -27,21 +27,24 @@ class personinfo extends React.Component{
         }
 
         //绑定需要调用的async函数
-       // this.handleChange=this.handleChange.bind(this);
         this.load_info=this.load_info.bind(this);
 
     }
     
     //向后端发送token，接收InfoMessage类对象。若查询成功则将各项值加载到组件的state中，否则弹窗提示原因。
     async load_info(){
+        console.log("load_info() is called");
+
         //读入cookie中的token
         let token=cookie.load('token');
+        console.log("token: "+token);
         let formData = new FormData();
         //非登录状态传输数据的方式
-        formData.append('token',token);
+        formData.append('authorizeToken',token);
 
         //调用后端queryinfo接口，发送token,返回InfoMessage类对象
         let query_return=(await axios.post('/api/queryinfo',formData)).data;
+        console.log("%o",query_return);
         
         //如果查询失败，弹窗提示原因
         if(query_return.data.state == false){
@@ -61,6 +64,9 @@ class personinfo extends React.Component{
                 organization: query_return.data.organization,
                 signature: query_return.data.signature
             }); 
+            console.log("Query Success!");
+            console.log("%o",this.state);
+
         }
         
         
@@ -70,7 +76,10 @@ class personinfo extends React.Component{
 
     //在渲染前调用
     componentWillMount(){
+        console.log("componentWillMount() is called");
+        
         if(cookie.load("token")){
+            console.log("call load_info()");
             this.load_info(); 
         }
     }
