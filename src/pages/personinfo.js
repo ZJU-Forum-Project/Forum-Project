@@ -106,7 +106,7 @@ class personinfo extends React.Component{
                     <Breadcrumb style={{margin: '16px 0'}}>
                         <Breadcrumb.Item>Home</Breadcrumb.Item>
                     </Breadcrumb>
-                    <div className="site-layout-content"style={{textAlign: 'center'}}>
+                    <div className="site-layout-content"style={{textAlign: 'center',fontSize:'30px'}}>
                         个人信息
                         <br/><br/><br/>
                     <Form

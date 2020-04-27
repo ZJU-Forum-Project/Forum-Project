@@ -406,7 +406,7 @@ class modifyinfo extends React.Component{
                                 name="real_name_hidden"
                                 selectedValue={this.state.real_name_hidden}
                                 onChange={this.handleRealNameHiddenChange}>
-                                <Radio value={1} style={{margin: '0px 0px 0px -700px'}}/>是
+                                <Radio value={1} style={{margin: '0px 0px 0px -728px'}}/>是
                                 <Radio value={0} style={{margin: '0px 0px 0px 40px'}}/>否
                             </RadioGroup>
                         </Form.Item>

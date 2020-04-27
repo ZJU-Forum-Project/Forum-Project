@@ -17,7 +17,7 @@ const loginGithubUrl = "https://github.com/login/oauth/authorize?client_id=d2512
 const userCenter = (
     <Menu theme="dark">
         <Menu.Item className="userCenterItemStyle">
-            <a target="_blank" rel="noopener noreferrer" href="http://www.alipay.com/">
+            <a target="_blank" rel="noopener noreferrer" href="http://106.12.27.104/personinfo">
                 个人中心
             </a>
         </Menu.Item>
@@ -31,6 +31,7 @@ const userCenter = (
                 回复我的
             </a>
         </Menu.Item>
+
     </Menu>
 );
 
@@ -46,21 +47,18 @@ const notLogin = (
         </Menu.Item>
         <Menu.Item className="userCenterItemStyle">
             <Link to="/login">
-	     <Button className="e-button" type="primary"> 普 通 登 陆 </Button>
+	     <Button className="e-button" type="primary"> 普 通 登 录 </Button>
              </Link>
         </Menu.Item>
+        
+        <Menu.Item className="userCenterItemStyle">
+            <a href={loginGithubUrl}><Button className="e-button" type="primary">GitHub登录</Button></a>
+        </Menu.Item>
+
         <Menu.Item className="userCenterItemStyle">
             <Link to="/personinfo">
 	     <Button className="e-button" type="primary"> 个 人 中 心 </Button>
              </Link>
-        </Menu.Item>
-        <Menu.Item className="userCenterItemStyle">
-            <a href={loginGithubUrl}><Button className="e-button" type="primary">GitHub登录</Button></a>
-        </Menu.Item>
-        <Menu.Item className="userCenterItemStyle">
-            <Button className="e-button" type="primary" onClick={
-                function(){cookie.remove('name');cookie.remove('avatarUrl');cookie.remove('token');}
-                }>注销</Button>
         </Menu.Item>
     </Menu>
 );
