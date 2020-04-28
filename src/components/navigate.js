@@ -31,6 +31,15 @@ const userCenter = (
                 回复我的
             </a>
         </Menu.Item>
+        <Menu.Item className="userCenterItemStyle">
+            <a target="_blank" rel="noopener noreferrer" href="http://106.12.27.104"
+                onClick={
+                function(){cookie.remove('name');cookie.remove('avatarUrl');cookie.remove('token');}
+                } 
+            >
+                注销
+            </a>
+        </Menu.Item>
 
     </Menu>
 );

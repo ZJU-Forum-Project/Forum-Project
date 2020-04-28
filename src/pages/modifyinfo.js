@@ -247,12 +247,16 @@ class modifyinfo extends React.Component{
         formData.append('organization',organization);
         formData.append('organization_hidden',organization_hidden);
         formData.append('signature',signature);
-
-        console.log("%o",formData);
+        
+        console.log("Show each var[a,b] in formData.entries()");
+        for (var [a, b] of formData.entries()) {
+            console.log(a, b);
+         }
 
         //调用后端queryinfo接口，发送信息,返回InfoMessage类对象
         let edit_return=(await axios.post('/api/editinfo',formData)).data;
 
+        console.log("Show edit_return:");
         console.log("%o",edit_return);
         
         //如果查询失败，弹窗提示原因

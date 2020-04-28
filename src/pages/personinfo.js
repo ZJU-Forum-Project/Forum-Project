@@ -29,25 +29,11 @@ class personinfo extends React.Component{
 
         //绑定需要调用的async函数
         this.load_info=this.load_info.bind(this);
-        this.handleInputChange=this.handleInputChange.bind(this);
-        this.handleGenderChange=this.handleGenderChange(this);
+
 
     }
     
-    //当输入框内的值发生改变时，触发此函数
-    async handleInputChange(event){
-        const target = event.target;
-        const value =  target.value;
-        const name = target.name;
-        //由于多个组件需要监听Onchange，此处基于name修改对应的值
-        this.setState({
-            [name]: value    });
-    }
-        
-    //当以下单选框选择发生改变时，触发相应函数
-    async handleGenderChange(value){
-        this.setState({gender: value});
-    }
+
 
 
 
@@ -167,87 +153,101 @@ class personinfo extends React.Component{
                     <Breadcrumb style={{margin: '16px 0'}}>
                         <Breadcrumb.Item>Home</Breadcrumb.Item>
                     </Breadcrumb>
+
                     <div className="site-layout-content"style={{textAlign: 'center',fontSize:'30px'}}>
                         个人信息
-                        <br/><br/><br/>
+                    <br/><br/><br/>
                     <Form
                         {...layout}
                         name="basic"
                         initialValues={{ remember: true }}
                     >
                         <Form.Item
+                            style={{margin: '16px 100px 15px -200px'}}
                             label="Email"
                             name="email"
                         >
-                            <Input type="text" readonly="readonly" placeholder={iemail} />                
+                            <Input type="text" 
+                                placeholder={iemail}
+                                readonly="readonly"/>
                         </Form.Item>
-                
+
                         <Form.Item
+                            style={{margin: '16px 100px 15px -200px'}}
                             label="Birthday"
                             name="birthday"
                         >
-                            <DatePicker placeholder={ibirthday.toLocaleDateString()} disabled/>
-                        </Form.Item>
-
-                        <Form.Item
-                            label="Gender"
-                            name="gender"
-                        >
-                            <RadioGroup 
-                                name="gender"
-                                selectedValue={this.state.gender}
-                                disabled>
-                                <Radio value="男" />Man
-                                <Radio value="女" />Woman
-                            </RadioGroup>
                             
-
+                            <DatePicker  placeholder={ibirthday.toLocaleDateString()} disabled/>
                         </Form.Item>
 
                         <Form.Item
+                            style={{margin: '16px 100px 15px -200px'}}
+                            label="Gender"
+                        >
+                            
+                        <RadioGroup 
+                            name="gender"
+                            selectedValue={this.state.gender}
+                            disabled>
+                            <Radio value="男" />Man
+                            <Radio value="女" />Woman
+                        </RadioGroup>
+
+
+                            
+                        </Form.Item>
+
+                        <Form.Item
+                            style={{margin: '16px 100px 15px -200px'}}
                             label="Phone"
                             name="phone"
                         >
-                            <Input type="text" readonly="readonly" placehoder={iphone} onChange={()=>this.handleInputChange}/>
+                            <Input type="text" placeholder={iphone} readonly="readonly" />
                         </Form.Item>
 
                         <Form.Item
+                            style={{margin: '16px 100px 15px -200px'}}
                             label="Real_name"
                             name="real_name"
                         >
-                            <Input type="text"  readonly="readonly" placehoder={ireal_name} onChange={()=>this.handleInputChange}/>
+                            <Input type="text" placeholder={ireal_name} readonly="readonly"/>
                         </Form.Item>
 
                         <Form.Item
+                            style={{margin: '16px 100px 15px -200px'}}
                             label="Hometown"
                             name="hometown"
                         >
-                            <Input type="text" readonly="readonly" placehoder={ihometown} onChange={()=>this.handleInputChange}/>
+                            <Input type="text" placeholder={ihometown} readonly="readonly"/>
                         </Form.Item>
-
+                        
                         <Form.Item
+                            style={{margin: '16px 100px 15px -200px'}}
                             label="Organization"
                             name="organization"
                         >
-                            <Input type="text" readonly="readonly" placehoder={iorganization} onChange={()=>this.handleInputChange}/>
+                            <Input type="text" placeholder={iorganization} readonly="readonly"/>
                         </Form.Item>
 
                         <Form.Item
+                        style={{margin: '16px 100px 15px -200px'}}
                             label="Signature"
                             name="signature"
                         >
-                            <Input type="textarea" readonly="readonly" placeholder={isignature} onChange={()=>this.handleInputChange}/>
+                            <Input type="textarea" placeholder={isignature} readonly="readonly"/>
                         </Form.Item>
-
+                        
+                        
                         <Link to="/modifyinfo">
                             <Button className="e-button" type="primary"  >
                                 修改个人信息
                             </Button>
                         </Link>
-                
-                
+
                     </Form>
                     </div>
+
                 </Content>
                 </Layout>
             
