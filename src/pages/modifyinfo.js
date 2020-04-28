@@ -19,7 +19,7 @@ class modifyinfo extends React.Component{
            email_hidden:'',
            birthday:new Date(1900,1,1,0,0,0),     //切记Date是引用类型
            birthday_hidden:0,
-           gender:'',
+           gender:"男",
            gender_hidden:0,
            phone:'',
            phone_hidden:0,
@@ -107,40 +107,101 @@ class modifyinfo extends React.Component{
 
         let formData = new FormData();
         //非登录状态传输数据的方式
-        formData.append('authorizeToken',token);
+        formData.append('token',token);
+        formData.append('Authorization',token);
 
         //调用后端queryinfo接口，发送token,返回InfoMessage类对象
         let query_return=(await axios.post('/api/queryinfo',formData)).data;
-
+        console.log("Show query_return:");
         console.log("%o",query_return);
         
         //如果查询失败，弹窗提示原因
-        if(query_return.data.state == false){
-           alert(query_return.data.message);
+        if(query_return.state == false){
+           alert(query_return.message);
         }
         
         //如果查询成功
         else{
+            console.log("Query Success!");
+
             //更新state
-            this.setState({
-                email: query_return.data.email,
-                birthday: query_return.data.birth,
-                birthday_hidden:query_return.data.birth_hidden,
-                gender: query_return.data.gender,
-                gender_hidden:query_return.data.gender_hidden,
-                phone: query_return.data.phone,
-                phone_hidden:query_return.data.phone_hidden,
-                real_name: query_return.data.real_name,
-                real_name_hidden: query_return.data.real_name_hidden,
-                hometown: query_return.data.hometown,
-                hometown_hidden: query_return.data.hometown_hidden,
-                organization: query_return.data.organization,
-                organization_hidden: query_return.data.organization_hidden,
-                signature: query_return.data.signature,
-            }); 
+            if(query_return.email!=null){
+                this.setState({
+                    email: query_return.email
+                }); 
+            }
+            if(query_return.birth!=null){
+                this.setState({
+                    birthday: query_return.birth
+                }); 
+            } 
+            if(query_return.birth_hidden!=null){
+                this.setState({
+                    birthday_hidden: query_return.birth_hidden
+                }); 
+            } 
+            if(query_return.gender!=null && query_return.gender!=""){
+                this.setState({
+                    gender: query_return.gender
+                }); 
+            } 
+            if(query_return.gender_hidden!=null){
+                this.setState({
+                    gender_hidden: query_return.gender_hidden
+                }); 
+            } 
+            if(query_return.phone!=null){
+                this.setState({
+                    phone: query_return.phone
+                }); 
+            } 
+            if(query_return.phone_hidden!=null){
+                this.setState({
+                    phone_hidden: query_return.phone_hidden
+                }); 
+            } 
+            if(query_return.real_name!=null){
+                this.setState({
+                    real_name: query_return.real_name
+                }); 
+            } 
+            if(query_return.real_name_hidden!=null){
+                this.setState({
+                    real_name_hidden: query_return.real_name_hidden
+                }); 
+            } 
+            if(query_return.hometown!=null){
+                this.setState({
+                    hometown: query_return.hometown
+                }); 
+            } 
+            if(query_return.hometown_hidden!=null){
+                this.setState({
+                    hometown_hidden: query_return.hometown_hidden
+                }); 
+            } 
+            if(query_return.organization!=null){
+                this.setState({
+                    organization: query_return.organization
+                }); 
+            } 
+            if(query_return.organization_hidden!=null){
+                this.setState({
+                    organization_hidden: query_return.organization_hidden
+                }); 
+            } 
+            if(query_return.signature!=null){
+                this.setState({
+                    signature: query_return.signature
+                }); 
+            } 
+
+            console.log("information loaded!")
+            console.log("Show this.state:");
+            console.log("%o",this.state);
+ 
         }
-        console.log("Query Success!");
-        console.log("%o",this.state);
+        
 
     }
 
@@ -156,7 +217,7 @@ class modifyinfo extends React.Component{
         let token=cookie.load('token');
         //读入state中的数据
         let email=this.state.email;
-        var birth=this.state.birthday;
+        var birth=this.state.birthday.toLocaleDateString();
         let birth_hidden=this.state.birthday_hidden;
         let gender=this.state.gender;
         let gender_hidden=this.state.gender_hidden;
@@ -171,7 +232,8 @@ class modifyinfo extends React.Component{
         let signature=this.state.signature;
         
         //非登录状态传输数据的方式
-        formData.append('authorizeToken',token);
+        formData.append('token',token);
+        formData.append('Authorization',token);
         formData.append('birth',birth);
         formData.append('birth_hidden',birth_hidden);
         formData.append('gender',gender);
@@ -194,8 +256,8 @@ class modifyinfo extends React.Component{
         console.log("%o",edit_return);
         
         //如果查询失败，弹窗提示原因
-        if(edit_return.data.state == false){
-            alert(edit_return.data.message);
+        if(edit_return.state == false){
+            alert(edit_return.message);
          }
          
          //如果查询成功

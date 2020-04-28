@@ -6,6 +6,7 @@ import { Button,Form, Input, DatePicker,Breadcrumb} from 'antd';
 import axios from 'axios';
 import cookie from 'react-cookies';
 import {Link} from 'react-router-dom';
+import {RadioGroup, Radio} from 'react-radio-group'
 
 const {Footer,Content} = Layout;
 const tailLayout = {wrapperCol: { offset: 8, span: 16 },};
@@ -17,7 +18,7 @@ class personinfo extends React.Component{
          this.state = {
            email:'',
            birthday:new Date(1900,1,1),  //切记Date是引用类型
-           gender:'',
+           gender:"男",
            phone:'',
            real_name:'',
            hometown:'',
@@ -28,9 +29,28 @@ class personinfo extends React.Component{
 
         //绑定需要调用的async函数
         this.load_info=this.load_info.bind(this);
+        this.handleInputChange=this.handleInputChange.bind(this);
+        this.handleGenderChange=this.handleGenderChange(this);
 
     }
     
+    //当输入框内的值发生改变时，触发此函数
+    async handleInputChange(event){
+        const target = event.target;
+        const value =  target.value;
+        const name = target.name;
+        //由于多个组件需要监听Onchange，此处基于name修改对应的值
+        this.setState({
+            [name]: value    });
+    }
+        
+    //当以下单选框选择发生改变时，触发相应函数
+    async handleGenderChange(value){
+        this.setState({gender: value});
+    }
+
+
+
     //向后端发送token，接收InfoMessage类对象。若查询成功则将各项值加载到组件的state中，否则弹窗提示原因。
     async load_info(){
         console.log("load_info() is called");
@@ -40,31 +60,67 @@ class personinfo extends React.Component{
         console.log("token: "+token);
         let formData = new FormData();
         //非登录状态传输数据的方式
-        formData.append('authorizeToken',token);
+        formData.append('token',token);
+        formData.append('Authorization',token);
 
         //调用后端queryinfo接口，发送token,返回InfoMessage类对象
         let query_return=(await axios.post('/api/queryinfo',formData)).data;
+        console.log("Show query_return:");
         console.log("%o",query_return);
         
         //如果查询失败，弹窗提示原因
-        if(query_return.data.state == false){
-           alert(query_return.data.message);
+        if(query_return.state == false){
+           alert(query_return.message);
         }
         
         //如果查询成功
         else{
-            //更新state
-            this.setState({
-                email: query_return.data.email,
-                birthday: query_return.data.birth,
-                gender: query_return.data.gender,
-                phone: query_return.data.phone,
-                real_name: query_return.data.real_name,
-                hometown: query_return.data.hometown,
-                organization: query_return.data.organization,
-                signature: query_return.data.signature
-            }); 
             console.log("Query Success!");
+
+            //更新state
+            if(query_return.email!=null){
+                this.setState({
+                    email: query_return.email
+                }); 
+            }
+            if(query_return.birth!=null){
+                this.setState({
+                    birthday: query_return.birth
+                }); 
+            } 
+            if(query_return.gender!=null&&query_return.gender!=""){
+                this.setState({
+                    gender: query_return.gender
+                }); 
+            } 
+            if(query_return.phone!=null){
+                this.setState({
+                    phone: query_return.phone
+                }); 
+            } 
+            if(query_return.real_name!=null){
+                this.setState({
+                    real_name: query_return.real_name
+                }); 
+            } 
+            if(query_return.hometown!=null){
+                this.setState({
+                    hometown: query_return.hometown
+                }); 
+            } 
+            if(query_return.organization!=null){
+                this.setState({
+                    organization: query_return.organization
+                }); 
+            } 
+            if(query_return.signature!=null){
+                this.setState({
+                    signature: query_return.signature
+                }); 
+            } 
+
+            console.log("information loaded!")
+            console.log("Show this.state:");
             console.log("%o",this.state);
 
         }
@@ -85,6 +141,9 @@ class personinfo extends React.Component{
     }
     
     render() {
+
+        console.log("render() is called");
+
         //若用户已登录
         //以下两行代码：为方便前端调试，暂时使条件判断失效
         //if(1){
@@ -98,6 +157,8 @@ class personinfo extends React.Component{
             var ihometown = this.state.hometown;
             var iorganization = this.state.organization;
             var isignature = this.state.signature;
+
+            console.log("iphone=%s",iphone);
 
             return(
                 <Layout className="layout">
@@ -118,24 +179,27 @@ class personinfo extends React.Component{
                             label="Email"
                             name="email"
                         >
-                            <Input type="text" readonly="readonly" value={iemail} />                
+                            <Input type="text" readonly="readonly" placeholder={iemail} />                
                         </Form.Item>
                 
                         <Form.Item
                             label="Birthday"
                             name="birthday"
                         >
-                            <DatePicker value={ibirthday} value={ibirthday}/>
+                            <DatePicker placeholder={ibirthday.toLocaleDateString()} disabled/>
                         </Form.Item>
 
                         <Form.Item
                             label="Gender"
                             name="gender"
                         >
-                            <input type="radio" name='gender' value="男" disabled 
-                                checked={igender=="男"?true:false}/>Man
-                            <input type="radio" name='gender' value="女" disabled
-                                checked={igender=="女"?true:false}/>Woman
+                            <RadioGroup 
+                                name="gender"
+                                selectedValue={this.state.gender}
+                                disabled>
+                                <Radio value="男" />Man
+                                <Radio value="女" />Woman
+                            </RadioGroup>
                             
 
                         </Form.Item>
@@ -144,35 +208,35 @@ class personinfo extends React.Component{
                             label="Phone"
                             name="phone"
                         >
-                            <Input type="text" readonly="readonly" value={iphone}/>
+                            <Input type="text" readonly="readonly" placehoder={iphone} onChange={()=>this.handleInputChange}/>
                         </Form.Item>
 
                         <Form.Item
                             label="Real_name"
                             name="real_name"
                         >
-                            <Input type="text"  readonly="readonly" value={ireal_name}/>
+                            <Input type="text"  readonly="readonly" placehoder={ireal_name} onChange={()=>this.handleInputChange}/>
                         </Form.Item>
 
                         <Form.Item
                             label="Hometown"
                             name="hometown"
                         >
-                            <Input type="text" readonly="readonly"value={ihometown}/>
+                            <Input type="text" readonly="readonly" placehoder={ihometown} onChange={()=>this.handleInputChange}/>
                         </Form.Item>
 
                         <Form.Item
                             label="Organization"
                             name="organization"
                         >
-                            <Input type="text" readonly="readonly" value={iorganization}/>
+                            <Input type="text" readonly="readonly" placehoder={iorganization} onChange={()=>this.handleInputChange}/>
                         </Form.Item>
 
                         <Form.Item
                             label="Signature"
                             name="signature"
                         >
-                            <Input type="textarea" readonly="readonly" value={isignature}/>
+                            <Input type="textarea" readonly="readonly" placeholder={isignature} onChange={()=>this.handleInputChange}/>
                         </Form.Item>
 
                         <Link to="/modifyinfo">
