@@ -6,6 +6,8 @@ import axios from 'axios';
 import cookie from 'react-cookies';
 import {Link} from 'react-router-dom';
 import {RadioGroup, Radio} from 'react-radio-group'
+import { configConsumerProps } from 'antd/lib/config-provider';
+import ReactDOM from 'react-dom';
 
 const {Footer,Content} = Layout;
 const tailLayout = {wrapperCol: { offset: 8, span: 16 },};
@@ -18,6 +20,7 @@ class modifyinfo extends React.Component{
            email:'defaultemail@default.com',
            email_hidden:'',
            birthday:new Date(1900,1,1,0,0,0),     //切记Date是引用类型
+           birthday_string:"",
            birthday_hidden:0,
            gender:"男",
            gender_hidden:0,
@@ -36,6 +39,8 @@ class modifyinfo extends React.Component{
 
         //绑定需要调用的async函数
         this.handleInputChange=this.handleInputChange.bind(this);
+      //  this.handleBirthdayChange=this.handleBirthdayChange.bind(this);
+      //  this.handleBirthdayOk=this.handleBirthdayOk.bind(this);
         this.handleGenderChange=this.handleGenderChange.bind(this);
         this.handleBirthdayHiddenChange=this.handleBirthdayHiddenChange.bind(this);
         this.handleGenderHiddenChange=this.handleGenderHiddenChange.bind(this);
@@ -51,14 +56,33 @@ class modifyinfo extends React.Component{
 
         //当输入框内的值发生改变时，触发此函数
         async handleInputChange(event){
-            const target = event.target;
-            const value =  target.value;
-            const name = target.name;
+
+            console.log("handleInputChange(event) is called");
+            console.log("Show event.target");
+            console.log("%o",event.target);
+
             //由于多个组件需要监听Onchange，此处基于name修改对应的值
-            this.setState({
-              [name]: value    });
+            this.setState({[event.target.name]: event.target.value});
         }
         
+        handleBirthdayChange=(value, dateString)=>{
+            console.log("handleBirthdayChange(date,datestring) is called");
+            this.setState({birthday: value,
+                           birthday_string:dateString });
+            console.log("Show this.state.birthday:");
+            console.log(this.state.birthday);
+            console.log("Show this.state.birthday_string:");
+            console.log("%o",this.state.birthday_string);
+                           
+        }
+        handleBirthdayOk=(value)=>{
+            console.log("handleBirthdayOk(value) is called");
+            this.setState({birthday: value });
+            console.log("Show this.state.birthday:");
+            console.log(this.state.birthday);
+                           
+        }
+
         //当以下单选框选择发生改变时，触发相应函数
         async handleGenderChange(value){
             this.setState({gender: value});
@@ -217,7 +241,7 @@ class modifyinfo extends React.Component{
         let token=cookie.load('token');
         //读入state中的数据
         let email=this.state.email;
-        var birth=this.state.birthday.toLocaleDateString();
+        var birth=this.state.birthday_string;
         let birth_hidden=this.state.birthday_hidden;
         let gender=this.state.gender;
         let gender_hidden=this.state.gender_hidden;
@@ -282,6 +306,8 @@ class modifyinfo extends React.Component{
 
     render() {
 
+        console.log("render() is called");
+
         //若用户已登录
         //以下两行代码：为方便前端进行界面，暂时使条件判断失效
         //if(1){
@@ -335,11 +361,15 @@ class modifyinfo extends React.Component{
 
                         <Form.Item
                             style={{margin: '16px 100px 15px -200px'}}
-                            label="Birthday"
+                            label="Birthday" 
                             name="birthday"
                         >
                             
-                            <DatePicker  placeholder={ibirthday.toLocaleDateString()} onChange={()=>this.handleInputChange}/>
+                            <DatePicker name="birthday" placeholder={ibirthday} 
+                                        value={ibirthday}
+                                        onChange={this.handleBirthdayChange}
+                                        onOk = {this.handleBirthdayOk}
+                            />
                         </Form.Item>
 
                         <Form.Item
@@ -367,7 +397,7 @@ class modifyinfo extends React.Component{
                                 max: 50, message: '电话号码不能多于50个字符!' 
                             }]}
                         >
-                            <Input type="text" placeholder={iphone} onChange={this.handleInputChange}/>
+                            <Input name="phone" type="text" placeholder={iphone} value={iphone} onChange={this.handleInputChange}/>
                         </Form.Item>
 
                         <Form.Item
@@ -378,7 +408,7 @@ class modifyinfo extends React.Component{
                                 max: 50, message: '真实姓名不能多于50个字符!' 
                             }]}
                         >
-                            <Input type="text" placeholder={ireal_name} onChange={this.handleInputChange}/>
+                            <Input name="real_name" type="text" placeholder={ireal_name} value={this.state.real_name} onChange={this.handleInputChange}/>
                         </Form.Item>
 
                         <Form.Item
@@ -389,7 +419,7 @@ class modifyinfo extends React.Component{
                                 max: 50, message: '户籍所在地不能多于50个字符!' 
                             }]}
                         >
-                            <Input type="text" placeholder={ihometown} onChange={this.handleInputChange}/>
+                            <Input name="hometown" type="text" placeholder={ihometown} value={ihometown} onChange={this.handleInputChange}/>
                         </Form.Item>
                         
                         <Form.Item
@@ -400,7 +430,7 @@ class modifyinfo extends React.Component{
                                 max: 50, placeholder: '组织名称不能多于50个字符!' 
                             }]}
                         >
-                            <Input type="text" placeholder={iorganization} onChange={this.handleInputChange}/>
+                            <Input name="organization" type="text" placeholder={iorganization} value={iorganization} onChange={this.handleInputChange}/>
                         </Form.Item>
 
                         <Form.Item
@@ -411,7 +441,7 @@ class modifyinfo extends React.Component{
                                 max: 200, message: '个性签名不能多于200个字符!' 
                             }]}
                         >
-                            <Input type="textarea" placeholder={isignature} onChange={this.handleInputChange}/>
+                            <Input name="signature" type="textarea" placeholder={isignature} value={isignature} onChange={this.handleInputChange}/>
                         </Form.Item>
 
                     </Form>
@@ -540,4 +570,7 @@ class modifyinfo extends React.Component{
         }
     }
 }
+
+ReactDOM.render(<modifyinfo />, document.getElementById('root'));
+
 export default modifyinfo

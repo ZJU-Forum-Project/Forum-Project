@@ -178,7 +178,7 @@ class personinfo extends React.Component{
                             name="birthday"
                         >
                             
-                            <DatePicker  placeholder={ibirthday.toLocaleDateString()} disabled/>
+                            <DatePicker  placeholder={ibirthday} disabled/>
                         </Form.Item>
 
                         <Form.Item
