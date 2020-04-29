@@ -37,10 +37,10 @@ class modifyinfo extends React.Component{
            token:'',
         }
 
-        //绑定需要调用的async函数
+        //绑定this指针（可以使用箭头函数来替代）
         this.handleInputChange=this.handleInputChange.bind(this);
-      //  this.handleBirthdayChange=this.handleBirthdayChange.bind(this);
-      //  this.handleBirthdayOk=this.handleBirthdayOk.bind(this);
+      //  this.handleBirthdayChange=this.handleBirthdayChange.bind(this);//使用箭头函数，无需绑定
+      //  this.handleBirthdayOk=this.handleBirthdayOk.bind(this); //使用箭头函数，无需绑定
         this.handleGenderChange=this.handleGenderChange.bind(this);
         this.handleBirthdayHiddenChange=this.handleBirthdayHiddenChange.bind(this);
         this.handleGenderHiddenChange=this.handleGenderHiddenChange.bind(this);
@@ -55,7 +55,7 @@ class modifyinfo extends React.Component{
 
 
         //当输入框内的值发生改变时，触发此函数
-        async handleInputChange(event){
+        handleInputChange(event){
 
             console.log("handleInputChange(event) is called");
             console.log("Show event.target");
@@ -84,28 +84,28 @@ class modifyinfo extends React.Component{
         }
 
         //当以下单选框选择发生改变时，触发相应函数
-        async handleGenderChange(value){
+        handleGenderChange(value){
             this.setState({gender: value});
         }
-        async handleBirthdayHiddenChange(value){
+        handleBirthdayHiddenChange(value){
             this.setState({birthday_hidden: value});
         }
-        async handleGenderHiddenChange(value){
+        handleGenderHiddenChange(value){
             this.setState({gender_hidden: value});
         }
-        async handlePhoneHiddenChange(value){
+        handlePhoneHiddenChange(value){
             this.setState({phone_hidden: value});
         }
-        async handleRealNameHiddenChange(value){
+        handleRealNameHiddenChange(value){
             this.setState({real_name_hidden: value});
         }
-        async handleHometownHiddenChange(value){
+        handleHometownHiddenChange(value){
             this.setState({hometown_hidden: value});
         }
-        async handleOrganizationHiddenChange(value){
+        handleOrganizationHiddenChange(value){
             this.setState({organization_hidden: value});
         }
-        async handleSignatureHiddenChange(value){
+        handleSignatureHiddenChange(value){
             this.setState({signature_hidden: value});
         }
     

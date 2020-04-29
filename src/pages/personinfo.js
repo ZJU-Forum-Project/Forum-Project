@@ -27,7 +27,7 @@ class personinfo extends React.Component{
            token:'',//token(若有)存储在本地cookie中
         }
 
-        //绑定需要调用的async函数
+        //绑定this指针（可以使用箭头函数来替代）
         this.load_info=this.load_info.bind(this);
 
 
