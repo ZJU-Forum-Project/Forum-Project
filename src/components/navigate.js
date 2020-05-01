@@ -6,6 +6,7 @@ import Text from "antd/es/typography/Text";
 import axios from 'axios';
 import cookie from 'react-cookies';
 import {Link} from 'react-router-dom';
+import SubMenu from 'antd/lib/menu/SubMenu';
 const {Search} = Input;
 const {Header} = Layout;
 const loginGithubUrl = "https://github.com/login/oauth/authorize?client_id=d25125e25fe36054a4de&redirect_uri=http://106.12.27.104/callback&scope=user&state=1";
@@ -121,7 +122,27 @@ class NavigateBar extends React.Component {
                     <Search placeholder="搜索问题或找人" onSearch={value => console.log(value)} enterButton/>
                 </div>
                 <Menu size="small" theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
-                    <Menu.Item className="menuItemStyle" key="1">版面列表</Menu.Item>
+                    <SubMenu className="menuItemStyle" key="1" title="版面列表">
+                        <Menu.Item key="sub1">
+                            <Link to="/board/emotion">
+                            <Button type="dashed">情感</Button>
+                            </Link>
+                        </Menu.Item>
+                        <Menu.Item key="sub2">
+                            <Link to="/board/campus">
+                            <Button type="dashed">校园信息</Button>
+                            </Link></Menu.Item>
+                        <Menu.Item key="sub3">
+                            <Link to="/board/internship">
+                            <Button type="dashed">实习信息</Button>
+                            </Link></Menu.Item>
+                        <Menu.Item key="sub4">
+                            <Link to="/board/study">
+                            <Button type="dashed">学习</Button>
+                            </Link>
+                        </Menu.Item>
+                        
+                    </SubMenu>
                     <Menu.Item className="menuItemStyle" key="2">新帖</Menu.Item>
                     <Menu.Item className="menuItemStyle" key="3">通知</Menu.Item>
                     {this.loginButton}

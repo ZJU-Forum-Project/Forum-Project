@@ -2,8 +2,6 @@ import {Layout,  Breadcrumb} from 'antd';
 import NavigateBar from '../components/navigate';
 import ReactDOM from 'react-dom';
 import React from 'react';
-import axios from 'axios';
-import cookie from 'react-cookies';
 
 const {Footer, Content} = Layout;
 export default class HomePage extends React.Component {

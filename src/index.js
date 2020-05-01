@@ -5,6 +5,8 @@ import Register from './pages/register';
 import Login from './pages/login';
 import HomePage from './pages/homepage';
 import Modifypwd from './pages/modifypwd';
+import Board from './pages/board';
+import post from './pages/post';
 
 export default class Routing extends React.Component {
   render() {
@@ -17,6 +19,8 @@ export default class Routing extends React.Component {
             <Route path="/login" component={Login} />
             <Route path="/register" component={Register} />
             <Route path="/modifypwd" component={Modifypwd}/>
+            <Route path="/board" component={Board}/>
+            <Route path="/post" component={post}/>
        	  </div>
         </Router>
       );
