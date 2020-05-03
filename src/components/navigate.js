@@ -129,19 +129,25 @@ class NavigateBar extends React.Component {
                             </Link>
                         </Menu.Item>
                         <Menu.Item key="sub2">
-                            <Link to="/board/campus">
+                            <Link to="/board/information">
                             <Button type="dashed">校园信息</Button>
-                            </Link></Menu.Item>
+                            </Link>
+                        </Menu.Item>
                         <Menu.Item key="sub3">
-                            <Link to="/board/internship">
+                            <Link to="/board/intern">
                             <Button type="dashed">实习信息</Button>
-                            </Link></Menu.Item>
+                            </Link>
+                        </Menu.Item>
                         <Menu.Item key="sub4">
                             <Link to="/board/study">
                             <Button type="dashed">学习</Button>
                             </Link>
                         </Menu.Item>
-                        
+                        <Menu.Item key="sub4">
+                            <Link to="/myPosts">
+                            <Button type="dashed">我的</Button>
+                            </Link>
+                        </Menu.Item>
                     </SubMenu>
                     <Menu.Item className="menuItemStyle" key="2">新帖</Menu.Item>
                     <Menu.Item className="menuItemStyle" key="3">通知</Menu.Item>

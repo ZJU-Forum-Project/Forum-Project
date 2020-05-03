@@ -16,11 +16,10 @@ let posts = [
     {title:"qwetyu", content:"zheshiyigeasdsfsf", id:4},
     {title:"qwetyui", content:"zheshiyigeasdsfsfzxc", id:5}
 ];
-export default class Board extends React.Component {
+export default class myPosts extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            type : "", //板块类型
             token : "", //验证
         }
     }
@@ -28,12 +27,11 @@ export default class Board extends React.Component {
         this.state.token = cookie.load("token");
         let formData = new FormData();
         formData.append('token',this.state.token);
-        this.state.type = type();
-        let postsTemp = axios.post("/api/board/"+type());
+        let postsTemp = axios.post("/api/personalposting");
         return(
             <Layout className="layout">
                 <NavigateBar />
-                <PageHeader style={{padding: '20px 50px'}} title={title(this.state.type)}/>
+                <PageHeader style={{padding: '20px 50px'}} title="我的贴子"/>
                 <Content style={{padding: '0px 50px'}}>   
                     <List
                         pagination={{
@@ -45,7 +43,7 @@ export default class Board extends React.Component {
                         itemLayout="horizontal"
                         dataSource={posts}
                         renderItem={item => (
-                        <List.Item actions={[<a href={'/post/'+item.id}>detail</a>]}>
+                        <List.Item actions={[<a href={'/post/'+item.id}>delete</a>, <a href={'/post/'+item.id}>modify</a>]}>
                             <List.Item.Meta
                             avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
                             title={<div>{item.title}</div>}
@@ -60,28 +58,4 @@ export default class Board extends React.Component {
       );
     }
     
-}
-function type(){
-    var url = window.location.href;
-    var content = url.split("/");
-    if(content.length<5)
-        return "study";
-    else {
-        return content[4];
-    }
-}
-
-function title(type){
-    if(type==null)
-        return "板块信息";
-    else {
-        if(type == "emotion")
-            return "情感板块";
-        else if(type == "information")
-            return "校园信息板块";
-        else if(type == "internship")
-            return "实习信息板块";
-        else if(type == "study")
-            return "学习板块";
-    }
 }

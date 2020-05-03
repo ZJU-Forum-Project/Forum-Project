@@ -7,6 +7,7 @@ import HomePage from './pages/homepage';
 import Modifypwd from './pages/modifypwd';
 import Board from './pages/board';
 import post from './pages/post';
+import myPosts from './pages/myPosts';
 
 export default class Routing extends React.Component {
   render() {
@@ -21,6 +22,7 @@ export default class Routing extends React.Component {
             <Route path="/modifypwd" component={Modifypwd}/>
             <Route path="/board" component={Board}/>
             <Route path="/post" component={post}/>
+            <Route path="/myPosts" component={myPosts}/>
        	  </div>
         </Router>
       );
