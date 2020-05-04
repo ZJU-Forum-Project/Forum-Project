@@ -14,7 +14,6 @@ const loginGithubUrl = "https://github.com/login/oauth/authorize?client_id=d2512
 
 //上方菜单栏实现
 
-//上方菜单栏实现
 const userCenter = (
     <Menu theme="dark">
         <Menu.Item className="userCenterItemStyle">
@@ -22,10 +21,10 @@ const userCenter = (
                 个人中心
             </a>
         </Menu.Item>
-        <Menu.Item className="userCenterItemStyle">
-            <a target="_blank" rel="noopener noreferrer" href="http://www.taobao.com/">
+        <Menu.Item className="userCenterItemStyle"> 
+            <Link to="/myPosts">
                 我的帖子
-            </a>
+            </Link>
         </Menu.Item>
         <Menu.Item className="userCenterItemStyle">
             <a target="_blank" rel="noopener noreferrer" href="http://www.tmall.com/">
@@ -125,12 +124,12 @@ class NavigateBar extends React.Component {
                     <SubMenu className="menuItemStyle" key="1" title="版面列表">
                         <Menu.Item key="sub1">
                             <Link to="/board/emotion">
-                            <Button type="dashed">情感</Button>
+                            <Button type="dashed">情感交流</Button>
                             </Link>
                         </Menu.Item>
                         <Menu.Item key="sub2">
                             <Link to="/board/information">
-                            <Button type="dashed">校园信息</Button>
+                            <Button type="dashed">校园生活</Button>
                             </Link>
                         </Menu.Item>
                         <Menu.Item key="sub3">
@@ -140,16 +139,11 @@ class NavigateBar extends React.Component {
                         </Menu.Item>
                         <Menu.Item key="sub4">
                             <Link to="/board/study">
-                            <Button type="dashed">学习</Button>
-                            </Link>
-                        </Menu.Item>
-                        <Menu.Item key="sub4">
-                            <Link to="/myPosts">
-                            <Button type="dashed">我的</Button>
+                            <Button type="dashed">学习资料</Button>
                             </Link>
                         </Menu.Item>
                     </SubMenu>
-                    <Menu.Item className="menuItemStyle" key="2">新帖</Menu.Item>
+                    <Menu.Item className="menuItemStyle" key="2">最新发帖</Menu.Item>
                     <Menu.Item className="menuItemStyle" key="3">通知</Menu.Item>
                     {this.loginButton}
                 </Menu>
@@ -157,4 +151,6 @@ class NavigateBar extends React.Component {
         );
     }
 }
+
+// 我的贴子在userCenter下拉栏
 export default NavigateBar;
