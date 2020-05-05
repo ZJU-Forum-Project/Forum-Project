@@ -1,17 +1,12 @@
-import {Layout,  Breadcrumb, PageHeader, Card} from 'antd';
+import {Layout, PageHeader, Card} from 'antd';
 import NavigateBar from '../components/navigate';
-import ReactDOM from 'react-dom';
 import React from 'react';
 import axios from 'axios';
 import cookie from 'react-cookies';
-import { Link } from 'react-router-dom';
 import "../asset/board.css"
 
 
-const { Header, Footer, Sider, Content } = Layout;
-let posting = {
-    title:"title", content:"content", id:1, user:"user"
-}
+const {Footer, Content } = Layout;
 
 export default class Post extends React.Component {
     constructor(props){
@@ -26,28 +21,43 @@ export default class Post extends React.Component {
         let formData = new FormData();
         formData.append('token', this.state.token);
         formData.append('postingID', this.state.id);
-        if(this.state.id==0) {
-            let postingTemp = [];
+        let postingTemp = (axios.post("/api/postings/"+this.state.id, formData)).data;
+        let posting = {};
+        if(postingTemp.state) {
+            posting = postingTemp;
+            cookie.save('token',postingTemp.authorizeToken);
+        } else {
+            alert(postingTemp.message);
         }
-        else {
-            let postingTemp = axios.post("/api/postings/"+this.state.id);
+        if(this.state.token){
+            return(
+                <Layout className="layout">
+                    <NavigateBar />
+                    <PageHeader style={{padding: '30px 50px'}}>
+                    <div>
+                        <Card title={posting.title} >
+                            <p style={{fontSize: '10px'}}>{posting.author}</p>
+                        </Card>
+                    </div>
+                    </PageHeader>
+                    <Content style={{ padding: '0 50px' }}>
+                        <div className="site-layout-content">{posting.content}</div>
+                    </Content>
+                    <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
+                </Layout>
+            );
         }
-        return(
-            <Layout className="layout">
-                <NavigateBar />
-                <PageHeader style={{padding: '30px 50px'}}>
-                <div>
-                    <Card title={posting.title} >
-                        <p style={{fontSize: '10px'}}>{posting.user}</p>
-                    </Card>
-                </div>
-                </PageHeader>
-                <Content style={{ padding: '0 50px' }}>
-                    <div className="site-layout-content">{posting.content}</div>
-                </Content>
-                <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
-            </Layout>
-        );
+        else{
+            return(
+                <Layout className="layout">
+                    <NavigateBar />
+                    <br/><br/><br/>
+                    <h1 align="center">
+                        请先登录！
+                    </h1>
+                </Layout>
+            );
+        }
     }
     
 }
