@@ -8,6 +8,7 @@ import Modifypwd from './pages/modifypwd';
 import Board from './pages/board';
 import post from './pages/post';
 import myPosts from './pages/myPosts';
+import 'lib-flexible';
 
 export default class Routing extends React.Component {
   render() {

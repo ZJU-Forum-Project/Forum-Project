@@ -1,25 +1,26 @@
-import {Layout,  Breadcrumb} from 'antd';
+import {Layout, Breadcrumb} from 'antd';
 import NavigateBar from '../components/navigate';
 import ReactDOM from 'react-dom';
 import React from 'react';
 
-const {Footer, Content} = Layout;
+const {Header, Content, Footer, Sider} = Layout;
 export default class HomePage extends React.Component {
     render() {
-        return(
-            <Layout className="layout">
-                <NavigateBar />
-                <Content style={{padding: '0 50px'}}>
-                        <Breadcrumb style={{margin: '16px 0'}}>
-                            <Breadcrumb.Item>Home</Breadcrumb.Item>
-                            <Breadcrumb.Item>List</Breadcrumb.Item>
-                            <Breadcrumb.Item>App</Breadcrumb.Item>
-                        </Breadcrumb>
+        return (
+            <Layout style={{width: "100%", height: "1000px"}}>
+                <Sider breakpoint="lg" collapsedWidth="0">
+                    <NavigateBar/>
+                </Sider>
+                <Layout>
+                    <Content>
                         <div className="site-layout-content">Content</div>
-                </Content>
-                <Footer style={{textAlign: 'center'}}>Design ©2020 by Group I</Footer>
+                    </Content>
+                    <Footer style={{textAlign: 'center'}}>Design ©2020 by Group I</Footer>
+                </Layout>
             </Layout>
-      );
+        );
     }
 }
-ReactDOM.render(<HomePage />, document.getElementById("root"));
+ReactDOM.render(
+    <HomePage/>
+    , document.getElementById("root"));
