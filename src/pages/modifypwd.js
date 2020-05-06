@@ -12,12 +12,10 @@ const layout = {labelCol: { span: 8 },wrapperCol: { span: 16 },};
 const tailLayout = {wrapperCol: { offset: 8, span: 16 },};
 
 async function onFinish(values){
-    let email = values.email,password=values.password,token=values.token, autoken=cookie.load('token');
+    let email = values.email,password=values.password, autoken=cookie.load('token');
     let formData = new FormData();
-    console.log("token: "+token+"||| autoken: "+autoken);
     formData.append('email',email);
     formData.append('password',password);
-    formData.append('token',token);
     formData.append('Authorization',autoken);
     //METHOD 1:
     // axios.post('/api/modify',{
@@ -35,7 +33,6 @@ async function onFinish(values){
     // axios.defaults.headers.post['Authorization'] = autoken;
     // axios.post('/api/modify',formData)
     .then(res=>{
-        console.log(res.data);
         let success=res.data.state;
         if(success){
             window.location.href="http://106.12.27.104/";

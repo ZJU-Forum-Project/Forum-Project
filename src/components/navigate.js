@@ -6,6 +6,8 @@ import Text from "antd/es/typography/Text";
 import axios from 'axios';
 import cookie from 'react-cookies';
 import {Link} from 'react-router-dom';
+import SubMenu from 'antd/lib/menu/SubMenu';
+import myPosts from '../pages/myPosts'
 const {Search} = Input;
 const {Header} = Layout;
 const loginGithubUrl = "https://github.com/login/oauth/authorize?client_id=d25125e25fe36054a4de&redirect_uri=http://106.12.27.104/callback&scope=user&state=1";
@@ -13,34 +15,23 @@ const loginGithubUrl = "https://github.com/login/oauth/authorize?client_id=d2512
 
 //上方菜单栏实现
 
-//上方菜单栏实现
 const userCenter = (
     <Menu theme="dark">
         <Menu.Item className="userCenterItemStyle">
-            <a target="_blank" rel="noopener noreferrer" href="http://106.12.27.104/personinfo">
+            <a target="_blank" rel="noopener noreferrer" href="http://www.alipay.com/">
                 个人中心
             </a>
         </Menu.Item>
-        <Menu.Item className="userCenterItemStyle">
-            <a target="_blank" rel="noopener noreferrer" href="http://www.taobao.com/">
+        <Menu.Item className="userCenterItemStyle"> 
+            <Link to="/myPosts">
                 我的帖子
-            </a>
+            </Link>
         </Menu.Item>
         <Menu.Item className="userCenterItemStyle">
             <a target="_blank" rel="noopener noreferrer" href="http://www.tmall.com/">
                 回复我的
             </a>
         </Menu.Item>
-        <Menu.Item className="userCenterItemStyle">
-            <a target="_blank" rel="noopener noreferrer" href="http://106.12.27.104"
-                onClick={
-                function(){cookie.remove('name');cookie.remove('avatarUrl');cookie.remove('token');}
-                } 
-            >
-                注销
-            </a>
-        </Menu.Item>
-
     </Menu>
 );
 
@@ -56,18 +47,16 @@ const notLogin = (
         </Menu.Item>
         <Menu.Item className="userCenterItemStyle">
             <Link to="/login">
-	     <Button className="e-button" type="primary"> 普 通 登 录 </Button>
+	     <Button className="e-button" type="primary"> 普 通 登 陆 </Button>
              </Link>
         </Menu.Item>
-        
         <Menu.Item className="userCenterItemStyle">
             <a href={loginGithubUrl}><Button className="e-button" type="primary">GitHub登录</Button></a>
         </Menu.Item>
-
         <Menu.Item className="userCenterItemStyle">
-            <Link to="/personinfo">
-	     <Button className="e-button" type="primary"> 个 人 中 心 </Button>
-             </Link>
+            <Button className="e-button" type="primary" onClick={
+                function(){cookie.remove('name');cookie.remove('avatarUrl');cookie.remove('token');}
+                }>注销</Button>
         </Menu.Item>
     </Menu>
 );
@@ -90,7 +79,6 @@ async function ToLogin(urlParam) {
         cookie.save('name', username);
         cookie.save('avatarUrl', avatar_url);
         cookie.save('token',token);
-        console.log(token);
     }
     return person_info;
 }
@@ -134,8 +122,29 @@ class NavigateBar extends React.Component {
                     <Search placeholder="搜索问题或找人" onSearch={value => console.log(value)} enterButton/>
                 </div>
                 <Menu size="small" theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
-                    <Menu.Item className="menuItemStyle" key="1">版面列表</Menu.Item>
-                    <Menu.Item className="menuItemStyle" key="2">新帖</Menu.Item>
+                    <SubMenu className="menuItemStyle" key="1" title="版面列表">
+                        <Menu.Item key="sub1">
+                            <Link to="/board/emotion">
+                            <Button type="dashed">情感交流</Button>
+                            </Link>
+                        </Menu.Item>
+                        <Menu.Item key="sub2">
+                            <Link to="/board/information">
+                            <Button type="dashed">校园生活</Button>
+                            </Link>
+                        </Menu.Item>
+                        <Menu.Item key="sub3">
+                            <Link to="/board/intern">
+                            <Button type="dashed">实习信息</Button>
+                            </Link>
+                        </Menu.Item>
+                        <Menu.Item key="sub4">
+                            <Link to="/board/study">
+                            <Button type="dashed">学习资料</Button>
+                            </Link>
+                        </Menu.Item>
+                    </SubMenu>
+                    <Menu.Item className="menuItemStyle" key="2">最新发帖</Menu.Item>
                     <Menu.Item className="menuItemStyle" key="3">通知</Menu.Item>
                     {this.loginButton}
                 </Menu>
@@ -143,4 +152,6 @@ class NavigateBar extends React.Component {
         );
     }
 }
+
+// 我的贴子在userCenter下拉栏
 export default NavigateBar;
