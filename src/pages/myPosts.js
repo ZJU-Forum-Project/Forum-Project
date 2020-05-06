@@ -153,8 +153,8 @@ export default class myPosts extends React.Component {
                                             }
                                             ]}
                                         >
-                                            <Input value={this.state.tilte}
-                                                style={{ width: "80%", marginLeft: '50px', marginTop: '10px' }}
+                                            <textarea defaultValue={this.state.title}
+                                                style={{ width: "80%", marginLeft: '50px', marginTop: '10px' ,height: '30px'}}
                                                 type="text" name="title" onChange={this.handleChange} />
                                         </Form.Item>
                                         <Form.Item
@@ -166,8 +166,8 @@ export default class myPosts extends React.Component {
                                             }
                                             ]}
                                         >
-                                            <textarea value={this.state.content}
-                                                style={{ width: "80%", height: "300px", marginLeft: '50px', textIndent: "8px" }}
+                                            <textarea defaultValue={this.state.content}
+                                                style={{ width: "80%", height: "300px", marginLeft: '50px', textIndent: "8px"}}
                                                 type="text" name="content" onChange={this.handleChange} />
                                         </Form.Item>
                                         <Form.Item>
@@ -178,9 +178,9 @@ export default class myPosts extends React.Component {
                                                 onClick={this.display_name.bind(this)}>
                                                 取消
                                     </Button>
-                                            <Button id="hidePost" style={{ float: 'right', marginRight: "10%" }}
+                                            <Button id="hide" style={{ float: 'left', marginLeft: 10 }}
                                                 onClick={this.display_name.bind(this)}>
-                                                保存草稿（没实现，现同取消）
+                                                隐藏
                                     </Button>
                                         </Form.Item>
 
@@ -201,7 +201,7 @@ export default class myPosts extends React.Component {
                             itemLayout="horizontal"
                             dataSource={this.state.postings}
                             renderItem={item => (
-                                <List.Item actions={[
+                                <List.Item actions={[<div>{item.time}</div>,
                                     <Button id="deletePost" htmlType="submit"
                                         onClick={this.state.id=item.id,this.deletePost}>
                                         删除

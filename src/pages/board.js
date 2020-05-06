@@ -153,10 +153,6 @@ export default class Board extends React.Component {
                                                 onClick={this.display_name.bind(this)}>
                                                 取消
                                     </Button>
-                                    <Button id="hidePost" style={{ float: 'right', marginRight:"10%" }}
-                                                onClick={this.display_name.bind(this)}>
-                                                保存草稿（没实现，现同取消）
-                                    </Button>
                                 </Form.Item>
 
                             </Form>
@@ -177,7 +173,7 @@ export default class Board extends React.Component {
                             itemLayout="horizontal"
                             dataSource={this.state.postings}
                             renderItem={item => (
-                            <List.Item actions={[<div>data</div>]}>
+                            <List.Item actions={[<div>{item.time}</div>]}>
                                 <List.Item.Meta
                                 avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
                                 title={[<div><a href={'/post/' + item.id}>{item.title}</a></div>]}
