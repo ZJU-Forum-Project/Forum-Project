@@ -147,7 +147,7 @@ export default class Board extends React.Component {
                                 </Form.Item>
                                 <Form.Item>
                                     <Button type="primary" htmlType="submit" style={{ float: 'left', marginLeft: 50 }} onClick={this.submit}>
-                                    发送
+                                                发送
                                     </Button>
                                     <Button id="send" style={{ float: 'left', marginLeft: 10 }}
                                                 onClick={this.display_name.bind(this)}>
