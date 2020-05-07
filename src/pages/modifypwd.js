@@ -17,21 +17,7 @@ async function onFinish(values){
     formData.append('email',email);
     formData.append('password',password);
     formData.append('Authorization',autoken);
-    //METHOD 1:
-    // axios.post('/api/modify',{
-    //     data: formData
-    // })
-    //METHOD 2:
     axios.post('/api/modify', formData)
-    //METHOD3:
-    // axios({
-    //     method: "POST",
-    //     url: '/api/modify',
-    //     data: formData,
-    // })
-    //METHOD4:
-    // axios.defaults.headers.post['Authorization'] = autoken;
-    // axios.post('/api/modify',formData)
     .then(res=>{
         let success=res.data.state;
         if(success){
