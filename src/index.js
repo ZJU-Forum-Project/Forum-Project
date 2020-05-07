@@ -24,7 +24,7 @@ export default class Routing extends React.Component {
     render() {
         return (
             // 所有值应按照百分比形式进行赋值，请不要修改height的值
-            <Layout style={{width: "100%", height: "1000px"}}>
+            <Layout style={{width: "100%", height: "fit-content",minHeight:"500px"}}>
                 <Header>
                     <div className="logo">
                         <Text style={{color: '#1890ff', fontSize: "large"}}><HomeFilled

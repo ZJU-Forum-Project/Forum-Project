@@ -1,5 +1,4 @@
 import React from 'react';
-import logo from '../picture/ZJU.jpg';
 import {Form, Input, Breadcrumb, Button, List, Layout} from 'antd';
 import cookie from 'react-cookies';
 import axios from 'axios';
@@ -61,9 +60,6 @@ class Login extends React.Component {
     render() {
         return (
             <div>
-                <div className="logo-container">
-                    <img className="logo-img" src={logo}/>
-                </div>
                 <Layout className="layout">
                     <Content style={{padding: '50px 0 0 200px'}}>
                         <Form
