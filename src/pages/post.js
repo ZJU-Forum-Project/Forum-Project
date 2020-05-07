@@ -1,12 +1,9 @@
-import {Card, Layout, PageHeader} from 'antd';
+import {Card, Layout} from 'antd';
 import NavigateBar from '../components/navigate';
 import React from 'react';
 import axios from 'axios';
 import cookie from 'react-cookies';
 import "../asset/board.css"
-
-
-const {Footer, Content} = Layout;
 
 export default class Post extends React.Component {
     constructor(props) {
@@ -44,20 +41,14 @@ export default class Post extends React.Component {
         this.state.token = cookie.load("token");
         if (this.state.token) {
             return (
-                <Layout className="layout">
-                    <NavigateBar/>
-                    <PageHeader style={{padding: '30px 50px'}}>
-                        <div>
-                            <Card title={this.state.title}>
-                                <p style={{fontSize: '10px'}}>{this.state.author}</p>
-                            </Card>
-                        </div>
-                    </PageHeader>
-                    <Content style={{padding: '0 50px'}}>
-                        <div className="site-layout-content">{this.state.content}</div>
-                    </Content>
-                    <Footer style={{textAlign: 'center'}}>Ant Design ©2018 Created by Ant UED</Footer>
-                </Layout>
+                <div>
+                    <div>
+                        <Card title={this.state.title}>
+                            <p style={{fontSize: '10px'}}>{this.state.author}</p>
+                        </Card>
+                    </div>
+                    <div className="site-layout-content">{this.state.content}</div>
+                </div>
             );
         } else {
             return (

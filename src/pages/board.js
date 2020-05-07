@@ -111,102 +111,94 @@ export default class Board extends React.Component {
         this.state.type = type();
         if (this.state.token) {
             return (
-                <Layout className="layout">
-                    <NavigateBar/>
-                    <PageHeader style={{padding: '20px 50px'}} title={title(this.state.type)}/>
-
+                <div>
+                    <PageHeader title={title(this.state.type)}/>
                     <p class="slide" style={{display: this.state.notdisplay_name}}>
-                        <Button type="primary" id="createPost" style={{float: 'left', marginLeft: 50}}
+                        <Button type="primary" id="createPost" style={{float: 'left', marginLeft: "2%"}}
                                 onClick={this.display_name.bind(this)}>
-                            {/**./createPost*/}
                             发帖
                         </Button>
                     </p>
+
                     {/*发帖区域动态显示 */}
                     <div style={{display: this.state.display_name}}>
-                        <h3 style={{padding: '0px 50px'}}>新建帖子</h3>
+                        <h3>新建帖子</h3>
 
                         <div>
-                            <Layout className="layout">
-                                <Content>
-                                    <Form
-                                        name="basic"
-                                        initialValues={{remember: true}}
+                            <div>
+                                <Form
+                                    name="basic"
+                                    initialValues={{remember: true}}
+                                >
+                                    <Form.Item
+                                        name="title"
+                                        rules={[{
+                                            required: true, message: '请输入标题!'
+                                        }, {
+                                            validator: this.checkTitle.bind(this)
+                                        }
+                                        ]}
                                     >
-                                        <Form.Item
-                                            name="title"
-                                            rules={[{
-                                                required: true, message: '请输入标题!'
-                                            }, {
-                                                validator: this.checkTitle.bind(this)
-                                            }
-                                            ]}
-                                        >
-                                            <Input placeholder="标题"
-                                                   style={{width: "80%", marginLeft: '50px', marginTop: '10px'}}
-                                                   type="text" name="title" onChange={this.handleChange}/>
-                                        </Form.Item>
-                                        <Form.Item
-                                            name="content"
-                                            rules={[{
-                                                required: true, message: '请输入正文!'
-                                            }, {
-                                                validator: this.checkContent.bind(this)
-                                            }
-                                            ]}
-                                        >
-                                            <MarkDown handleInputChange={this.handleChange}/>
-                                            {/*<textarea placeholder="正文"*/}
-                                            {/*          style={{*/}
-                                            {/*              width: "80%",*/}
-                                            {/*              height: "300px",*/}
-                                            {/*              marginLeft: '50px',*/}
-                                            {/*              textIndent: "8px"*/}
-                                            {/*          }}*/}
-                                            {/*          type="text" name="content" onChange={this.handleChange}/>*/}
-                                        </Form.Item>
-                                        <Form.Item>
-                                            <Button type="primary" htmlType="submit"
-                                                    style={{float: 'left', marginLeft: 50}} onClick={this.submit}>
-                                                发送
-                                            </Button>
-                                            <Button id="send" style={{float: 'left', marginLeft: 10}}
-                                                    onClick={this.display_name.bind(this)}>
-                                                取消
-                                            </Button>
-                                        </Form.Item>
-
-                                    </Form>
-                                </Content>
-                            </Layout>
+                                        <Input placeholder="标题"
+                                               style={{width: "80%", marginLeft: '50px', marginTop: '10px'}}
+                                               type="text" name="title" onChange={this.handleChange}/>
+                                    </Form.Item>
+                                    <Form.Item
+                                        name="content"
+                                        rules={[{
+                                            required: true, message: '请输入正文!'
+                                        }, {
+                                            validator: this.checkContent.bind(this)
+                                        }
+                                        ]}
+                                    >
+                                        <MarkDown handleInputChange={this.handleChange}/>
+                                        {/*<textarea placeholder="正文"*/}
+                                        {/*          style={{*/}
+                                        {/*              width: "80%",*/}
+                                        {/*              height: "300px",*/}
+                                        {/*              marginLeft: '50px',*/}
+                                        {/*              textIndent: "8px"*/}
+                                        {/*          }}*/}
+                                        {/*          type="text" name="content" onChange={this.handleChange}/>*/}
+                                    </Form.Item>
+                                    <Form.Item>
+                                        <Button type="primary" htmlType="submit"
+                                                style={{float: 'left', marginLeft: 50}} onClick={this.submit}>
+                                            发送
+                                        </Button>
+                                        <Button id="send" style={{float: 'left', marginLeft: 10}}
+                                                onClick={this.display_name.bind(this)}>
+                                            取消
+                                        </Button>
+                                    </Form.Item>
+                                </Form>
+                            </div>
                         </div>
                     </div>
 
 
-                    <Content style={{padding: '0px 50px'}}>
-                        <List
-                            pagination={{
-                                onChange: page => {
-                                    console.log(page);
-                                },
-                                pageSize: 4,
-                            }}
-                            itemLayout="horizontal"
-                            dataSource={this.state.postings}
-                            renderItem={item => (
-                                <List.Item actions={[<div>{item.time}</div>]}>
-                                    <List.Item.Meta
-                                        avatar={<Avatar
-                                            src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"/>}
-                                        title={[<div><a href={'/post/' + item.id}>{item.title}</a></div>]}
-                                        description={<div>description</div>}
-                                    />
-                                </List.Item>
-                            )}
-                        />
-                    </Content>
-                    <Footer style={{textAlign: 'center'}}>Design ©2020 by Group I</Footer>
-                </Layout>
+                    <List
+                        pagination={{
+                            onChange: page => {
+                                console.log(page);
+                            },
+                            pageSize: 4,
+                        }}
+                        itemLayout="horizontal"
+                        dataSource={this.state.postings}
+                        renderItem={item => (
+                            <List.Item actions={[<div>{item.time}</div>]}>
+                                <List.Item.Meta
+                                    avatar={<Avatar
+                                        src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"/>}
+                                    title={[<div><a href={'/post/' + item.id}>{item.title}</a></div>]}
+                                    description={<div>description</div>}
+                                />
+                            </List.Item>
+                        )}
+                    />
+                </div>
             );
         } else {
             return (
