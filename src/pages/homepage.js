@@ -1,4 +1,3 @@
-import {Input} from 'antd';
 import React from 'react';
 
 
@@ -9,6 +8,3 @@ export default class HomePage extends React.Component {
         );
     }
 }
-// ReactDOM.render(
-//     <HomePage/>
-//     , document.getElementById("root"));

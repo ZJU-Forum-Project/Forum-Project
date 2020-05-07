@@ -4,6 +4,7 @@ import React from 'react';
 import axios from 'axios';
 import cookie from 'react-cookies';
 import "../asset/board.css"
+import NotLogin from "../components/notlogin";
 
 export default class Post extends React.Component {
     constructor(props) {
@@ -52,13 +53,7 @@ export default class Post extends React.Component {
             );
         } else {
             return (
-                <Layout className="layout">
-                    <NavigateBar/>
-                    <br/><br/><br/>
-                    <h1 align="center">
-                        请先登录！
-                    </h1>
-                </Layout>
+                <div style={{fontSize: "100px", float: "center", textAlign: "center"}}><NotLogin/></div>
             );
         }
     }

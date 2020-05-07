@@ -1,48 +1,37 @@
-import {Layout, Button, PageHeader, Avatar, List, Form, Input} from 'antd';
-import NavigateBar from '../components/navigate';
+import {Avatar, Button, Form, Input, List, PageHeader, Modal} from 'antd';
 import React from 'react';
 import axios from 'axios';
 import cookie from 'react-cookies';
 import "../asset/board.css"
-// markdown文本编辑器配置
-import ReactMde from "react-mde";
-import * as Showdown from "showdown";
-import "react-mde/lib/styles/css/react-mde-all.css";
-import MarkDown from "../components/markdown";
+import NotLogin from "../components/notlogin";
+import boardImg1 from '../img/board-1.jpeg';
 
-const converter = new Showdown.Converter({
-    tables: true,
-    simplifiedAutoLink: true,
-    strikethrough: true,
-    tasklists: true
-});
-
-const {Footer, Content} = Layout;
 export default class Board extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            type: "", //板块类型
             token: "", //验证
-            display_name: 'none',//发帖区域显示状态
+            display_name: false,//发帖区域显示状态
             notdisplay_name: 'block',//按钮显示状态
             title: "",
             content: "",
             postings: [],
-        }
+            type: "",
+        };
         //绑定需要调用的async函数
         this.handleChange = this.handleChange.bind(this);
-        this.submit = this.submit.bind(this);
+        // this.handleSubmit = this.handleSubmit()
+        // this.submit = this.submit.bind(this);
     }
 
     componentDidMount() {
         let token = cookie.load("token");
         let formData = new FormData();
-        formData.append('Authorization', token)
+        formData.append('Authorization', token);
         axios.post("/api/board/" + type(), formData)
             .then(response => {
-                let data = response.data;
-                let posts = data.postings;
+                let data = response.data
+                let posts = data.postings
                 this.setState({
                     postings: posts,
                     token: token,
@@ -52,8 +41,46 @@ export default class Board extends React.Component {
 
     }
 
-    async submit() {
+
+    //实时更新state里面的值
+    handleChange(event) {
+        this.setState({[event.target.name]: event.target.value});
+    }
+
+
+    checkTitle(rule, value, callback) {//待定
+        const reg = /^[a-zA-Z0-9]+([-_.][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([-_.][a-zA-Z0-9]+)*\.[a-z]{2,}$/;
+        if (!reg.test(value)) {
+        }
+        callback();
+    }
+
+    checkContent(rule, value, callback) {//待定
+        const reg = /^[a-zA-Z0-9]+([-_.][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([-_.][a-zA-Z0-9]+)*\.[a-z]{2,}$/;
+        if (!reg.test(value)) {
+        }
+        callback();
+    }
+
+    // 显示对话框
+    handleDisplay() {
+        this.setState({
+            display_name: true,
+        })
+    }
+
+    // 关闭对话框
+    handleCancel = () => {
+        this.setState({
+            display_name: false,
+        });
+    };
+
+    async handleSubmit() {
         let formData = new FormData();
+        this.setState({
+            display_name: false,
+        });
         formData.append('title', this.state.title);
         formData.append('content', this.state.content);
         formData.append('type', postType(this.state.type));
@@ -70,41 +97,6 @@ export default class Board extends React.Component {
         }
     }
 
-    //实时更新state里面的值
-    handleChange(event) {
-        this.setState({[event.target.name]: event.target.value});
-    }
-
-    display_name() { //编辑按钮的单击事件，修改状态机display_name的取值
-        if (this.state.display_name === 'none') {
-            this.setState({
-                display_name: 'block',
-                notdisplay_name: 'none'
-            })
-        } else if (this.state.display_name === 'block') {
-            this.setState({
-                display_name: 'none',
-                notdisplay_name: 'block'
-            })
-
-        }
-    }
-
-    checkTitle(rule, value, callback) {//待定
-        const reg = /^[a-zA-Z0-9]+([-_.][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([-_.][a-zA-Z0-9]+)*\.[a-z]{2,}$/;
-        if (!reg.test(value)) {
-        }
-        callback();
-    }
-
-    checkContent(rule, value, callback) {//待定
-        const reg = /^[a-zA-Z0-9]+([-_.][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([-_.][a-zA-Z0-9]+)*\.[a-z]{2,}$/;
-        if (!reg.test(value)) {
-        }
-        callback();
-    }
-
-
     render() {
         // this.state.token = cookie.load("token");
         this.state.token = true;
@@ -112,71 +104,49 @@ export default class Board extends React.Component {
         if (this.state.token) {
             return (
                 <div>
-                    <PageHeader title={title(this.state.type)}/>
-                    <p class="slide" style={{display: this.state.notdisplay_name}}>
-                        <Button type="primary" id="createPost" style={{float: 'left', marginLeft: "2%"}}
-                                onClick={this.display_name.bind(this)}>
-                            发帖
-                        </Button>
-                    </p>
-
-                    {/*发帖区域动态显示 */}
-                    <div style={{display: this.state.display_name}}>
+                    <Avatar className="headline" shape="square" size={128}
+                            src={boardImg1}/>
+                    <Button className="headline" type="dashed"
+                            style={{position: "relative", bottom: "40px"}}>{title(this.state.type)}</Button>
+                    <Button type="primary" id="createPost" className="headline"
+                            style={{position: "relative", bottom: "40px"}}
+                            onClick={this.handleDisplay.bind(this)}>
+                        发表帖子
+                    </Button>
+                    <Modal title="" visible={this.state.display_name} onCancel={this.handleCancel}
+                           onOk={this.handleSubmit}>
                         <h3>新建帖子</h3>
-
                         <div>
-                            <div>
-                                <Form
-                                    name="basic"
-                                    initialValues={{remember: true}}
+                            <Form
+                                name="basic"
+                                initialValues={{remember: true}}
+                            >
+                                <Form.Item
+                                    name="title"
+                                    rules={[{
+                                        required: true, message: '请输入标题!'
+                                    }, {
+                                        validator: this.checkTitle.bind(this)
+                                    }
+                                    ]}
                                 >
-                                    <Form.Item
-                                        name="title"
-                                        rules={[{
-                                            required: true, message: '请输入标题!'
-                                        }, {
-                                            validator: this.checkTitle.bind(this)
-                                        }
-                                        ]}
-                                    >
-                                        <Input placeholder="标题"
-                                               style={{width: "80%", marginLeft: '50px', marginTop: '10px'}}
-                                               type="text" name="title" onChange={this.handleChange}/>
-                                    </Form.Item>
-                                    <Form.Item
-                                        name="content"
-                                        rules={[{
-                                            required: true, message: '请输入正文!'
-                                        }, {
-                                            validator: this.checkContent.bind(this)
-                                        }
-                                        ]}
-                                    >
-                                        <MarkDown handleInputChange={this.handleChange}/>
-                                        {/*<textarea placeholder="正文"*/}
-                                        {/*          style={{*/}
-                                        {/*              width: "80%",*/}
-                                        {/*              height: "300px",*/}
-                                        {/*              marginLeft: '50px',*/}
-                                        {/*              textIndent: "8px"*/}
-                                        {/*          }}*/}
-                                        {/*          type="text" name="content" onChange={this.handleChange}/>*/}
-                                    </Form.Item>
-                                    <Form.Item>
-                                        <Button type="primary" htmlType="submit"
-                                                style={{float: 'left', marginLeft: 50}} onClick={this.submit}>
-                                            发送
-                                        </Button>
-                                        <Button id="send" style={{float: 'left', marginLeft: 10}}
-                                                onClick={this.display_name.bind(this)}>
-                                            取消
-                                        </Button>
-                                    </Form.Item>
-                                </Form>
-                            </div>
+                                    <Input placeholder="标题"
+                                           type="text" name="title" onChange={this.handleChange}/>
+                                </Form.Item>
+                                <Form.Item name="content"
+                                           rules={[{required: true, message: '请输入正文!'},
+                                               {validator: this.checkContent.bind(this)}]}>
+                                    <textarea placeholder="正文"
+                                              style={{
+                                                  width: "100%",
+                                                  height: "300px",
+                                                  textIndent: "8px"
+                                              }}
+                                              type="text" name="content" onChange={this.handleChange}/>
+                                </Form.Item>
+                            </Form>
                         </div>
-                    </div>
-
+                    </Modal>
 
                     <List
                         pagination={{
@@ -202,13 +172,7 @@ export default class Board extends React.Component {
             );
         } else {
             return (
-                <Layout className="layout">
-                    <NavigateBar/>
-                    <br/><br/><br/>
-                    <h1 align="center">
-                        请先登录！
-                    </h1>
-                </Layout>
+                <div style={{textAlign: "center", fontSize: "400%"}}><NotLogin/></div>
             );
         }
     }
@@ -241,7 +205,7 @@ function title(type) {
 }
 
 function postType(type) {
-    if (type === null)
+    if (type == null)
         return 1;
     else {
         if (type === "emotion")
@@ -254,5 +218,3 @@ function postType(type) {
             return 1;
     }
 }
-
-
