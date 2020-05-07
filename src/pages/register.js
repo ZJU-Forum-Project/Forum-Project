@@ -1,7 +1,7 @@
 import React from 'react';
 import '../asset/register.css';
 import logo from '../picture/ZJU.jpg';
-import {Form,Input,Breadcrumb,Button,List,Layout} from 'antd';
+import {Button, Form, Input, Layout} from 'antd';
 import axios from 'axios';
 import cookie from 'react-cookies';
 

@@ -1,12 +1,10 @@
-
-import {Layout} from 'antd';
+import {Breadcrumb, Button, DatePicker, Form, Input, Layout} from 'antd';
 import NavigateBar from '../components/navigate';
 import React from 'react';
-import { Button,Form, Input, DatePicker,Breadcrumb} from 'antd';
 import axios from 'axios';
 import cookie from 'react-cookies';
 import {Link} from 'react-router-dom';
-import {RadioGroup, Radio} from 'react-radio-group'
+import {Radio, RadioGroup} from 'react-radio-group'
 
 const {Footer,Content} = Layout;
 const tailLayout = {wrapperCol: { offset: 8, span: 16 },};

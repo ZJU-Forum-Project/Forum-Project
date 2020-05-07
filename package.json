@@ -13,9 +13,12 @@
     "react": "^16.13.1",
     "react-cookies": "^0.1.1",
     "react-dom": "^16.13.1",
+    "react-mde": "^10.0.3",
     "react-radio-group": "^3.0.3",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "^3.4.1"
+    "react-scripts": "^3.4.1",
+    "showdown": "^1.9.1",
+    "xss": "^1.0.6"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -1,12 +1,10 @@
-import {Layout} from 'antd';
+import {Breadcrumb, Button, DatePicker, Form, Input, Layout} from 'antd';
 import NavigateBar from '../components/navigate';
 import React from 'react';
-import { Form, Input, Button, Breadcrumb, DatePicker} from 'antd';
 import axios from 'axios';
 import cookie from 'react-cookies';
 import {Link} from 'react-router-dom';
-import {RadioGroup, Radio} from 'react-radio-group'
-import { configConsumerProps } from 'antd/lib/config-provider';
+import {Radio, RadioGroup} from 'react-radio-group'
 import ReactDOM from 'react-dom';
 
 const {Footer,Content} = Layout;

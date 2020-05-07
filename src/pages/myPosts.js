@@ -1,4 +1,4 @@
-import { Layout, Button, PageHeader, Avatar, List, Form, Input} from 'antd';
+import {Avatar, Button, Form, Layout, List, PageHeader} from 'antd';
 import NavigateBar from '../components/navigate';
 import React from 'react';
 import axios from 'axios';
