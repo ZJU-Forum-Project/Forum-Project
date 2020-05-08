@@ -1,18 +1,17 @@
 import React from 'react';
 import '../asset/register.css';
-import logo from '../picture/zju.jpg';
-import {Form, Input, Breadcrumb, Button, List, Layout} from 'antd';
+import {Button, Form, Input} from 'antd';
 import axios from 'axios';
 import cookie from 'react-cookies';
-import NavigateBar from "../components/navigate";
+import {Carousel} from 'antd';
 
-const {Header, Content, Footer, Sider} = Layout;
+// 添加走马灯图片
+import registerImg1 from '../img/register-1.jpg';
+import registerImg2 from '../img/register-2.jpg';
+import registerImg3 from '../img/register-3.jpg';
+import registerImg4 from '../img/register-4.jpg';
 
-const layout = {
-    labelCol: {span: 8},
-    wrapperCol: {span: 16},
-};
-
+// register部分
 class register extends React.Component {
     constructor(props) {
         super(props);
@@ -109,40 +108,46 @@ class register extends React.Component {
 
     render() {
         return (
-            <Layout style={{backgroundColor: "#fafafa", width: "100%"}}>
-                <Content>
-                    <Form name="basic" initialValues={{remember: true}} size="small"
-                          labelAlign="left" style={{
-                        backgroundColor: "#f0f5ff",
-                        width: "70%",
-                        margin: "0 auto",
-                        paddingTop: "2%",
-                        paddingBottom: "2%",
-                        marginBottom: "2%",
-                        marginTop: "2%"
-                    }}>
-                        <Form.Item label="用户名" name="name" rules={[{required: true, message: '请输入用户名!'}]}
-                                   className="inputStyle">
-                            <Input name="name" type="text"
-                                   onChange={this.handleChange}/>
+            <div>
+                <div>
+                    <Form
+                        name="basic"
+                        initialValues={{remember: true}}
+                        style={{marginLeft: "2%", marginTop: "2%", width: "75%"}}
+                    >
+                        <Form.Item
+                            label="用户名"
+                            name="name"
+                            rules={[{
+                                required: true, message: '请输入用户名!'
+                            }
+                            ]}
+                        >
+                            <Input name="name" type="text" onChange={this.handleChange}/>
                         </Form.Item>
-                        <Form.Item label="Email" name="email" rules={[{
-                            required: true,
-                            message: '请输入邮箱!'
-                        }, {validator: this.checkEmail.bind(this)}]} className="inputStyle">
+                        <Form.Item
+                            label="邮箱"
+                            name="email"
+                            rules={[{
+                                required: true, message: '请输入邮箱!'
+                            }, {
+                                validator: this.checkEmail.bind(this)
+                            }
+                            ]}
+                        >
                             <Input name="email" type="text" onChange={this.handleChange}/>
                         </Form.Item>
 
                         <Form.Item
-                            label="Password"
+                            label="密码"
                             name="password"
                             rules={[{required: true, message: '请输入密码!'}]}
-                            className="inputStyle"
                         >
                             <Input.Password name="password" onChange={this.handleChange}/>
                         </Form.Item>
+
                         <Form.Item
-                            label="confirmPassword"
+                            label="确认密码"
                             name="confirmpassword"
                             dependencies={['password']}
                             hasFeedback
@@ -157,31 +162,37 @@ class register extends React.Component {
                                     },
                                 }),
                             ]}
-                            className="inputStyle"
                         >
                             <Input.Password name="password" onChange={this.handleChange}/>
                         </Form.Item>
                         <Form.Item
-                            label="Captcha"
+                            label="验证码"
                             name="token"
                             rules={[{required: true, message: '请输入验证码!'}]}
-                            className="inputStyle"
                         >
                             <Input name="token" allowClear={true}
                                    onChange={this.handleChange}/>
                         </Form.Item>
+
                         <Form.Item>
-                            <Button onClick={this.applyEmail.bind(this)} loading={this.state.loading} type="primary"
-                                    style={{marginLeft: "30%"}}>
+                            <Button onClick={this.applyEmail.bind(this)} loading={this.state.loading}
+                                    style={{marginRight: "5%"}}>
                                 {this.state.loading ? this.state.time + '秒' : '发送邮件验证'}
                             </Button>
-                            <Button type="primary" htmlType="submit" onClick={this.submit} style={{marginLeft: "3%"}}>
+                            <Button type="primary" htmlType="submit" onClick={this.submit}>
                                 提交
                             </Button>
                         </Form.Item>
-                    </Form>
-                </Content>
-            </Layout>
+                    </Form></div>
+                <div>
+                    <Carousel>
+                        <div><img src={registerImg1} className="logo-img"/></div>
+                        <div><img src={registerImg2} className="logo-img"/></div>
+                        <div><img src={registerImg3} className="logo-img"/></div>
+                        <div><img src={registerImg4} className="logo-img"/></div>
+                    </Carousel>
+                </div>
+            </div>
         )
     }
 }

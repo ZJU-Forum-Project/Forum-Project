@@ -1,14 +1,13 @@
 import React from 'react';
-import logo from '../picture/zju.jpg';
-import {Form, Input, Breadcrumb, Button, List, Layout} from 'antd';
+import {Button, Carousel, Form, Input} from 'antd';
 import cookie from 'react-cookies';
 import axios from 'axios';
 import '../asset/register.css';
 
-const {Footer, Content} = Layout;
-
-const layout = {labelCol: {span: 8}, wrapperCol: {span: 16}};
-const tailLayout = {wrapperCol: {offset: 8, span: 16},};
+import registerImg1 from "../img/register-1.jpg";
+import registerImg2 from "../img/register-2.jpg";
+import registerImg3 from "../img/register-3.jpg";
+import registerImg4 from "../img/register-4.jpg";
 
 class Login extends React.Component {
     constructor(props) {
@@ -38,11 +37,11 @@ class Login extends React.Component {
         formData.append('password', this.state.password);
         formData.append('email', this.state.email);
         ////调用后端api,并存储返回值
-        let ret = (await axios.post('/api/login', formData)).data;
+        let ret = (await axios.post('api/login', formData)).data;
         let state = ret.state;
         let name = ret.message.split(";")[1];
         //根据返回值进行处理
-        if (state == true) {
+        if (state === true) {
             //存入cookie,直接跳转登陆状态
             cookie.save('token', ret.authorizeToken);
             cookie.save("name", name);
@@ -61,45 +60,45 @@ class Login extends React.Component {
     render() {
         return (
             <div>
-                <div className="logo-container">
-                    <img className="logo-img" src={logo}/>
-                </div>
-                <Layout className="layout">
-                    <Content style={{padding: '50px 0 0 200px'}}>
-                        <Form
-                            {...layout}
-                            name="basic"
-                            initialValues={{remember: true}}
-                            style={{marginTop: "1%"}}
-                        >
-                            <Form.Item
-                                label="Email"
-                                name="email"
-                                rules={[{
-                                    required: true, message: '请输入邮箱!'
-                                }, {
-                                    validator: this.checkEmail.bind(this)
-                                }
-                                ]}
-                            >
-                                <Input style={{width: "30%"}} type="text" name="email" onChange={this.handleChange}/>
-                            </Form.Item>
+                <Form
+                    name="basic"
+                    initialValues={{remember: true}}
+                    style={{marginLeft: "2%", marginTop: "2%", width: "75%"}}
+                >
+                    <Form.Item
+                        label="Email"
+                        name="email"
+                        rules={[{
+                            required: true, message: '请输入邮箱!'
+                        }, {
+                            validator: this.checkEmail.bind(this)
+                        }
+                        ]}
+                    >
+                        <Input type="text" name="email" onChange={this.handleChange}/>
+                    </Form.Item>
 
-                            <Form.Item
-                                label="Password"
-                                name="password"
-                                rules={[{required: true, message: '请输入密码!'}]}
-                            >
-                                <Input.Password style={{width: "30%"}} name="password" onChange={this.handleChange}/>
-                            </Form.Item>
-                            <Form.Item {...tailLayout}>
-                                <Button type="primary" htmlType="submit" onClick={this.submit}>
-                                    提交
-                                </Button>
-                            </Form.Item>
-                        </Form>
-                    </Content>
-                </Layout>
+                    <Form.Item
+                        label="Password"
+                        name="password"
+                        rules={[{required: true, message: '请输入密码!'}]}
+                    >
+                        <Input.Password name="password" onChange={this.handleChange}/>
+                    </Form.Item>
+                    <Form.Item>
+                        <Button type="primary" htmlType="submit" onClick={this.submit}>
+                            提交
+                        </Button>
+                    </Form.Item>
+                </Form>
+                <div>
+                    <Carousel>
+                        <div><img src={registerImg1} className="logo-img"/></div>
+                        <div><img src={registerImg2} className="logo-img"/></div>
+                        <div><img src={registerImg3} className="logo-img"/></div>
+                        <div><img src={registerImg4} className="logo-img"/></div>
+                    </Carousel>
+                </div>
             </div>
         )
     }

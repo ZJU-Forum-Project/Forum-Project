@@ -1,15 +1,12 @@
 import React from 'react';
 import '../asset/navigate.css';
-import {Layout, Menu, Avatar, Dropdown, Input, Button} from 'antd';
-import {HomeFilled, DownSquareFilled} from '@ant-design/icons';
-import Text from "antd/es/typography/Text";
+import {Avatar, Button, Dropdown, Menu} from 'antd';
+import {DownSquareFilled} from '@ant-design/icons';
 import axios from 'axios';
 import cookie from 'react-cookies';
 import {Link} from 'react-router-dom';
-import SubMenu from 'antd/lib/menu/SubMenu';
-import {PageHeader, Tabs, Statistic, Descriptions} from 'antd';
 
-const {Search} = Input;
+
 const loginGithubUrl = "https://github.com/login/oauth/authorize?client_id=d25125e25fe36054a4de&redirect_uri=http://106.12.27.104/callback&scope=user&state=1";
 
 
@@ -32,6 +29,16 @@ const userCenter = (
                 回复我的
             </a>
         </Menu.Item>
+        <Menu.Item className="menuItemStyle">
+            <Button type="link" size="large" style={{position: "relative", bottom: "10px"}} onClick={
+                function () {
+                    cookie.remove('name');
+                    cookie.remove('avatarUrl');
+                    cookie.remove('token');
+                    window.location.reload();
+                }
+            }>注销</Button>
+        </Menu.Item>
     </Menu>
 );
 
@@ -51,15 +58,6 @@ const notLogin = (
         </Menu.Item>
         <Menu.Item className="menuItemStyle">
             <a href={loginGithubUrl}><Button ghost type="link" style={{fontSize: "medium"}}>GitHub登录</Button></a>
-        </Menu.Item>
-        <Menu.Item className="menuItemStyle">
-            <Button ghost type="link" style={{fontSize: "medium"}} onClick={
-                function () {
-                    cookie.remove('name');
-                    cookie.remove('avatarUrl');
-                    cookie.remove('token');
-                }
-            }>注销</Button>
         </Menu.Item>
     </Menu>
 );
@@ -145,26 +143,19 @@ class NavigateBar extends React.Component {
                     <Dropdown overlay={userCenter} className="menuItemStyle">
                         <a className="menuItemStyle" onClick={e => e.preventDefault()}>
                             {cookie.load('name')}&nbsp;&nbsp;<Avatar shape="square" size={28}
+                                                                     style={{position: "relative", bottom: "10px"}}
                                                                      src={cookie.load('avatarUrl')}/>
                         </a>
                     </Dropdown>
                 </Menu.Item>;
 
         return (
-            // < className="site-page-header-responsive" mode>
-            //     <div className="logo">
-            //         <Text style={{color: '#1890ff', fontSize: "medium"}}><HomeFilled twoToneColor/> DD98</Text>
-            //     </div>
-            //     <div className="search">
-            //         <Search placeholder="搜索问题或找人" onSearch={value => console.log(value)} enterButton/>
-            //     </div>
             <Menu theme="dark" mode="inline">
                 {this.pageButton}
                 <Menu.Item className="menuItemStyle" key="2"><a className="menuItemStyle">最新发帖</a></Menu.Item>
                 <Menu.Item className="menuItemStyle" key="3"><a className="menuItemStyle">通知</a></Menu.Item>
                 {this.loginButton}
             </Menu>
-            // </>
         );
     }
 }

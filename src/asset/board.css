@@ -17,5 +17,19 @@
 .ant-avatar {
     margin-top: 16px;
     margin-right: 16px;
-  }
-  
+}
+
+.headline {
+    margin-left: 1%;
+    margin-top: 1%;
+}
+
+.boardTitle {
+    margin-top: 1%;
+    font-size: xx-large;
+}
+
+.buttonType{
+    margin-top: -1%;
+    margin-left: 1%;
+}
