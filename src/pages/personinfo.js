@@ -1,10 +1,10 @@
-import {Breadcrumb, Button, DatePicker, Form, Input} from 'antd';
+import {Button, DatePicker, Form, Input} from 'antd';
 import React from 'react';
 import axios from 'axios';
 import cookie from 'react-cookies';
 import {Link} from 'react-router-dom';
-import {Radio, RadioGroup} from 'react-radio-group'
 import NotLogin from "../components/notlogin";
+import {Radio} from 'antd';
 
 
 class personinfo extends React.Component {
@@ -94,11 +94,6 @@ class personinfo extends React.Component {
                     signature: query_return.signature
                 });
             }
-
-            console.log("information loaded!")
-            console.log("Show this.state:");
-            console.log("%o", this.state);
-
         }
 
 
@@ -118,11 +113,7 @@ class personinfo extends React.Component {
     render() {
         console.log("render() is called");
 
-        //若用户已登录
-        //以下两行代码：为方便前端调试，暂时使条件判断失效
-        //if(1){
         if (cookie.load("token")) {
-
             let iemail = this.state.email;
             let ibirthday = this.state.birthday;
             let igender = this.state.gender;
@@ -133,77 +124,43 @@ class personinfo extends React.Component {
             let isignature = this.state.signature;
 
             return (
-                <div className="site-layout-content">
-                    个人信息
-                    <Form
-                        name="basic"
-                        initialValues={{remember: true}}
-                    >
-                        <Form.Item
-                            label="Email"
-                            name="email"
-                        >
-                            <Input type="text"
-                                   placeholder={iemail}
-                                   readonly="readonly"/>
+                <div>
+                    <h1 className="headline">个人信息</h1>
+                    <Form name="basic" initialValues={{remember: true}} className="headline">
+                        <Form.Item label="邮箱" name="email"
+                                   className={{width: "40%", float: "left", marginRight: "50px"}}>
+                            <Input type="text" placeholder={iemail} disabled/>
+                        </Form.Item>
+                        <Form.Item label="生日" name="birthday" style={{width: "50%"}}>
+                            <DatePicker placeholder={ibirthday} disabled style={{width: "300px"}}/>
                         </Form.Item>
 
-                        <Form.Item
-                            label="Birthday"
-                            name="birthday"
-                        >
-
-                            <DatePicker placeholder={ibirthday} disabled/>
+                        <Form.Item label="性别" style={{width: "40%", float: "left", marginRight: "50px"}}>
+                            <Radio.Group name="gender" defaultValue={this.state.gender} disabled>
+                                <Radio.Button value="男" style={{width: "150px"}}>男孩纸</Radio.Button>
+                                <Radio.Button value="女" style={{width: "150px"}}>女孩纸</Radio.Button>
+                            </Radio.Group>
                         </Form.Item>
 
-                        <Form.Item
-                            label="Gender"
-                        >
-
-                            <RadioGroup
-                                name="gender"
-                                selectedValue={this.state.gender}
-                                disabled>
-                                <Radio value="男"/>Man
-                                <Radio value="女"/>Woman
-                            </RadioGroup>
-
-
+                        <Form.Item label="手机号" name="phone" style={{width: "50%"}}>
+                            <Input type="text" placeholder={iphone} disabled/>
                         </Form.Item>
 
-                        <Form.Item
-                            label="Phone"
-                            name="phone"
-                        >
-                            <Input type="text" placeholder={iphone} readonly="readonly"/>
+                        <Form.Item label="真实姓名" name="real_name"
+                                   style={{width: "40%", float: "left", marginRight: "50px"}}>
+                            <Input type="text" placeholder={ireal_name} disabled/>
                         </Form.Item>
 
-                        <Form.Item
-                            label="Real_name"
-                            name="real_name"
-                        >
-                            <Input type="text" placeholder={ireal_name} readonly="readonly"/>
+                        <Form.Item label="故乡" name="hometown" style={{width: "50%"}}>
+                            <Input type="text" placeholder={ihometown} disabled/>
                         </Form.Item>
 
-                        <Form.Item
-                            label="Hometown"
-                            name="hometown"
-                        >
-                            <Input type="text" placeholder={ihometown} readonly="readonly"/>
+                        <Form.Item label="机构" style={{width: "90%"}} name="organization">
+                            <Input type="text" placeholder={iorganization} disabled/>
                         </Form.Item>
 
-                        <Form.Item
-                            label="Organization"
-                            name="organization"
-                        >
-                            <Input type="text" placeholder={iorganization} readonly="readonly"/>
-                        </Form.Item>
-
-                        <Form.Item
-                            label="Signature"
-                            name="signature"
-                        >
-                            <Input type="textarea" placeholder={isignature} readonly="readonly"/>
+                        <Form.Item style={{width: "90%"}} label="个性签名" name="signature">
+                            <Input type="textarea" placeholder={isignature} disabled/>
                         </Form.Item>
 
 

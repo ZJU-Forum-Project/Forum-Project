@@ -60,7 +60,6 @@ export default class Routing extends React.Component {
                 <Footer style={{textAlign: 'center'}}>Design ©2020 by Group I</Footer>
             </Layout>
         )
-            ;
     }
 }
 

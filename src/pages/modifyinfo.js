@@ -3,10 +3,9 @@ import React from 'react';
 import axios from 'axios';
 import cookie from 'react-cookies';
 import {Link} from 'react-router-dom';
-import {Radio, RadioGroup} from 'react-radio-group'
 import ReactDOM from 'react-dom';
 import NotLogin from "../components/notlogin";
-
+import {Radio} from 'antd';
 
 class modifyinfo extends React.Component {
     constructor(props) {
@@ -328,229 +327,159 @@ class modifyinfo extends React.Component {
 
             return (
                 <div>
-                    <div className="site-layout-content" style={{textAlign: 'center', fontSize: '30px'}}>
-                        修改个人信息
-                        <br/><br/><br/>
-                        <Form
-                            name="basic"
-                            initialValues={{remember: true}}
+                    <h1 className="headline">修改个人信息</h1>
+                    <Form name="basic" initialValues={{remember: true}} className="headline">
+                        <Form.Item label="邮箱" name="email"
+                                   rules={[{
+                                       max: 50, message: 'email不能多于50个字符!'
+                                   }, {
+                                       validator: this.checkEmail.bind(this)
+                                   }]}
+                                   style={{width: "80%"}}>
+                            <Input type="text" placeholder={iemail} disabled/>
+                        </Form.Item>
+
+                        <Form.Item
+                            label="生日"
+                            name="birthday"
+                            style={{width: "40%", float: "left", marginRight: "50px"}}
                         >
-                            <Form.Item
-                                style={{margin: '16px 100px 15px -200px'}}
-                                label="Email"
-                                name="email"
-                                rules={[{
-                                    max: 50, message: 'email不能多于50个字符!'
-                                }, {
-                                    validator: this.checkEmail.bind(this)
-                                }]}
-                            >
-                                <Input type="text"
-                                       placeholder={iemail}
-                                       readonly="readonly"/>
-                            </Form.Item>
+                            <DatePicker name="birthday" placeholder={ibirthday}
+                                        value={ibirthday}
+                                        onChange={this.handleBirthdayChange}
+                                        onOk={this.handleBirthdayOk}
+                                        style={{width: "300px"}}
+                            />
+                        </Form.Item>
 
-                            <Form.Item
-                                style={{margin: '16px 100px 15px -200px'}}
-                                label="Birthday"
-                                name="birthday"
-                            >
+                        <Form.Item style={{width: "50%"}}>
+                            <Radio.Group
+                                name="brithday_hidden"
+                                defaultValue={this.state.birthday_hidden}
+                                onChange={this.handleBirthdayHiddenChange}>
+                                <Radio.Button value={1} style={{width: "150px"}}>隐藏生日</Radio.Button>
+                                <Radio.Button value={0} style={{width: "150px"}}>不隐藏生日</Radio.Button>
+                            </Radio.Group>
+                        </Form.Item>
 
-                                <DatePicker name="birthday" placeholder={ibirthday}
-                                            value={ibirthday}
-                                            onChange={this.handleBirthdayChange}
-                                            onOk={this.handleBirthdayOk}
-                                />
-                            </Form.Item>
+                        <Form.Item label="性别"
+                                   style={{width: "40%", float: "left", marginRight: "50px"}}>
+                            <Radio.Group
+                                name="gender"
+                                defaultValue={this.state.gender}
+                                onChange={this.handleGenderChange}>
+                                <Radio.Button value="男" style={{width: "150px"}}>Man</Radio.Button>
+                                <Radio.Button value="女" style={{width: "150px"}}>Woman</Radio.Button>
+                            </Radio.Group>
+                        </Form.Item>
 
-                            <Form.Item
-                                style={{margin: '16px 100px 15px -200px'}}
-                                label="Gender"
-                            >
+                        <Form.Item style={{width: "50%"}}>
+                            <Radio.Group
+                                name="gender_hidden"
+                                defaultValue={this.state.gender_hidden}
+                                onChange={this.handleGenderHiddenChange}>
+                                <Radio.Button value={1} style={{width: "150px"}}>隐藏性别</Radio.Button>
+                                <Radio.Button value={0} style={{width: "150px"}}>不隐藏性别</Radio.Button>
+                            </Radio.Group>
+                        </Form.Item>
 
-                                <RadioGroup
-                                    name="gender"
-                                    selectedValue={this.state.gender}
-                                    onChange={this.handleGenderChange}>
-                                    <Radio value="男"/>Man
-                                    <Radio value="女"/>Woman
-                                </RadioGroup>
+                        <Form.Item label="电话号码" name="phone"
+                                   rules={[{
+                                       max: 50, message: '电话号码不能多于50个字符!'
+                                   }]}
+                                   style={{width: "40%", float: "left", marginRight: "50px"}}
+                        >
+                            <Input name="phone" type="text" placeholder={iphone} value={iphone}
+                                   onChange={this.handleInputChange}/>
+                        </Form.Item>
 
+                        <Form.Item style={{width: "50%"}}>
+                            <Radio.Group
+                                name="phone_hidden"
+                                defaultValue={this.state.phone_hidden}
+                                onChange={this.handlePhoneHiddenChange}>
+                                <Radio.Button value={1} style={{width: "150px"}}>隐藏电话</Radio.Button>
+                                <Radio.Button value={0} style={{width: "150px"}}>不隐藏电话</Radio.Button>
+                            </Radio.Group>
+                        </Form.Item>
 
-                            </Form.Item>
+                        <Form.Item label="真实姓名" name="real_name"
+                                   rules={[{
+                                       max: 50, message: '真实姓名不能多于50个字符!'
+                                   }]}
+                                   style={{width: "40%", float: "left", marginRight: "50px"}}
+                        >
+                            <Input name="real_name" type="text" placeholder={ireal_name}
+                                   value={this.state.real_name} onChange={this.handleInputChange}/>
+                        </Form.Item>
 
-                            <Form.Item
-                                style={{margin: '16px 100px 15px -200px'}}
-                                label="Phone"
-                                name="phone"
-                                rules={[{
-                                    max: 50, message: '电话号码不能多于50个字符!'
-                                }]}
-                            >
-                                <Input name="phone" type="text" placeholder={iphone} value={iphone}
-                                       onChange={this.handleInputChange}/>
-                            </Form.Item>
+                        <Form.Item style={{width: "50%"}}>
+                            <Radio.Group
+                                name="real_name_hidden"
+                                defaultValue={this.state.real_name_hidden}
+                                onChange={this.handleRealNameHiddenChange}>
+                                <Radio.Button value={1} style={{width: "150px"}}>隐藏真实姓名</Radio.Button>
+                                <Radio.Button value={0} style={{width: "150px"}}>不隐藏真实姓名</Radio.Button>
+                            </Radio.Group>
+                        </Form.Item>
 
-                            <Form.Item
-                                style={{margin: '16px 100px 15px -200px'}}
-                                label="Real_name"
-                                name="real_name"
-                                rules={[{
-                                    max: 50, message: '真实姓名不能多于50个字符!'
-                                }]}
-                            >
-                                <Input name="real_name" type="text" placeholder={ireal_name}
-                                       value={this.state.real_name} onChange={this.handleInputChange}/>
-                            </Form.Item>
+                        <Form.Item label="所在地" name="hometown"
+                                   style={{width: "40%", float: "left", marginRight: "50px"}}
+                                   rules={[{
+                                       max: 50, message: '户籍所在地不能多于50个字符!'
+                                   }]}
+                        >
+                            <Input name="hometown" type="text" placeholder={ihometown} value={ihometown}
+                                   onChange={this.handleInputChange}/>
+                        </Form.Item>
 
-                            <Form.Item
-                                style={{margin: '16px 100px 15px -200px'}}
-                                label="Hometown"
-                                name="hometown"
-                                rules={[{
-                                    max: 50, message: '户籍所在地不能多于50个字符!'
-                                }]}
-                            >
-                                <Input name="hometown" type="text" placeholder={ihometown} value={ihometown}
-                                       onChange={this.handleInputChange}/>
-                            </Form.Item>
+                        <Form.Item style={{width: "50%"}}>
+                            <Radio.Group
+                                name="hometown_hidden"
+                                defaultValue={this.state.hometown_hidden}
+                                onChange={this.handleHometownHiddenChange}>
+                                <Radio.Button value={1} style={{width: "150px"}}>隐藏所在地</Radio.Button>
+                                <Radio.Button value={0} style={{width: "150px"}}>不隐藏所在地</Radio.Button>
+                            </Radio.Group>
+                        </Form.Item>
 
-                            <Form.Item
-                                style={{margin: '16px 100px 15px -200px'}}
-                                label="Organization"
-                                name="organization"
-                                rules={[{
-                                    max: 50, placeholder: '组织名称不能多于50个字符!'
-                                }]}
-                            >
-                                <Input name="organization" type="text" placeholder={iorganization}
-                                       value={iorganization} onChange={this.handleInputChange}/>
-                            </Form.Item>
+                        <Form.Item label="所属组织" name="organization"
+                                   style={{width: "40%", float: "left", marginRight: "50px"}}
+                                   rules={[{
+                                       max: 50, placeholder: '组织名称不能多于50个字符!'
+                                   }]}>
+                            <Input name="organization" type="text" placeholder={iorganization}
+                                   value={iorganization} onChange={this.handleInputChange}/>
+                        </Form.Item>
+                        <Form.Item style={{width: "50%"}}>
+                            <Radio.Group
+                                name="organization_hidden"
+                                defaultValue={this.state.organization_hidden}
+                                onChange={this.handleOrganizationHiddenChange}>
+                                <Radio.Button value={1} style={{width: "150px"}}>隐藏组织</Radio.Button>
+                                <Radio.Button value={0} style={{width: "150px"}}>显示组织</Radio.Button>
+                            </Radio.Group>
+                        </Form.Item>
 
-                            <Form.Item
-                                style={{margin: '16px 100px 15px -200px'}}
-                                label="Signature"
-                                name="signature"
-                                rules={[{
-                                    max: 200, message: '个性签名不能多于200个字符!'
-                                }]}
-                            >
-                                <Input name="signature" type="textarea" placeholder={isignature} value={isignature}
-                                       onChange={this.handleInputChange}/>
-                            </Form.Item>
-
-                        </Form>
-                    </div>
-
-                    <div className="site-layout-content" style={{textAlign: 'center', fontSize: '30px'}}>
-                        隐私设置
-                        <br/><br/><br/>
-                        <Form>
-                            <Form.Item
-                                style={{margin: '16px 100px 15px 300px'}}
-                                label="是否隐藏生日"
-                                name=""
-                            >
-                                <RadioGroup
-                                    name="brithday_hidden"
-                                    selectedValue={this.state.birthday_hidden}
-                                    onChange={this.handleBirthdayHiddenChange}>
-                                    <Radio value={1} style={{margin: '0px 0px 0px -700px'}}/>是
-                                    <Radio value={0} style={{margin: '0px 0px 0px 40px'}}/>否
-                                </RadioGroup>
-                            </Form.Item>
-
-                            <Form.Item
-                                style={{margin: '16px 100px 15px 300px'}}
-                                label="是否隐藏性别"
-                                name=""
-                            >
-                                <RadioGroup
-                                    name="gender_hidden"
-                                    selectedValue={this.state.gender_hidden}
-                                    onChange={this.handleGenderHiddenChange}>
-                                    <Radio value={1} style={{margin: '0px 0px 0px -700px'}}/>是
-                                    <Radio value={0} style={{margin: '0px 0px 0px 40px'}}/>否
-                                </RadioGroup>
-                            </Form.Item>
-
-                            <Form.Item
-                                style={{margin: '16px 100px 15px 300px'}}
-                                label="是否隐藏电话"
-                                name=""
-                            >
-                                <RadioGroup
-                                    name="phone_hidden"
-                                    selectedValue={this.state.phone_hidden}
-                                    onChange={this.handlePhoneHiddenChange}>
-                                    <Radio value={1} style={{margin: '0px 0px 0px -700px'}}/>是
-                                    <Radio value={0} style={{margin: '0px 0px 0px 40px'}}/>否
-                                </RadioGroup>
-                            </Form.Item>
-
-                            <Form.Item
-                                style={{margin: '16px 100px 15px 300px'}}
-                                label="是否隐藏真实姓名"
-                                name=""
-                            >
-                                <RadioGroup
-                                    name="real_name_hidden"
-                                    selectedValue={this.state.real_name_hidden}
-                                    onChange={this.handleRealNameHiddenChange}>
-                                    <Radio value={1} style={{margin: '0px 0px 0px -728px'}}/>是
-                                    <Radio value={0} style={{margin: '0px 0px 0px 40px'}}/>否
-                                </RadioGroup>
-                            </Form.Item>
-
-                            <Form.Item
-                                style={{margin: '16px 100px 15px 300px'}}
-                                label="是否隐藏家乡"
-                                name=""
-                            >
-                                <RadioGroup
-                                    name="hometown_hidden"
-                                    selectedValue={this.state.hometown_hidden}
-                                    onChange={this.handleHometownHiddenChange}>
-                                    <Radio value={1} style={{margin: '0px 0px 0px -700px'}}/>是
-                                    <Radio value={0} style={{margin: '0px 0px 0px 40px'}}/>否
-                                </RadioGroup>
-                            </Form.Item>
-
-                            <Form.Item
-                                style={{margin: '16px 100px 15px 300px'}}
-                                label="是否隐藏组织"
-                                name=""
-                            >
-                                <RadioGroup
-                                    name="organization_hidden"
-                                    selectedValue={this.state.organization_hidden}
-                                    onChange={this.handleOrganizationHiddenChange}>
-                                    <Radio value={1} style={{margin: '0px 0px 0px -700px'}}/>是
-                                    <Radio value={0} style={{margin: '0px 0px 0px 40px'}}/>否
-                                </RadioGroup>
-                            </Form.Item>
-
-                            <Form.Item
-                                style={{textAlign: 'center'}}
-                            >
-                                <Button type="primary" onClick={this.submit}>
-                                    保存
+                        <Form.Item label="个性签名" name="signature"
+                                   style={{width: "80%"}}
+                                   rules={[{max: 200, message: '个性签名不能多于200个字符!'}]}>
+                            <Input name="signature" type="textarea" placeholder={isignature} value={isignature}
+                                   onChange={this.handleInputChange}/>
+                        </Form.Item>
+                        <Form.Item>
+                            <Button type="primary" onClick={this.submit} style={{marginRight:"20px"}}>
+                                保存
+                            </Button>
+                            <Link to="/personinfo">
+                                <Button type="default">
+                                    取消
                                 </Button>
-
-                                <Link to="/personinfo">
-                                    <Button type="default">
-                                        取消
-                                    </Button>
-                                </Link>
-                            </Form.Item>
-                        </Form>
-                    </div>
-                </div>
-            )
-        }
-
-        //若用户未登录，显示登录提示界面
-        else {
+                            </Link>
+                        </Form.Item>
+                    </Form>
+                </div>);
+        } else {
             return (
                 <div style={{textAlign: "center", fontSize: "400%"}}><NotLogin/></div>
             );
@@ -558,6 +487,8 @@ class modifyinfo extends React.Component {
     }
 }
 
-ReactDOM.render(<modifyinfo/>, document.getElementById('root'));
+ReactDOM.render(
+    <modifyinfo/>
+    , document.getElementById('root'));
 
 export default modifyinfo
