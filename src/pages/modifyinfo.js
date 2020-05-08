@@ -358,7 +358,7 @@ class modifyinfo extends React.Component {
                                 defaultValue={this.state.birthday_hidden}
                                 onChange={this.handleBirthdayHiddenChange}>
                                 <Radio.Button value={1} style={{width: "150px"}}>隐藏生日</Radio.Button>
-                                <Radio.Button value={0} style={{width: "150px"}}>不隐藏生日</Radio.Button>
+                                <Radio.Button value={0} style={{width: "150px"}}>显示生日</Radio.Button>
                             </Radio.Group>
                         </Form.Item>
 
@@ -379,7 +379,7 @@ class modifyinfo extends React.Component {
                                 defaultValue={this.state.gender_hidden}
                                 onChange={this.handleGenderHiddenChange}>
                                 <Radio.Button value={1} style={{width: "150px"}}>隐藏性别</Radio.Button>
-                                <Radio.Button value={0} style={{width: "150px"}}>不隐藏性别</Radio.Button>
+                                <Radio.Button value={0} style={{width: "150px"}}>显示性别</Radio.Button>
                             </Radio.Group>
                         </Form.Item>
 
@@ -399,7 +399,7 @@ class modifyinfo extends React.Component {
                                 defaultValue={this.state.phone_hidden}
                                 onChange={this.handlePhoneHiddenChange}>
                                 <Radio.Button value={1} style={{width: "150px"}}>隐藏电话</Radio.Button>
-                                <Radio.Button value={0} style={{width: "150px"}}>不隐藏电话</Radio.Button>
+                                <Radio.Button value={0} style={{width: "150px"}}>显示电话</Radio.Button>
                             </Radio.Group>
                         </Form.Item>
 
@@ -419,7 +419,7 @@ class modifyinfo extends React.Component {
                                 defaultValue={this.state.real_name_hidden}
                                 onChange={this.handleRealNameHiddenChange}>
                                 <Radio.Button value={1} style={{width: "150px"}}>隐藏真实姓名</Radio.Button>
-                                <Radio.Button value={0} style={{width: "150px"}}>不隐藏真实姓名</Radio.Button>
+                                <Radio.Button value={0} style={{width: "150px"}}>显示真实姓名</Radio.Button>
                             </Radio.Group>
                         </Form.Item>
 
@@ -439,7 +439,7 @@ class modifyinfo extends React.Component {
                                 defaultValue={this.state.hometown_hidden}
                                 onChange={this.handleHometownHiddenChange}>
                                 <Radio.Button value={1} style={{width: "150px"}}>隐藏所在地</Radio.Button>
-                                <Radio.Button value={0} style={{width: "150px"}}>不隐藏所在地</Radio.Button>
+                                <Radio.Button value={0} style={{width: "150px"}}>显示所在地</Radio.Button>
                             </Radio.Group>
                         </Form.Item>
 
