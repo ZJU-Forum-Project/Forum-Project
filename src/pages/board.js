@@ -18,10 +18,10 @@ export default class Board extends React.Component {
             postings: [],
             type: "",
         };
+
         //绑定需要调用的async函数
         this.handleChange = this.handleChange.bind(this);
-        // this.handleSubmit = this.handleSubmit()
-        // this.submit = this.submit.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     componentDidMount() {
@@ -79,12 +79,16 @@ export default class Board extends React.Component {
     async handleSubmit() {
         let formData = new FormData();
         this.setState({
-            display_name: false,
+            display_name: false
         });
         formData.append('title', this.state.title);
         formData.append('content', this.state.content);
         formData.append('type', postType(this.state.type));
         formData.append('Authorization', this.state.token);
+        console.log(this.state.token);
+        console.log(this.state.type);
+        console.log(this.state.content);
+        console.log(this.state.title);
         ////调用后端api,并存储返回值
         let ret = (await axios.post('/api/post', formData)).data;
         let state = ret.state;
@@ -98,8 +102,7 @@ export default class Board extends React.Component {
     }
 
     render() {
-        // this.state.token = cookie.load("token");
-        this.state.token = true;
+        this.state.token = cookie.load("token");
         this.state.type = type();
         if (this.state.token) {
             return (

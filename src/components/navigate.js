@@ -29,6 +29,16 @@ const userCenter = (
                 回复我的
             </a>
         </Menu.Item>
+        <Menu.Item className="menuItemStyle">
+            <Button type="link" size="large" style={{position: "relative", bottom: "10px"}} onClick={
+                function () {
+                    cookie.remove('name');
+                    cookie.remove('avatarUrl');
+                    cookie.remove('token');
+                    window.location.reload();
+                }
+            }>注销</Button>
+        </Menu.Item>
     </Menu>
 );
 
@@ -48,15 +58,6 @@ const notLogin = (
         </Menu.Item>
         <Menu.Item className="menuItemStyle">
             <a href={loginGithubUrl}><Button ghost type="link" style={{fontSize: "medium"}}>GitHub登录</Button></a>
-        </Menu.Item>
-        <Menu.Item className="menuItemStyle">
-            <Button ghost type="link" style={{fontSize: "medium"}} onClick={
-                function () {
-                    cookie.remove('name');
-                    cookie.remove('avatarUrl');
-                    cookie.remove('token');
-                }
-            }>注销</Button>
         </Menu.Item>
     </Menu>
 );
@@ -142,6 +143,7 @@ class NavigateBar extends React.Component {
                     <Dropdown overlay={userCenter} className="menuItemStyle">
                         <a className="menuItemStyle" onClick={e => e.preventDefault()}>
                             {cookie.load('name')}&nbsp;&nbsp;<Avatar shape="square" size={28}
+                                                                     style={{position: "relative", bottom: "10px"}}
                                                                      src={cookie.load('avatarUrl')}/>
                         </a>
                     </Dropdown>
