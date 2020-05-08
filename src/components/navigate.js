@@ -15,29 +15,34 @@ const loginGithubUrl = "https://github.com/login/oauth/authorize?client_id=d2512
 const userCenter = (
     <Menu theme="dark">
         <Menu.Item className="menuItemStyle">
-            <a target="_blank" rel="noopener noreferrer" href="http://www.alipay.com/">
+            <Link to="/personinfo">
                 个人中心
-            </a>
+            </Link>
         </Menu.Item>
-        <Menu.Item className="menuItemStyle">
+        <Menu.Item className=" menuItemStyle">
             <Link to="/myPosts">
                 我的帖子
             </Link>
         </Menu.Item>
-        <Menu.Item className="menuItemStyle">
-            <a target="_blank" rel="noopener noreferrer" href="http://www.tmall.com/">
+        <Menu.Item className=" menuItemStyle">
+            <a target=" _blank" rel=" noopener noreferrer" href=" http://www.tmall.com/">
                 回复我的
             </a>
         </Menu.Item>
-        <Menu.Item className="menuItemStyle">
-            <Button type="link" size="large" style={{position: "relative", bottom: "10px"}} onClick={
-                function () {
-                    cookie.remove('name');
-                    cookie.remove('avatarUrl');
-                    cookie.remove('token');
-                    window.location.reload();
-                }
-            }>注销</Button>
+        < Menu.Item
+            className="menuItemStyle">
+            < Button
+                type="link"
+                size="large"
+                style={{position: "relative", bottom: "10px"}}
+                onClick={
+                    function () {
+                        cookie.remove('name');
+                        cookie.remove('avatarUrl');
+                        cookie.remove('token');
+                        window.location.reload();
+                    }
+                }> 注销 </Button>
         </Menu.Item>
     </Menu>
 );
