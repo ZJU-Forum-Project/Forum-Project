@@ -1,0 +1,28 @@
+@import '../../node_modules/antd/dist/antd.css';
+
+.site-layout-content {
+    background: #fff;
+    min-height: 100%;
+}
+
+.logo {
+    width: fit-content;
+    margin-right: 8%;
+    float: left;
+    text-align: left;
+}
+
+.search {
+    width: 50%;
+    height: fit-content;
+    float: left;
+}
+
+.menuItemStyle {
+    font-size: medium;
+    width: 10%;
+    text-align: left;
+    margin-left: 2%;
+    margin-right: 2%;
+}
+

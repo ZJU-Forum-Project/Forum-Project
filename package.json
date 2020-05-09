@@ -4,13 +4,21 @@
   "private": true,
   "dependencies": {
     "@ant-design/icons": "^4.0.5",
+    "@babel/plugin-proposal-decorators": "^7.8.3",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "antd": "^4.1.0",
+    "axios": "^0.19.2",
     "react": "^16.13.1",
+    "react-cookies": "^0.1.1",
     "react-dom": "^16.13.1",
-    "react-scripts": "3.4.1"
+    "react-mde": "^10.0.3",
+    "react-radio-group": "^3.0.3",
+    "react-router-dom": "^5.1.2",
+    "react-scripts": "^3.4.1",
+    "showdown": "^1.9.1",
+    "xss": "^1.0.6"
   },
   "scripts": {
     "start": "react-scripts start",

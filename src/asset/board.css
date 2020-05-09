@@ -1,0 +1,35 @@
+@import '../../node_modules/antd/dist/antd.css';
+
+.layout-sider {
+    background: #fff;
+    padding: 24px;
+    min-height: 140px;
+    text-align: center;
+}
+
+.layout-content {
+    background: #fff;
+    padding: 24px;
+    min-height: 70px;
+    line-height: 70px;
+}
+
+.ant-avatar {
+    margin-top: 16px;
+    margin-right: 16px;
+}
+
+.headline {
+    margin-left: 1%;
+    margin-top: 1%;
+}
+
+.boardTitle {
+    margin-top: 1%;
+    font-size: xx-large;
+}
+
+.buttonType{
+    margin-top: -1%;
+    margin-left: 1%;
+}
