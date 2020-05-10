@@ -1,6 +1,6 @@
 import React from 'react';
 import '../asset/navigate.css';
-import {Avatar, Button, Dropdown, Menu} from 'antd';
+import {Avatar, Button, Dropdown, Menu, Badge,notification} from 'antd';
 import {DownSquareFilled} from '@ant-design/icons';
 import axios from 'axios';
 import cookie from 'react-cookies';
@@ -8,9 +8,17 @@ import {Link} from 'react-router-dom';
 
 
 const loginGithubUrl = "https://github.com/login/oauth/authorize?client_id=d25125e25fe36054a4de&redirect_uri=http://106.12.27.104/callback&scope=user&state=1";
-
+let replyNumber = 0;
 
 //上方菜单栏实现
+const openNotification = () => {
+    const args = {
+        message: "当前有"+{replyNumber}+"新消息",
+        duration: 0,
+    };
+    if (replyNumber !== 0)
+        notification.open(args);
+};
 
 const userCenter = (
     <Menu theme="dark">
@@ -25,9 +33,9 @@ const userCenter = (
             </Link>
         </Menu.Item>
         <Menu.Item className=" menuItemStyle">
-            <a target=" _blank" rel=" noopener noreferrer" href=" http://www.tmall.com/">
-                回复我的
-            </a>
+            <Link to="/myReplies">
+                回复我的<Badge count={replyNumber}></Badge>
+            </Link>
         </Menu.Item>
         < Menu.Item
             className="menuItemStyle">
@@ -113,6 +121,14 @@ async function ToLogin(urlParam) {
     return person_info;
 }
 
+async function getUnreadReplyNumber() {
+    let token = cookie.load("token");
+    let name = cookie.load("name");
+    let formData = new FormData();
+    formData.append('Authorization', token);
+    formData.append('receiver', name);
+    axios.post("/api/getUnreadReplyNumber", formData);
+};
 
 class NavigateBar extends React.Component {
     async componentWillMount() {
@@ -133,7 +149,7 @@ class NavigateBar extends React.Component {
                     </a>
                 </Dropdown>
             </Menu.Item>;
-        if (cookie.load('token') == undefined || cookie.load('token') == null)
+        if (cookie.load('token') === undefined || cookie.load('token') === null)
             this.loginButton =
                 <Menu.Item>
                     <Dropdown overlay={notLogin} className="menuItemStyle">
@@ -142,7 +158,9 @@ class NavigateBar extends React.Component {
                         </a>
                     </Dropdown>
                 </Menu.Item>;
-        else
+        else {
+            replyNumber = getUnreadReplyNumber();
+            openNotification();
             this.loginButton =
                 <Menu.Item>
                     <Dropdown overlay={userCenter} className="menuItemStyle">
@@ -153,6 +171,7 @@ class NavigateBar extends React.Component {
                         </a>
                     </Dropdown>
                 </Menu.Item>;
+        }
 
         return (
             <Menu theme="dark" mode="inline">
