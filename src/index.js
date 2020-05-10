@@ -14,6 +14,7 @@ import Text from "antd/es/typography/Text";
 import {HomeFilled} from "@ant-design/icons";
 import NavigateBar from "./components/navigate";
 import modifyinfo from "./pages/modifyinfo";
+import ReplyMe from "./pages/replyme";
 
 const {Search} = Input;
 const {Header, Content, Footer, Sider} = Layout;
@@ -26,7 +27,7 @@ export default class Routing extends React.Component {
     render() {
         return (
             // 所有值应按照百分比形式进行赋值，请不要修改height的值
-            <Layout style={{width: "100%", height: "fit-content",minHeight:"650px"}}>
+            <Layout style={{width: "100%", height: "fit-content", minHeight: "650px"}}>
                 <Header>
                     <div className="logo">
                         <Text style={{color: '#1890ff', fontSize: "large"}}><HomeFilled
@@ -53,6 +54,7 @@ export default class Routing extends React.Component {
                                 <Route path="/board/" component={Board}/>
                                 <Route path="/post" component={post}/>
                                 <Route path="/myPosts" component={myPosts}/>
+                                <Route path="/myReplies" component={ReplyMe}/>
                             </div>
                         </Content>
                     </Router>
