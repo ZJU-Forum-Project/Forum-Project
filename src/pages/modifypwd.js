@@ -24,7 +24,7 @@ async function onFinish(values) {
 };
 
 async function sendEmail(emailAddress) {
-    if (emailAddress != "") {
+    if (emailAddress !== "") {
         let formData = new FormData();
         formData.append('email', emailAddress);
         let ret = (await axios.post(global.constants.url + '/api/applyEmail', formData)).data;

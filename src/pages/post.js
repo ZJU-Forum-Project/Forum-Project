@@ -1,5 +1,4 @@
-import {Card, Layout} from 'antd';
-import NavigateBar from '../components/navigate';
+import {Card} from 'antd';
 import React from 'react';
 import axios from 'axios';
 import cookie from 'react-cookies';

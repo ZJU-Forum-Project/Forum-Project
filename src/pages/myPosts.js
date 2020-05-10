@@ -1,5 +1,4 @@
-import {Layout, Button, PageHeader, Avatar, List, Form, Input} from 'antd';
-import NavigateBar from '../components/navigate';
+import {Avatar, Button, List} from 'antd';
 import React from 'react';
 import axios from 'axios';
 import cookie from 'react-cookies';

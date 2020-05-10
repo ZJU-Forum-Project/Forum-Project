@@ -54,8 +54,7 @@ export default class ReplyMe extends React.Component {
 
 
     render() {
-        // this.state.token = cookie.load("token");
-        this.state.token = true;
+        this.state.token = cookie.load("token");
         this.handleChange = this.handleChange.bind(this);
         if (this.state.token) {
             return (

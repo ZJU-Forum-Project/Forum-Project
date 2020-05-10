@@ -38,7 +38,7 @@ class Login extends React.Component {
         formData.append('password', this.state.password);
         formData.append('email', this.state.email);
         ////调用后端api,并存储返回值
-        let ret = (await axios.post(global.constants.url+'api/login', formData)).data;
+        let ret = (await axios.post(global.constants.url+'/api/login', formData)).data;
         let state = ret.state;
         let name = ret.message.split(";")[1];
         //根据返回值进行处理
