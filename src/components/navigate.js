@@ -1,6 +1,6 @@
 import React from 'react';
 import '../asset/navigate.css';
-import {Avatar, Button, Dropdown, Menu, Badge} from 'antd';
+import {Avatar, Button, Dropdown, Menu, Badge,notification} from 'antd';
 import {DownSquareFilled} from '@ant-design/icons';
 import axios from 'axios';
 import cookie from 'react-cookies';
@@ -11,6 +11,14 @@ const loginGithubUrl = "https://github.com/login/oauth/authorize?client_id=d2512
 let replyNumber = 0;
 
 //上方菜单栏实现
+const openNotification = () => {
+    const args = {
+        message: "当前有"+{replyNumber}+"新消息",
+        duration: 0,
+    };
+    if (replyNumber !== 0)
+        notification.open(args);
+};
 
 const userCenter = (
     <Menu theme="dark">
@@ -141,7 +149,7 @@ class NavigateBar extends React.Component {
                     </a>
                 </Dropdown>
             </Menu.Item>;
-        if (cookie.load('token') == undefined || cookie.load('token') == null)
+        if (cookie.load('token') === undefined || cookie.load('token') === null)
             this.loginButton =
                 <Menu.Item>
                     <Dropdown overlay={notLogin} className="menuItemStyle">
@@ -152,6 +160,7 @@ class NavigateBar extends React.Component {
                 </Menu.Item>;
         else {
             replyNumber = getUnreadReplyNumber();
+            openNotification();
             this.loginButton =
                 <Menu.Item>
                     <Dropdown overlay={userCenter} className="menuItemStyle">
