@@ -31,8 +31,8 @@ export default class myPosts extends React.Component {
         formData.append('Authorization', token)
         axios.post(global.constants.url + "/api/personalposting", formData)
             .then(response => {
-                const data = response.data
-                const posts = data.postings
+                const data = response.data;
+                const posts = data.postings;
                 this.setState({
                     postings: posts,
                     token: token
