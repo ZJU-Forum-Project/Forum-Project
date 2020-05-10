@@ -5,6 +5,7 @@ import axios from 'axios';
 import cookie from 'react-cookies';
 import "../asset/board.css"
 import NotLogin from "../components/notlogin";
+import './config';
 
 export default class Post extends React.Component {
     constructor(props) {
@@ -23,7 +24,7 @@ export default class Post extends React.Component {
         let formData = new FormData();
         formData.append('postingID', id());
         formData.append('Authorization', token);
-        axios.post("/api/postings/" + id(), formData)
+        axios.post(global.constants.url + "/api/postings/" + id(), formData)
             .then(response => {
                 const data = response.data;
                 this.setState({

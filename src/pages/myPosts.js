@@ -6,6 +6,7 @@ import cookie from 'react-cookies';
 import "../asset/board.css"
 import {Link} from "react-router-dom";
 import NotLogin from "../components/notlogin";
+import './config';
 
 export default class myPosts extends React.Component {
     constructor(props) {
@@ -29,7 +30,7 @@ export default class myPosts extends React.Component {
         let token = cookie.load("token")
         let formData = new FormData()
         formData.append('Authorization', token)
-        axios.post("/api/personalposting", formData)
+        axios.post(global.constants.url + "/api/personalposting", formData)
             .then(response => {
                 const data = response.data
                 const posts = data.postings

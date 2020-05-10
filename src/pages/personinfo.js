@@ -5,6 +5,7 @@ import cookie from 'react-cookies';
 import {Link} from 'react-router-dom';
 import NotLogin from "../components/notlogin";
 import {Radio} from 'antd';
+import './config';
 
 
 class personinfo extends React.Component {
@@ -40,7 +41,7 @@ class personinfo extends React.Component {
         formData.append('Authorization', token);
 
         //调用后端queryinfo接口，发送token,返回InfoMessage类对象
-        let query_return = (await axios.post('/api/queryinfo', formData)).data;
+        let query_return = (await axios.post(global.constants.url + '/api/queryinfo', formData)).data;
         console.log("Show query_return:");
         console.log("%o", query_return);
 

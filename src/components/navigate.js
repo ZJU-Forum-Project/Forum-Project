@@ -1,10 +1,11 @@
 import React from 'react';
 import '../asset/navigate.css';
-import {Avatar, Button, Dropdown, Menu, Badge,notification} from 'antd';
+import {Avatar, Button, Dropdown, Menu, Badge, notification} from 'antd';
 import {DownSquareFilled} from '@ant-design/icons';
 import axios from 'axios';
 import cookie from 'react-cookies';
 import {Link} from 'react-router-dom';
+import './config';
 
 
 const loginGithubUrl = "https://github.com/login/oauth/authorize?client_id=d25125e25fe36054a4de&redirect_uri=http://106.12.27.104/callback&scope=user&state=1";
@@ -13,7 +14,7 @@ let replyNumber = 0;
 //上方菜单栏实现
 const openNotification = () => {
     const args = {
-        message: "当前有"+{replyNumber}+"新消息",
+        message: "当前有" + {replyNumber} + "新消息",
         duration: 0,
     };
     if (replyNumber !== 0)
@@ -127,7 +128,8 @@ async function getUnreadReplyNumber() {
     let formData = new FormData();
     formData.append('Authorization', token);
     formData.append('receiver', name);
-    axios.post("/api/getUnreadReplyNumber", formData);
+    let number = (await axios.post(global.constants.url + "/api/getUnreadReplyNumber", formData)).data;
+    return number;
 };
 
 class NavigateBar extends React.Component {

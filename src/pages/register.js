@@ -4,6 +4,8 @@ import {Button, Form, Input} from 'antd';
 import axios from 'axios';
 import cookie from 'react-cookies';
 import {Carousel} from 'antd';
+import './config';
+
 
 // 添加走马灯图片
 import registerImg1 from '../img/register-1.jpg';
@@ -40,7 +42,7 @@ class register extends React.Component {
         formData.append('name', this.state.name);
         formData.append('password', this.state.password);
         formData.append('token', this.state.token);
-        let register_return = (await axios.post('/api/register', formData)).data;//调用后端register接口，返回消息
+        let register_return = (await axios.post(global.constants.url + '/api/register', formData)).data;//调用后端register接口，返回消息
         let success = register_return.state;
         if (success) {
             alert(register_return.message);//返回信息
@@ -73,7 +75,7 @@ class register extends React.Component {
         if (emailAddress != "") {
             let formData = new FormData();
             formData.append('email', emailAddress);
-            let ret = (await axios.post('/api/applyEmail', formData)).data;
+            let ret = (await axios.post(global.constants.url + '/api/applyEmail', formData)).data;
             let success = ret.state;
             if (success) {
                 alert("You have reived the email contains token!");

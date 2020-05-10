@@ -6,6 +6,7 @@ import {Link} from 'react-router-dom';
 import ReactDOM from 'react-dom';
 import NotLogin from "../components/notlogin";
 import {Radio} from 'antd';
+import './config';
 
 class modifyinfo extends React.Component {
     constructor(props) {
@@ -132,7 +133,7 @@ class modifyinfo extends React.Component {
         formData.append('Authorization', token);
 
         //调用后端queryinfo接口，发送token,返回InfoMessage类对象
-        let query_return = (await axios.post('/api/queryinfo', formData)).data;
+        let query_return = (await axios.post(global.constants.url + '/api/queryinfo', formData)).data;
         console.log("Show query_return:");
         console.log("%o", query_return);
 
@@ -274,7 +275,7 @@ class modifyinfo extends React.Component {
         }
 
         //调用后端queryinfo接口，发送信息,返回InfoMessage类对象
-        let edit_return = (await axios.post('/api/editinfo', formData)).data;
+        let edit_return = (await axios.post(global.constants.url + '/api/editinfo', formData)).data;
 
         console.log("Show edit_return:");
         console.log("%o", edit_return);
@@ -468,7 +469,7 @@ class modifyinfo extends React.Component {
                                    onChange={this.handleInputChange}/>
                         </Form.Item>
                         <Form.Item>
-                            <Button type="primary" onClick={this.submit} style={{marginRight:"20px"}}>
+                            <Button type="primary" onClick={this.submit} style={{marginRight: "20px"}}>
                                 保存
                             </Button>
                             <Link to="/personinfo">

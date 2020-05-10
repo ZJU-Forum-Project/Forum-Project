@@ -5,6 +5,7 @@ import cookie from 'react-cookies';
 import "../asset/board.css"
 import NotLogin from "../components/notlogin";
 import {Link} from "react-router-dom";
+import './config';
 
 export default class ReplyMe extends React.Component {
     constructor(props) {
@@ -30,7 +31,7 @@ export default class ReplyMe extends React.Component {
         let formData = new FormData();
         formData.append('Authorization', token);
         formData.append('receiver', receiver);
-        axios.post("/api/CheckReply", formData)
+        axios.post(global.constants.url + "/api/CheckReply", formData)
             .then(response => {
                 const data = response.data;
                 const replies = data.replies;
@@ -48,7 +49,7 @@ export default class ReplyMe extends React.Component {
         element.setAttribute("style", "background:grey");
         formData.append('Authorization', token);
         formData.append('id', id);
-        axios.post("/api/seereply", formData);
+        axios.post(global.constants.url + "/api/seereply", formData);
     };
 
 
