@@ -1,17 +1,18 @@
-import {Comment, Tooltip, Avatar, Descriptions, List, Button, Input, Form, Badge, Spin, Modal} from 'antd';
+import {Button, Comment, Descriptions, Form, Input, List, message, Modal, Spin} from 'antd';
 import axios from 'axios';
 import cookie from 'react-cookies';
 import InfiniteScroll from 'react-infinite-scroller';
 import "../asset/board.css"
 import NotLogin from "../components/notlogin";
-import React, { createElement, useState } from 'react';
+import React from 'react';
 import moment from 'moment';
+import "./config"
 
-const { TextArea } = Input;
-const Editor = ({ onChange, onSubmit, submitting, value }) => (
+const {TextArea} = Input;
+const Editor = ({onChange, onSubmit, submitting, value}) => (
     <div>
         <Form.Item>
-            <TextArea rows={4} onChange={onChange} value={value} />
+            <TextArea rows={4} onChange={onChange} value={value}/>
         </Form.Item>
         <Form.Item>
             <Button htmlType="submit" loading={submitting} onClick={onSubmit} type="primary">
@@ -36,7 +37,7 @@ export default class Post extends React.Component {
             replyList: [],
             value: "",
             submitting: false,
-            comments:[],
+            comments: [],
             name: name,
             re_Author: true, //回复楼主标记
             loading: false,
@@ -62,7 +63,7 @@ export default class Post extends React.Component {
         let formData = new FormData();
         formData.append('postingID', id());
         formData.append('Authorization', token);
-        axios.post("/api/postings/" + id(), formData)
+        axios.post(global.constants.url + "/api/postings/" + id(), formData)
             .then(response => {
                 const data = response.data;
                 this.setState({
@@ -78,7 +79,7 @@ export default class Post extends React.Component {
 
     }
 
-    async handleSubmit (){
+    async handleSubmit() {
         let ret = null;
         if (!this.state.value) {
             return;
@@ -97,12 +98,11 @@ export default class Post extends React.Component {
         console.log(this.state.author);
         console.log(this.state.content);
 
-        if(this.state.re_Author == true) {
-            ret = (await axios.post('/api/ReplyPosting', formData)).data;
-        }
-        else {
+        if (this.state.re_Author == true) {
+            ret = (await axios.post(global.constants.url + '/api/ReplyPosting', formData)).data;
+        } else {s
             formData.append('floor', this.state.floor);
-            ret = (await axios.post('/api/ReplyFloor', formData)).data;
+            ret = (await axios.post(global.constants.url + '/api/ReplyFloor', formData)).data;
         }
         let state = ret.state;
         //根据返回值进行处理
@@ -114,26 +114,27 @@ export default class Post extends React.Component {
         }
     };
 
-    handleReply(event){
+    handleReply(event) {
         this.setState({
             value: "Reply Floor" + event.target.value + ":",
-            re_Author : false,
+            re_Author: false,
             floorId: event.target.value
         })
     }
 
-    handleChange(event){
+    handleChange(event) {
         this.setState({
             value: event.target.value,
         });
     };
 
-    handleInfiniteOnLoad(){
-        let { data } = this.state;
+    handleInfiniteOnLoad() {
+        let {data} = this.state;
         this.setState({
             loading: true,
         });
         if (data.length > this.state.replyList.length) {
+            message.warning('Infinite List loaded all');
             this.setState({
                 hasMore: false,
                 loading: false,
@@ -148,12 +149,12 @@ export default class Post extends React.Component {
         });
     }
 
-    async handleEdit(event){
+    async handleEdit(event) {
         console.log(event.target.value);
         this.setState({
             floorId: event.target.value
         })
-        let ret = (await axios.get('/api/GetFloorContent/' + this.state.floorId)).data;
+        let ret = (await axios.get(global.constants.url + '/api/GetFloorContent/' + this.state.floorId)).data;
         let state = ret.state;
         if (state === true) {
             let content = ret.message.split(";")[1];
@@ -168,14 +169,14 @@ export default class Post extends React.Component {
         }
     }
 
-    async handleEditOk(event){
+    async handleEditOk(event) {
         console.log(event.target.value);
         let formData = new FormData();
-        formData.append("floorId",this.state.floorId);
-        formData.append("content","回复" + this.state.floorId + "楼：" + this.state.content);
-        formData.append("replyId",this.state.replyId);
+        formData.append("floorId", this.state.floorId);
+        formData.append("content", "回复" + this.state.floorId + "楼：" + this.state.content);
+        formData.append("replyId", this.state.replyId);
 
-        let ret = (await axios.post('/api/ModifyFloor', formData)).data;
+        let ret = (await axios.post(global.constants.url + '/api/ModifyFloor', formData)).data;
         let state = ret.state;
 
         if (state === true) {
@@ -186,18 +187,18 @@ export default class Post extends React.Component {
         }
     }
 
-    async handleDelete(event){
+    async handleDelete(event) {
         this.setState({
             dVisible: true,
             floorId: event.target.value
         })
     }
 
-    async handleDeleteOk(){
+    async handleDeleteOk() {
         let formData = new FormData();
-        formData.append("floorId",this.state.floorId);
+        formData.append("floorId", this.state.floorId);
 
-        let ret = (await axios.post('/api/DeleteReply', formData)).data;
+        let ret = (await axios.post(global.constants.url + '/api/DeleteReply', formData)).data;
         let state = ret.state;
 
         if (state === true) {
@@ -208,14 +209,14 @@ export default class Post extends React.Component {
         }
     }
 
-    handleECancel(event){
+    handleECancel(event) {
         console.log(event);
         this.setState({
             eVisible: false,
         });
     };
 
-    handleDCancel(event){
+    handleDCancel(event) {
         console.log(event);
         this.setState({
             dVisible: false,
@@ -252,28 +253,31 @@ export default class Post extends React.Component {
                                     ({this.state.name} != {item.author})?
                                     <badge count={item.floor}>
                                         <Comment
-                                            actions={<span value={item.floorId} onClick={this.handleReply}>Reply to</span>}
+                                            actions={<span value={item.floorId}
+                                                           onClick={this.handleReply}>Reply to</span>}
                                             author={item.author}
                                             content={item.content}
                                             datetime={item.datetime}
                                         />
                                     </badge>
-                                    :<badge count={item.floor}>
-                                    <Comment
-                                        actions={[<span value={item.floorId} onClick={this.handleReply}>Reply to</span>,
-                                                  <span value={item.floorId} onClick={this.handleEdit}>Edit</span>,
-                                                  <span value={item.floorId} onClick={this.handleDelete}>Delete</span>]}
-                                        author={item.author}
-                                        content={item.content}
-                                        datetime={item.datetime}
-                                    />
+                                    :
+                                    <badge count={item.floor}>
+                                        <Comment
+                                            actions={[<span value={item.floorId}
+                                                            onClick={this.handleReply}>Reply to</span>,
+                                                <span value={item.floorId} onClick={this.handleEdit}>Edit</span>,
+                                                <span value={item.floorId} onClick={this.handleDelete}>Delete</span>]}
+                                            author={item.author}
+                                            content={item.content}
+                                            datetime={item.datetime}
+                                        />
                                     </badge>
                                 </li>
                             )}
                         />
                         {this.state.loading && this.state.hasMore && (
                             <div className="demo-loading-container">
-                                <Spin />
+                                <Spin/>
                             </div>
                         )}
                     </InfiniteScroll>
