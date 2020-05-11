@@ -135,7 +135,6 @@ export default class Post extends React.Component {
             loading: true,
         });
         if (data.length > this.state.replyList.length) {
-            message.warning('Infinite List loaded all');
             this.setState({
                 hasMore: false,
                 loading: false,
