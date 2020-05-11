@@ -1,5 +1,4 @@
 import {Comment, Tooltip, Avatar, Descriptions, List, Button, Input, Form, Badge, Spin, Modal} from 'antd';
-import NavigateBar from '../components/navigate';
 import axios from 'axios';
 import cookie from 'react-cookies';
 import InfiniteScroll from 'react-infinite-scroller';
@@ -135,7 +134,6 @@ export default class Post extends React.Component {
             loading: true,
         });
         if (data.length > this.state.replyList.length) {
-            message.warning('Infinite List loaded all');
             this.setState({
                 hasMore: false,
                 loading: false,
