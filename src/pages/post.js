@@ -32,6 +32,7 @@ export default class Post extends React.Component {
             title: "",
             content: "",
             replyId: "",
+            replyUI: "",
             author: "",
             time: "", //帖子创建时间
             replyList: [],
@@ -45,7 +46,8 @@ export default class Post extends React.Component {
             data: [],
             eVisible: false,
             dVisible: false,
-            floorId: ""
+            floorId: "",
+            floorUI: ""
         }
 
         //绑定需要调用的async函数
@@ -69,7 +71,6 @@ export default class Post extends React.Component {
                 this.setState({
                     token: token,
                     title: data.title,
-                    content: data.content,
                     author: data.author,
                     time: data.time,
                     replyList: data.replyList
@@ -100,25 +101,44 @@ export default class Post extends React.Component {
 
         if (this.state.re_Author == true) {
             ret = (await axios.post(global.constants.url + '/api/ReplyPosting', formData)).data;
-        } else {s
-            formData.append('floor', this.state.floor);
-            ret = (await axios.post(global.constants.url + '/api/ReplyFloor', formData)).data;
-        }
-        let state = ret.state;
-        //根据返回值进行处理
-        if (state === true) {
-            window.location.reload()//直接打开新网页
+            let state = ret.state;
+            //根据返回值进行处理
+            if (state === true) {
+                window.location.reload()//直接打开新网页
+            } else {
+                let message = ret.message;
+                alert(message);
+            }
         } else {
-            let message = ret.message;
-            alert(message);
+            ret = (await axios.post(global.constants.url + '/api/GetFloorContent/' + this.state.floorId)).data;
+            let state = ret.state;
+            //根据返回值进行处理
+            if (state === true) {
+                formData.append('replyId', this.state.floorId);
+                formData.append('replyUI', ret.message.replyUI);
+
+                ret = (await axios.post(global.constants.url + '/api/ReplyFloor', formData)).data;
+                let state = ret.state;
+                //根据返回值进行处理
+                if (state === true) {
+                    window.location.reload()//直接打开新网页
+                } else {
+                    let message = ret.message;
+                    alert(message);
+                }
+            } else {
+                let message = ret.message;
+                alert(message);
+            }
         }
+
     };
 
     handleReply(event) {
         this.setState({
             value: "Reply Floor" + event.target.value + ":",
             re_Author: false,
-            floorId: event.target.value
+            replyId: event.target.value
         })
     }
 
@@ -157,10 +177,10 @@ export default class Post extends React.Component {
         let ret = (await axios.get(global.constants.url + '/api/GetFloorContent/' + this.state.floorId)).data;
         let state = ret.state;
         if (state === true) {
-            let content = ret.message.split(";")[1];
-            let replyId = ret.message.split(";")[2];
             this.setState({
-                content: content,
+                content: ret.message.content,
+                replyId: ret.message.replyId,
+                replyUI: ret.message.replyUI,
                 eVisible: true
             })
         } else {
@@ -173,7 +193,7 @@ export default class Post extends React.Component {
         console.log(event.target.value);
         let formData = new FormData();
         formData.append("floorId", this.state.floorId);
-        formData.append("content", "回复" + this.state.floorId + "楼：" + this.state.content);
+        formData.append("content", "回复" + this.state.replyUI + "楼：" + this.state.content);
         formData.append("replyId", this.state.replyId);
 
         let ret = (await axios.post(global.constants.url + '/api/ModifyFloor', formData)).data;
