@@ -5,7 +5,7 @@ import cookie from 'react-cookies';
 import "../asset/board.css"
 import NotLogin from "../components/notlogin";
 import {Link} from "react-router-dom";
-import './config';
+//import './config';
 
 export default class ReplyMe extends React.Component {
     constructor(props) {

@@ -1,4 +1,4 @@
-import {Button, Comment, Descriptions, Form, Input, List, message, Modal, Spin} from 'antd';
+import {Button, Comment, Descriptions, Form, Input, List, message, Modal, Spin, Avatar, Progress} from 'antd';
 import axios from 'axios';
 import cookie from 'react-cookies';
 import InfiniteScroll from 'react-infinite-scroller';
@@ -6,7 +6,7 @@ import "../asset/board.css"
 import NotLogin from "../components/notlogin";
 import React from 'react';
 import moment from 'moment';
-import "./config"
+//import "./config"
 
 const {TextArea} = Input;
 const Editor = ({onChange, onSubmit, submitting, value}) => (
@@ -46,6 +46,7 @@ export default class Post extends React.Component {
             data: [],
             eVisible: false,
             dVisible: false,
+            rVisible: false,
             floorId: "",
             floorUI: ""
         }
@@ -53,11 +54,6 @@ export default class Post extends React.Component {
         //绑定需要调用的async函数
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleReply = this.handleReply(this);
-        this.handleEdit = this.handleEdit(this);
-        this.handleDelete = this.handleDelete(this);
-        this.handleEditOk = this.handleEditOk(this);
-        this.handleDeleteOk = this.handleDeleteOk(this);
     }
 
     componentDidMount() {
@@ -65,62 +61,66 @@ export default class Post extends React.Component {
         let formData = new FormData();
         formData.append('postingID', id());
         formData.append('Authorization', token);
-        axios.post(global.constants.url + "/api/postings/" + id(), formData)
+        axios.post("/api/postings/" + id(), formData)
             .then(response => {
                 const data = response.data;
+                console.log(data);
                 this.setState({
                     token: token,
                     title: data.title,
                     author: data.author,
                     time: data.time,
-                    replyList: data.replyList
+                    content: data.content,
+                    replyList: data.replyList,
                 });
                 cookie.save("token", this.state.token)
             })
-
     }
 
     async handleSubmit() {
         let ret = null;
         if (!this.state.value) {
+            this.setState({
+                submitting: false,
+            });
             return;
         }
-
         this.setState({
             submitting: true,
         });
 
         let formData = new FormData();
         formData.append('author', this.state.name);
-        formData.append('content', this.state.value);
         formData.append('Authorization', this.state.token);
-        formData.append('time', moment().fromNow());
+        formData.append('postId', id());
         console.log(this.state.token);
         console.log(this.state.author);
-        console.log(this.state.content);
 
         if (this.state.re_Author == true) {
-            ret = (await axios.post(global.constants.url + '/api/ReplyPosting', formData)).data;
+            formData.append('content', this.state.value);
+            ret = (await axios.post('/api/ReplyPosting', formData)).data;
             let state = ret.state;
             //根据返回值进行处理
-            if (state === true) {
+            if (state == true) {
                 window.location.reload()//直接打开新网页
             } else {
                 let message = ret.message;
                 alert(message);
             }
         } else {
-            ret = (await axios.post(global.constants.url + '/api/GetFloorContent/' + this.state.floorId)).data;
+            formData.append('content', "回复第" + this.state.replyUI + "楼：" + this.state.value);
+            formData.append("floorId", this.state.replyId);
+            ret = (await axios.post('/api/GetFloor', formData)).data;
             let state = ret.state;
             //根据返回值进行处理
-            if (state === true) {
+            if (state == true) {
                 formData.append('replyId', this.state.floorId);
-                formData.append('replyUI', ret.message.replyUI);
+                formData.append('replyUI', ret.replyUI);
 
-                ret = (await axios.post(global.constants.url + '/api/ReplyFloor', formData)).data;
+                ret = (await axios.post('/api/ReplyFloor', formData)).data;
                 let state = ret.state;
                 //根据返回值进行处理
-                if (state === true) {
+                if (state == true) {
                     window.location.reload()//直接打开新网页
                 } else {
                     let message = ret.message;
@@ -132,13 +132,19 @@ export default class Post extends React.Component {
             }
         }
 
+        this.setState({
+            submitting: false,
+            re_Author: true
+        });
+
     };
 
     handleReply(event) {
         this.setState({
-            value: "Reply Floor" + event.target.value + ":",
             re_Author: false,
-            replyId: event.target.value
+            replyId: event.target.getAttribute("data-floorId"),
+            replyUI: event.target.getAttribute("data-floorUI"),
+            rVisible: true
         })
     }
 
@@ -170,17 +176,22 @@ export default class Post extends React.Component {
     }
 
     async handleEdit(event) {
-        console.log(event.target.value);
+        let formData = new FormData();
+        formData.append("Authorization", this.state.token);
         this.setState({
-            floorId: event.target.value
-        })
-        let ret = (await axios.get(global.constants.url + '/api/GetFloorContent/' + this.state.floorId)).data;
+            floorId: event.target.getAttribute("data-floorId")
+        });
+        console.log(this.state.floorId);
+        formData.append("floorId", this.state.floorId);
+        let ret = (await axios.post('/api/GetFloor', formData)).data;
         let state = ret.state;
-        if (state === true) {
+        if (state == true) {
+            console.log(ret.content)
             this.setState({
-                content: ret.message.content,
-                replyId: ret.message.replyId,
-                replyUI: ret.message.replyUI,
+                content: ret.content,
+                value: ret.content,
+                replyId: ret.replyId,
+                replyUI: ret.replyUI,
                 eVisible: true
             })
         } else {
@@ -189,39 +200,53 @@ export default class Post extends React.Component {
         }
     }
 
-    async handleEditOk(event) {
-        console.log(event.target.value);
+    async handleEditOk() {
         let formData = new FormData();
         formData.append("floorId", this.state.floorId);
-        formData.append("content", "回复" + this.state.replyUI + "楼：" + this.state.content);
+        formData.append('Authorization', this.state.token);
+        if (this.state.replyId != 0) {
+            formData.append("content", "回复" + this.state.replyUI + "楼：" + this.state.value);
+        }
+        else{
+            formData.append("content", this.state.value);
+            console.log(this.state.value)
+        }
         formData.append("replyId", this.state.replyId);
 
-        let ret = (await axios.post(global.constants.url + '/api/ModifyFloor', formData)).data;
+        let ret = (await axios.post('/api/ModifyFloor', formData)).data;
         let state = ret.state;
 
-        if (state === true) {
+        if (state == true) {
             window.location.reload()//直接打开新网页
         } else {
             let message = ret.message;
             alert(message);
         }
+
+        this.setState({
+            eVisible: false,
+        });
     }
 
     async handleDelete(event) {
         this.setState({
             dVisible: true,
-            floorId: event.target.value
+            floorId: event.target.getAttribute("data-floorId")
         })
     }
 
     async handleDeleteOk() {
         let formData = new FormData();
+        this.setState({
+            dVisible: false
+        });
         formData.append("floorId", this.state.floorId);
+        formData.append('Authorization', this.state.token);
 
-        let ret = (await axios.post(global.constants.url + '/api/DeleteReply', formData)).data;
+        let ret = (await axios.post('/api/DeleteReply', formData)).data;
         let state = ret.state;
 
-        if (state === true) {
+        if (state == true) {
             window.location.reload()//直接打开新网页
         } else {
             let message = ret.message;
@@ -229,85 +254,120 @@ export default class Post extends React.Component {
         }
     }
 
-    handleECancel(event) {
-        console.log(event);
+    handleECancel() {
         this.setState({
             eVisible: false,
         });
     };
 
-    handleDCancel(event) {
-        console.log(event);
+    handleDCancel() {
         this.setState({
             dVisible: false,
         });
     };
 
-    render() {
-        const actions = [
-            <span key="comment-basic-reply-to">Reply to</span>,
-        ];
+    handleRCancel() {
+        this.setState({
+            rVisible: false,
+        });
+    };
 
+    is_Current_User(item){
+        console.log(item);
+        if(this.state.name != item.author){
+            let actions = [<span key="comment-basic-reply-to" data-floorId={item.floorId} data-floorUI={item.floorUI}
+                                  onClick={this.handleReply.bind(this)}>Reply to</span>]
+            return actions
+        }
+        else{
+            let actions = [<span key="comment-basic-reply-to" data-floorId={item.floorId} data-floorUI={item.floorUI}
+                                 onClick={this.handleReply.bind(this)}>Reply to</span>,
+                            <span key="comment-basic-edit" data-floorId={item.floorId} data-floorUI={item.floorUI}
+                                  onClick={this.handleEdit.bind(this)}>Edit</span>,
+                            <span key="comment-basic-delete" data-floorId={item.floorId} data-floorUI={item.floorUI}
+                                  onClick={this.handleDelete.bind(this)}>Delete</span>]
+            return actions
+        }
+    }
+
+    render() {
         this.state.id = id();
         this.state.token = cookie.load("token");
         if (this.state.token) {
             return (
                 <div>
-                    <Descriptions title={this.state.title}>
-                        <Descriptions.Item label="创建时间:">{this.state.time}</Descriptions.Item>
-                    </Descriptions>
-                    <InfiniteScroll
-                        initialLoad={false}
-                        pageStart={0}
-                        loadMore={this.handleInfiniteOnLoad}
-                        hasMore={!this.state.loading && this.state.hasMore}
-                        useWindow={false}
+                    <div className="description-title">
+                        <Descriptions title={this.state.title}>
+                            <Descriptions.Item label="创建时间:">{this.state.time}</Descriptions.Item>
+                        </Descriptions>
+                    </div>
+                    <div className="demo-infinite-container">
+                        <InfiniteScroll
+                            initialLoad={false}
+                            pageStart={0}
+                            loadMore={this.handleInfiniteOnLoad}
+                            hasMore={!this.state.loading && this.state.hasMore}
+                            useWindow={false}
+                        >
+                            <List
+                                dataSource={this.state.replyList}
+                                renderItem={item => (
+                                <List.Item>
+                                    <Comment
+                                        avatar={
+                                            <Avatar
+                                                src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
+                                                alt="Han Solo"
+                                            />
+                                        }
+                                        actions={this.is_Current_User(item)}
+                                        author={item.author}
+                                        content={item.content}
+                                        datetime={item.time}
+                                    />
+                                    <Progress
+                                        type="circle"
+                                        format={() => `${item.floorUI} 楼`}
+                                        strokeColor={{
+                                            '0%': '#108ee9',
+                                            '100%': '#87d068',
+                                        }}
+                                        percent={100}
+                                        width={50}
+                                    />
+                                </List.Item>
+                                )}
+                            >
+                                {this.state.loading && this.state.hasMore && (
+                                    <div className="demo-loading-container">
+                                        <Spin/>
+                                    </div>
+                                )}
+                            </List>
+                        </InfiniteScroll>
+                    </div>
+                    <Modal
+                        title="Edit"
+                        visible={this.state.rVisible}
+                        onOk={this.handleSubmit}
+                        onCancel={this.handleRCancel.bind(this)}
                     >
-                        <List
-                            className="comment-list"
-                            header={`${this.state.replyList.length} replies`}
-                            itemLayout="horizontal"
-                            dataSource={this.state.replyList}
-                            renderItem={item => (
-                                <li>
-                                    ({this.state.name} != {item.author})?
-                                    <badge count={item.floor}>
-                                        <Comment
-                                            actions={<span value={item.floorId}
-                                                           onClick={this.handleReply}>Reply to</span>}
-                                            author={item.author}
-                                            content={item.content}
-                                            datetime={item.datetime}
-                                        />
-                                    </badge>
-                                    :
-                                    <badge count={item.floor}>
-                                        <Comment
-                                            actions={[<span value={item.floorId}
-                                                            onClick={this.handleReply}>Reply to</span>,
-                                                <span value={item.floorId} onClick={this.handleEdit}>Edit</span>,
-                                                <span value={item.floorId} onClick={this.handleDelete}>Delete</span>]}
-                                            author={item.author}
-                                            content={item.content}
-                                            datetime={item.datetime}
-                                        />
-                                    </badge>
-                                </li>
-                            )}
-                        />
-                        {this.state.loading && this.state.hasMore && (
-                            <div className="demo-loading-container">
-                                <Spin/>
-                            </div>
-                        )}
-                    </InfiniteScroll>
+                        <p>回复{this.state.replyUI}楼:</p>
+                        <textarea placeholder="正文"
+                                  style={{
+                                      width: "100%",
+                                      height: "300px",
+                                      textIndent: "8px"
+                                  }}
+                                  type="text" name="content" onChange={this.handleChange}/>
+                    </Modal>
                     <Modal
                         title="Edit"
                         visible={this.state.eVisible}
-                        onOk={this.handleEditOk}
-                        onCancel={this.handleECancel}
+                        onOk={this.handleEditOk.bind(this)}
+                        onCancel={this.handleECancel.bind(this)}
                     >
-                        <p>回复{this.state.replyId}楼:</p>
+                        <p>回复{this.state.replyUI}楼:</p>
                         <textarea placeholder="正文"
                                   style={{
                                       width: "100%",
@@ -319,17 +379,19 @@ export default class Post extends React.Component {
                     <Modal
                         title="Delete"
                         visible={this.state.dVisible}
-                        onOk={this.handleDeleteOk}
-                        onCancel={this.handleDCancel}
+                        onOk={this.handleDeleteOk.bind(this)}
+                        onCancel={this.handleDCancel.bind(this)}
                     >
                         <p>是否确认删除该回复？</p>
                     </Modal>
-                    <Editor
-                        onChange={this.handleChange}
-                        onSubmit={this.handleSubmit}
-                        submitting={this.state.submitting}
-                        value={this.state.value}
-                    />
+                    <div className="edit-style">
+                        <Editor
+                            onChange={this.handleChange}
+                            onSubmit={this.handleSubmit}
+                            submitting={this.state.submitting}
+                            value={this.state.value}
+                        />
+                    </div>
                 </div>
             );
         } else {
