@@ -6,6 +6,7 @@ import {Link} from 'react-router-dom';
 import ReactDOM from 'react-dom';
 import NotLogin from "../components/notlogin";
 import {Radio} from 'antd';
+import './config';
 
 class modifyinfo extends React.Component {
     constructor(props) {
@@ -114,7 +115,7 @@ class modifyinfo extends React.Component {
     //检查输入的email是否符合邮箱格式(若输入为空则不检查)
     checkEmail(rule, value, callback) {
         const reg = /^[a-zA-Z0-9]+([-_.][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([-_.][a-zA-Z0-9]+)*\.[a-z]{2,}$/;
-        if (!reg.test(value) && value != "") {
+        if (!reg.test(value) && value !== "") {
             callback('请输入正确的邮箱地址');
         }
         callback();
@@ -132,12 +133,12 @@ class modifyinfo extends React.Component {
         formData.append('Authorization', token);
 
         //调用后端queryinfo接口，发送token,返回InfoMessage类对象
-        let query_return = (await axios.post('/api/queryinfo', formData)).data;
+        let query_return = (await axios.post(global.constants.url + '/api/queryinfo', formData)).data;
         console.log("Show query_return:");
         console.log("%o", query_return);
 
         //如果查询失败，弹窗提示原因
-        if (query_return.state == false) {
+        if (query_return.state === false) {
             alert(query_return.message);
         }
 
@@ -146,72 +147,72 @@ class modifyinfo extends React.Component {
             console.log("Query Success!");
 
             //更新state
-            if (query_return.email != null) {
+            if (query_return.email !== null) {
                 this.setState({
                     email: query_return.email
                 });
             }
-            if (query_return.birth != null) {
+            if (query_return.birth !== null) {
                 this.setState({
                     birthday: query_return.birth
                 });
             }
-            if (query_return.birth_hidden != null) {
+            if (query_return.birth_hidden !== null) {
                 this.setState({
                     birthday_hidden: query_return.birth_hidden
                 });
             }
-            if (query_return.gender != null && query_return.gender != "") {
+            if (query_return.gender !== null && query_return.gender !== "") {
                 this.setState({
                     gender: query_return.gender
                 });
             }
-            if (query_return.gender_hidden != null) {
+            if (query_return.gender_hidden !== null) {
                 this.setState({
                     gender_hidden: query_return.gender_hidden
                 });
             }
-            if (query_return.phone != null) {
+            if (query_return.phone !== null) {
                 this.setState({
                     phone: query_return.phone
                 });
             }
-            if (query_return.phone_hidden != null) {
+            if (query_return.phone_hidden !== null) {
                 this.setState({
                     phone_hidden: query_return.phone_hidden
                 });
             }
-            if (query_return.real_name != null) {
+            if (query_return.real_name !== null) {
                 this.setState({
                     real_name: query_return.real_name
                 });
             }
-            if (query_return.real_name_hidden != null) {
+            if (query_return.real_name_hidden !== null) {
                 this.setState({
                     real_name_hidden: query_return.real_name_hidden
                 });
             }
-            if (query_return.hometown != null) {
+            if (query_return.hometown !== null) {
                 this.setState({
                     hometown: query_return.hometown
                 });
             }
-            if (query_return.hometown_hidden != null) {
+            if (query_return.hometown_hidden !== null) {
                 this.setState({
                     hometown_hidden: query_return.hometown_hidden
                 });
             }
-            if (query_return.organization != null) {
+            if (query_return.organization !== null) {
                 this.setState({
                     organization: query_return.organization
                 });
             }
-            if (query_return.organization_hidden != null) {
+            if (query_return.organization_hidden !== null) {
                 this.setState({
                     organization_hidden: query_return.organization_hidden
                 });
             }
-            if (query_return.signature != null) {
+            if (query_return.signature !== null) {
                 this.setState({
                     signature: query_return.signature
                 });
@@ -236,7 +237,6 @@ class modifyinfo extends React.Component {
         //读入cookie中的token
         let token = cookie.load('token');
         //读入state中的数据
-        let email = this.state.email;
         var birth = this.state.birthday_string;
         let birth_hidden = this.state.birthday_hidden;
         let gender = this.state.gender;
@@ -274,13 +274,13 @@ class modifyinfo extends React.Component {
         }
 
         //调用后端queryinfo接口，发送信息,返回InfoMessage类对象
-        let edit_return = (await axios.post('/api/editinfo', formData)).data;
+        let edit_return = (await axios.post(global.constants.url + '/api/editinfo', formData)).data;
 
         console.log("Show edit_return:");
         console.log("%o", edit_return);
 
         //如果查询失败，弹窗提示原因
-        if (edit_return.state == false) {
+        if (edit_return.state === false) {
             alert(edit_return.message);
         }
 
@@ -310,20 +310,11 @@ class modifyinfo extends React.Component {
         if (cookie.load("token")) {
             var iemail = this.state.email;
             var ibirthday = this.state.birthday;//实际显示月份多1
-            var igender = this.state.gender;
             var iphone = this.state.phone;
             var ireal_name = this.state.real_name;
-            var ihometown = this.state.hometown;
             var iorganization = this.state.organization;
             var isignature = this.state.signature;
-            var iemail_hidden = this.state.email_hidden;
-            var ibirthday_hidden = this.state.birthday_hidden;
-            var igender_hidden = this.state.gender_hidden;
-            var iphone_hidden = this.state.phone_hidden;
-            var ireal_name_hidden = this.state.real_name_hidden;
             var ihometown = this.state.hometown;
-            var iorganization_hidden = this.state.organization_hidden;
-            var isignature_hidden = this.state.signature_hidden;
 
             return (
                 <div>
@@ -468,7 +459,7 @@ class modifyinfo extends React.Component {
                                    onChange={this.handleInputChange}/>
                         </Form.Item>
                         <Form.Item>
-                            <Button type="primary" onClick={this.submit} style={{marginRight:"20px"}}>
+                            <Button type="primary" onClick={this.submit} style={{marginRight: "20px"}}>
                                 保存
                             </Button>
                             <Link to="/personinfo">
@@ -486,9 +477,5 @@ class modifyinfo extends React.Component {
         }
     }
 }
-
-ReactDOM.render(
-    <modifyinfo/>
-    , document.getElementById('root'));
 
 export default modifyinfo

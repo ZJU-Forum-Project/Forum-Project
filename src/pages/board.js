@@ -1,10 +1,11 @@
-import {Avatar, Button, Form, Input, List, PageHeader, Modal} from 'antd';
+import {Avatar, Button, Form, Input, List, Modal} from 'antd';
 import React from 'react';
 import axios from 'axios';
 import cookie from 'react-cookies';
 import "../asset/board.css"
 import NotLogin from "../components/notlogin";
 import boardImg1 from '../img/board-1.jpeg';
+import './config';
 
 export default class Board extends React.Component {
     constructor(props) {
@@ -28,7 +29,7 @@ export default class Board extends React.Component {
         let token = cookie.load("token");
         let formData = new FormData();
         formData.append('Authorization', token);
-        axios.post("/api/board/" + type(), formData)
+        axios.post(global.constants.url + "/api/board/" + type(), formData)
             .then(response => {
                 let data = response.data
                 let posts = data.postings
@@ -90,7 +91,7 @@ export default class Board extends React.Component {
         console.log(this.state.content);
         console.log(this.state.title);
         ////调用后端api,并存储返回值
-        let ret = (await axios.post('/api/post', formData)).data;
+        let ret = (await axios.post(global.constants.url + '/api/post', formData)).data;
         let state = ret.state;
         //根据返回值进行处理
         if (state === true) {

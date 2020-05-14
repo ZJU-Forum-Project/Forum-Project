@@ -3,6 +3,7 @@ import {Button, Carousel, Form, Input} from 'antd';
 import cookie from 'react-cookies';
 import axios from 'axios';
 import '../asset/register.css';
+import './config';
 
 import registerImg1 from "../img/register-1.jpg";
 import registerImg2 from "../img/register-2.jpg";
@@ -37,7 +38,7 @@ class Login extends React.Component {
         formData.append('password', this.state.password);
         formData.append('email', this.state.email);
         ////调用后端api,并存储返回值
-        let ret = (await axios.post('api/login', formData)).data;
+        let ret = (await axios.post(global.constants.url+'/api/login', formData)).data;
         let state = ret.state;
         let name = ret.message.split(";")[1];
         //根据返回值进行处理

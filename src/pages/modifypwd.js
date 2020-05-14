@@ -3,6 +3,7 @@ import React from 'react';
 import axios from 'axios';
 import cookie from 'react-cookies';
 import NotLogin from "../components/notlogin";
+import './config';
 
 async function onFinish(values) {
     let email = values.email, password = values.password, autoken = cookie.load('token');
@@ -10,7 +11,7 @@ async function onFinish(values) {
     formData.append('email', email);
     formData.append('password', password);
     formData.append('Authorization', autoken);
-    axios.post('/api/modify', formData)
+    axios.post(global.constants.url + '/api/modify', formData)
         .then(res => {
             let success = res.data.state;
             if (success) {
@@ -23,10 +24,10 @@ async function onFinish(values) {
 };
 
 async function sendEmail(emailAddress) {
-    if (emailAddress != "") {
+    if (emailAddress !== "") {
         let formData = new FormData();
         formData.append('email', emailAddress);
-        let ret = (await axios.post('/api/applyEmail', formData)).data;
+        let ret = (await axios.post(global.constants.url + '/api/applyEmail', formData)).data;
         let success = ret.state;
         if (success) {
             alert("You have reived the email contains token!");

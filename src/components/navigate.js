@@ -1,6 +1,6 @@
 import React from 'react';
 import '../asset/navigate.css';
-import {Avatar, Button, Dropdown, Menu, Badge,notification} from 'antd';
+import {Avatar, Button, Dropdown, Menu, notification} from 'antd';
 import {DownSquareFilled} from '@ant-design/icons';
 import axios from 'axios';
 import cookie from 'react-cookies';
@@ -13,7 +13,7 @@ let replyNumber = 0;
 //上方菜单栏实现
 const openNotification = () => {
     const args = {
-        message: "当前有"+{replyNumber}+"新消息",
+        message: "当前有" + Number(replyNumber) + "新消息",
         duration: 0,
     };
     if (replyNumber !== 0)
@@ -34,12 +34,12 @@ const userCenter = (
         </Menu.Item>
         <Menu.Item className=" menuItemStyle">
             <Link to="/myReplies">
-                回复我的<Badge count={replyNumber}></Badge>
+                回复我的
             </Link>
         </Menu.Item>
         < Menu.Item
             className="menuItemStyle">
-            < Button
+            <Button
                 type="link"
                 size="large"
                 style={{position: "relative", bottom: "10px"}}
@@ -107,7 +107,7 @@ async function ToLogin(urlParam) {
     formData.append('code', code);
     formData.append('state', state);
 
-    let person_info = (await axios.post('/api/githubLogin', formData)).data;
+    let person_info = (await axios.post(global.constants.url + '/api/githubLogin', formData)).data;
 
     let success = person_info.state;
     if (success) {
@@ -127,7 +127,8 @@ async function getUnreadReplyNumber() {
     let formData = new FormData();
     formData.append('Authorization', token);
     formData.append('receiver', name);
-    axios.post("/api/getUnreadReplyNumber", formData);
+    let number = (await axios.post(global.constants.url + "/api/getUnreadReplyNumber", formData)).data.message;
+    replyNumber = number;
 };
 
 class NavigateBar extends React.Component {
@@ -137,6 +138,11 @@ class NavigateBar extends React.Component {
             let urlParam = url.split("?")[1];
             await ToLogin(urlParam);
             this.forceUpdate();
+        }
+
+        if(cookie.load('token')){
+            await getUnreadReplyNumber();
+            openNotification();
         }
     }
 
@@ -159,8 +165,6 @@ class NavigateBar extends React.Component {
                     </Dropdown>
                 </Menu.Item>;
         else {
-            replyNumber = getUnreadReplyNumber();
-            openNotification();
             this.loginButton =
                 <Menu.Item>
                     <Dropdown overlay={userCenter} className="menuItemStyle">
