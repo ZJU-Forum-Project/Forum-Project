@@ -37,6 +37,11 @@ const userCenter = (
                 回复我的
             </Link>
         </Menu.Item>
+        <Menu.Item className=" menuItemStyle">
+            <Link to="/modifypwd">
+                修改密码
+            </Link>
+        </Menu.Item>
         < Menu.Item
             className="menuItemStyle">
             <Button
@@ -78,24 +83,16 @@ const notLogin = (
 const pages = (
     <Menu theme="dark">
         <Menu.Item key="sub1">
-            <Link to="/board/emotion">
-                <Button ghost type="link" style={{fontSize: "medium"}}>情感交流</Button>
-            </Link>
+            <Button ghost href="/board/emotion" type="link" style={{fontSize: "medium"}}>情感交流</Button>
         </Menu.Item>
         <Menu.Item key="sub2">
-            <Link to="/board/information">
-                <Button ghost type="link" style={{fontSize: "medium"}}>校园生活</Button>
-            </Link>
+            <Button ghost href="/board/information" type="link" style={{fontSize: "medium"}}>校园生活</Button>
         </Menu.Item>
         <Menu.Item key="sub3">
-            <Link to="/board/intern">
-                <Button ghost type="link" style={{fontSize: "medium"}}>实习信息</Button>
-            </Link>
+            <Button ghost href="/board/intern" type="link" style={{fontSize: "medium"}}>实习信息</Button>
         </Menu.Item>
         <Menu.Item key="sub4">
-            <Link to="/board/study">
-                <Button ghost type="link" style={{fontSize: "medium"}}>学习资料</Button>
-            </Link>
+            <Button ghost href="/board/study" type="link" style={{fontSize: "medium"}}>学习资料</Button>
         </Menu.Item>
     </Menu>
 );

@@ -39,7 +39,7 @@ export default class Board extends React.Component {
                     type: type()
                 });
             })
-
+        
     }
 
 
@@ -95,7 +95,7 @@ export default class Board extends React.Component {
         let state = ret.state;
         //根据返回值进行处理
         if (state === true) {
-            window.location.reload()//直接打开新网页
+            window.location.reload()//刷新
         } else {
             let message = ret.message;
             alert(message);
@@ -103,9 +103,8 @@ export default class Board extends React.Component {
     }
 
     render() {
-        this.state.token = cookie.load("token");
-        this.state.type = type();
-        if (this.state.token) {
+        this.state.type = type()
+        if (cookie.load("token")) {
             return (
                 <div>
                     <Avatar className="headline" shape="square" size={128}
