@@ -1,11 +1,10 @@
-import {Button, Comment, Descriptions, Form, Input, List, message, Modal, Spin, Avatar, Progress} from 'antd';
+import {Avatar, Button, Comment, Descriptions, Form, Input, List, message, Modal, Progress, Spin} from 'antd';
 import axios from 'axios';
 import cookie from 'react-cookies';
 import InfiniteScroll from 'react-infinite-scroller';
 import "../asset/board.css"
 import NotLogin from "../components/notlogin";
 import React from 'react';
-import moment from 'moment';
 //import "./config"
 
 const {TextArea} = Input;
@@ -272,24 +271,19 @@ export default class Post extends React.Component {
         });
     };
 
-    async is_Current_User(item){
+    is_Current_User(item) {
         console.log(item);
-        let formData = new FormData();
-        formData.append('Authorization', this.state.token);
-        let ret = (await axios.post('/api/isAdmin', formData)).data;
-        let message = ret.message;
-        if(this.state.name != item.author && message==0){
+        if (this.state.name != item.author && this.state.name != "admin" && this.state.name != "csq") {
             let actions = [<span key="comment-basic-reply-to" data-floorId={item.floorId} data-floorUI={item.floorUI}
-                                  onClick={this.handleReply.bind(this)}>Reply to</span>]
+                                 onClick={this.handleReply.bind(this)}>Reply to</span>]
             return actions
-        }
-        else{
+        } else {
             let actions = [<span key="comment-basic-reply-to" data-floorId={item.floorId} data-floorUI={item.floorUI}
                                  onClick={this.handleReply.bind(this)}>Reply to</span>,
-                            <span key="comment-basic-edit" data-floorId={item.floorId} data-floorUI={item.floorUI}
-                                  onClick={this.handleEdit.bind(this)}>Edit</span>,
-                            <span key="comment-basic-delete" data-floorId={item.floorId} data-floorUI={item.floorUI}
-                                  onClick={this.handleDelete.bind(this)}>Delete</span>]
+                <span key="comment-basic-edit" data-floorId={item.floorId} data-floorUI={item.floorUI}
+                      onClick={this.handleEdit.bind(this)}>Edit</span>,
+                <span key="comment-basic-delete" data-floorId={item.floorId} data-floorUI={item.floorUI}
+                      onClick={this.handleDelete.bind(this)}>Delete</span>]
             return actions
         }
     }
