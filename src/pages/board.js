@@ -2,11 +2,10 @@ import {Avatar, Button, Form, Input, List, Modal} from 'antd';
 import React from 'react';
 import axios from 'axios';
 import cookie from 'react-cookies';
-import "../asset/board.css"
+import "../asset/board.css";
 import NotLogin from "../components/notlogin";
-import './config';
-
 import boardImg1 from '../asset/images/board-1.jpeg';
+import './config';
 
 export default class Board extends React.Component {
     constructor(props) {
@@ -23,6 +22,7 @@ export default class Board extends React.Component {
             edit_intro_visible: false,
             delete_visible: false,
             id: "",//删除的帖子id
+            boardId: "",//版面id
             value: "",
         };
 
@@ -47,7 +47,7 @@ export default class Board extends React.Component {
                     introduction: intro
                 });
             })
-        
+
     }
 
 
@@ -118,6 +118,14 @@ export default class Board extends React.Component {
         );
     }
 
+    async handleDCancel(event) {
+        this.setState(
+            {
+                delete_visible:false,
+            }
+        );
+    }
+
     async handleEdit(event) {
         this.setState({
             edit_intro_visible: true,
@@ -127,35 +135,35 @@ export default class Board extends React.Component {
     async handleEditOk() {
         let formData = new FormData();
         formData.append('Authorization', this.state.token);
-        formData.append('boardId',postType(this.state.id));
+        formData.append('boardId',this.state.boardId);
         formData.append('introduction',this.state.introduction);
         console.log(this.state.value);
-        let ret = (await axios.post('/api/boardmodify', formData)).data;
-                let state = ret.state;
+        let ret = (await axios.post('/api/board/boardmodify', formData)).data;
+        let state = ret.state;
 
-                if (state == true) {
-                    window.location.reload()//直接打开新网页
-                } else {
-                    let message = ret.message;
-                    alert(message);
-                }
+        if (state == true) {
+            window.location.reload()//直接打开新网页
+        } else {
+            let message = ret.message;
+            alert(message);
+        }
 
-                this.setState({
-                    edit_intro_visible: false,
-                });
+        this.setState({
+            edit_intro_visible: false,
+        });
     }
 
     async handleDelete(event) {
         this.setState({
             delete_visible: true,
-            id: event.target.getAttribute("data-boardId")
+            id: event.target.getAttribute("data-id")
         })
     }
 
     async handleDeleteOk() {
         let formData = new FormData();
         this.setState({
-             delete_visible: false
+            delete_visible: false
         });
         formData.append('Authorization', this.state.token);
         formData.append('postingID', this.state.id);
@@ -178,7 +186,7 @@ export default class Board extends React.Component {
         console.log(item.id);
         if (message == 1) {
             let actions = [<Button id="deletePost" htmlType="submit" style={{float: 'right', marginRight: "15%"}}
-                                   data-boardId={item.id}
+                                   data-id={item.id}
                                    onClick={this.handleDelete}>
                 删除
             </Button>,<div>{item.time}</div>]
@@ -197,16 +205,17 @@ export default class Board extends React.Component {
         let message = ret.message;
         if (message == 1) {
             let actions = [<Button type="primary" id="modifyIntro" className="headline"
-                                style={{position: "relative", bottom: "60px"}}
-                                onClick={this.handleEdit.bind(this)}>
-                                    修改版面简介
-                           </Button>]
+                                   style={{position: "relative", bottom: "60px"}}
+                                   onClick={this.handleEdit.bind(this)}>
+                修改版面简介
+            </Button>]
             return actions
         }
     }
 
     render() {
         this.state.type = type()
+        this.state.boardId = postType(this.state.type)
         if (cookie.load("token")) {
             return (
                 <div>
@@ -220,9 +229,9 @@ export default class Board extends React.Component {
                         发表帖子
                     </Button>
                     <Button type="primary" id="modifyIntro" className="headline"
-                        style={{position: "relative", bottom: "60px"}}
-                        onClick={this.handleEdit.bind(this)}>
-                            修改版面简介
+                            style={{position: "relative", bottom: "40px"}}
+                            onClick={this.handleEdit.bind(this)}>
+                        修改版面简介
                     </Button>
                     <p>{this.state.introduction}</p>
                     <Modal title="" visible={this.state.display_name} onCancel={this.handleCancel}
@@ -273,6 +282,14 @@ export default class Board extends React.Component {
                                       textIndent: "8px"
                                   }}
                                   type="text" name="introduction" onChange={this.handleChange}/>
+                    </Modal>
+                    <Modal
+                        title="Delete"
+                        visible={this.state.delete_visible}
+                        onOk={this.handleDeleteOk.bind(this)}
+                        onCancel={this.handleDCancel.bind(this)}
+                    >
+                        <p>是否确认删除该帖子？</p>
                     </Modal>
                     <List
                         pagination={{
