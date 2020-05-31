@@ -8,15 +8,15 @@ import {Link} from 'react-router-dom';
 
 
 const loginGithubUrl = "https://github.com/login/oauth/authorize?client_id=d25125e25fe36054a4de&redirect_uri=http://106.12.27.104/callback&scope=user&state=1";
-let replyNumber = 0;
 
 //上方菜单栏实现
-const openNotification = () => {
+const openNotification = (r) => {
+    let replyNumber = r;
     const args = {
         message: "当前有" + Number(replyNumber) + "新消息",
         duration: 0,
     };
-    if (replyNumber!==null&&replyNumber!==undefined&&replyNumber !== 0)
+    if (replyNumber !== 0)
         notification.open(args);
 };
 
@@ -124,22 +124,20 @@ async function getUnreadReplyNumber() {
     let formData = new FormData();
     formData.append('Authorization', token);
     formData.append('receiver', name);
-    let number = (await axios.post(global.constants.url + "/api/getUnreadReplyNumber", formData)).data.message;
-    replyNumber = number;
+    return  (await axios.post(global.constants.url + "/api/getUnreadReplyNumber", formData)).data.num;
 };
 
 class NavigateBar extends React.Component {
-    async componentWillMount() {
+    componentWillMount() {
         let url = document.URL;
         if (url.search("callback") !== -1) {
             let urlParam = url.split("?")[1];
-            await ToLogin(urlParam);
-            this.forceUpdate();
+            ToLogin(urlParam).then(r => this.forceUpdate());
+
         }
 
         if(cookie.load('token')){
-            await getUnreadReplyNumber();
-            openNotification();
+            getUnreadReplyNumber().then(r => openNotification(r));
         }
     }
 

@@ -8,10 +8,10 @@ import './config';
 
 
 // 添加走马灯图片
-import registerImg1 from '../img/register-1.jpg';
-import registerImg2 from '../img/register-2.jpg';
-import registerImg3 from '../img/register-3.jpg';
-import registerImg4 from '../img/register-4.jpg';
+import registerImg1 from '../asset/images/register-1.jpg';
+import registerImg2 from '../asset/images/register-2.jpg';
+import registerImg3 from '../asset/images/register-3.jpg';
+import registerImg4 from '../asset/images/register-4.jpg';
 
 // register部分
 class register extends React.Component {

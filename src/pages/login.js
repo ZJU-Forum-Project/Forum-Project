@@ -5,10 +5,11 @@ import axios from 'axios';
 import '../asset/register.css';
 import './config';
 
-import registerImg1 from "../img/register-1.jpg";
-import registerImg2 from "../img/register-2.jpg";
-import registerImg3 from "../img/register-3.jpg";
-import registerImg4 from "../img/register-4.jpg";
+// 添加走马灯图片
+import registerImg1 from '../asset/images/register-1.jpg';
+import registerImg2 from '../asset/images/register-2.jpg';
+import registerImg3 from '../asset/images/register-3.jpg';
+import registerImg4 from '../asset/images/register-4.jpg';
 
 class Login extends React.Component {
     constructor(props) {

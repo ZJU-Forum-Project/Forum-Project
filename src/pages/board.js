@@ -4,8 +4,9 @@ import axios from 'axios';
 import cookie from 'react-cookies';
 import "../asset/board.css"
 import NotLogin from "../components/notlogin";
-import boardImg1 from '../img/board-1.jpeg';
 import './config';
+
+import boardImg1 from '../asset/images/board-1.jpeg';
 
 export default class Board extends React.Component {
     constructor(props) {
@@ -109,6 +110,14 @@ export default class Board extends React.Component {
         }
     }
 
+    async handleECancel(event){
+        this.setState(
+            {
+                edit_intro_visible:false,
+            }
+        );
+    }
+
     async handleEdit(event) {
         this.setState({
             edit_intro_visible: true,
@@ -177,7 +186,7 @@ export default class Board extends React.Component {
         }
     }
 
-    async is_Admin() {
+    async is_Admin_edit() {
         let formData = new FormData();
         formData.append('Authorization', this.state.token);
         let ret = (await axios.post('/api/isAdmin', formData)).data;
@@ -248,7 +257,7 @@ export default class Board extends React.Component {
                     </Modal>
                     <Modal
                         title="Edit"
-                        visible={this.state.eVisible}
+                        visible={this.state.edit_intro_visible}
                         onOk={this.handleEditOk.bind(this)}
                         onCancel={this.handleECancel.bind(this)}
                     >
@@ -272,7 +281,7 @@ export default class Board extends React.Component {
                         dataSource={this.state.postings}
                         renderItem={item => (
                             <List.Item actions={[<div>{item.time}</div>]}>
-                                actions={this.is_Admin()}
+                                actions={this.is_Admin(item)}
                                 <List.Item.Meta
                                     avatar={<Avatar
                                         src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"/>}
