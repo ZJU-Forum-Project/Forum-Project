@@ -16,7 +16,7 @@ const openNotification = () => {
         message: "当前有" + Number(replyNumber) + "新消息",
         duration: 0,
     };
-    if (replyNumber !== 0)
+    if (replyNumber!==null&&replyNumber!==undefined&&replyNumber !== 0)
         notification.open(args);
 };
 
