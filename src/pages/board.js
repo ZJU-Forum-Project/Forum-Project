@@ -180,8 +180,12 @@ export default class Board extends React.Component {
             let actions = [<Button id="deletePost" htmlType="submit" style={{float: 'right', marginRight: "15%"}}
                                    data-boardId={item.id}
                                    onClick={this.handleDelete}>
-                                        删除
-                           </Button>]
+                删除
+            </Button>,<div>{item.time}</div>]
+            return actions
+        }
+        else {
+            let actions = [<div>{item.time}</div>]
             return actions
         }
     }
@@ -280,8 +284,8 @@ export default class Board extends React.Component {
                         itemLayout="horizontal"
                         dataSource={this.state.postings}
                         renderItem={item => (
-                            <List.Item actions={[<div>{item.time}</div>]}>
-                                actions={this.is_Admin(item)}
+                            <List.Item actions={this.is_Admin(item)}>
+
                                 <List.Item.Meta
                                     avatar={<Avatar
                                         src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"/>}
