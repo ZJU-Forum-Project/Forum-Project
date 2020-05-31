@@ -1,11 +1,9 @@
-import {Button, DatePicker, Form, Input} from 'antd';
+import {Button, DatePicker, Form, Input, Radio} from 'antd';
 import React from 'react';
 import axios from 'axios';
 import cookie from 'react-cookies';
 import {Link} from 'react-router-dom';
-import ReactDOM from 'react-dom';
 import NotLogin from "../components/notlogin";
-import {Radio} from 'antd';
 import './config';
 
 class modifyinfo extends React.Component {
