@@ -1,5 +1,4 @@
 import {Breadcrumb, Button, DatePicker, Form, Input, Layout} from 'antd';
-import NavigateBar from '../components/navigate';
 import React from 'react';
 import axios from 'axios';
 import cookie from 'react-cookies';
@@ -311,27 +310,18 @@ class modifyinfo extends React.Component{
         if(cookie.load("token")){
             var iemail = this.state.email;
             var ibirthday = this.state.birthday;//实际显示月份多1
-            var igender = this.state.gender;
             var iphone = this.state.phone;
             var ireal_name = this.state.real_name;
             var ihometown = this.state.hometown;
             var iorganization = this.state.organization;
             var isignature = this.state.signature;
-            var iemail_hidden = this.state.email_hidden;
-            var ibirthday_hidden = this.state.birthday_hidden;
-            var igender_hidden = this.state.gender_hidden;
-            var iphone_hidden = this.state.phone_hidden;
-            var ireal_name_hidden = this.state.real_name_hidden;
             var ihometown = this.state.hometown;
-            var iorganization_hidden = this.state.organization_hidden;
-            var isignature_hidden = this.state.signature_hidden;
 
             return(
                 <Layout className="layout">
-                    <NavigateBar />
                     <Content style={{padding: '0 50px'}}>
                         <Breadcrumb style={{margin: '16px 0'}}>
-                            <Breadcrumb.Item>Home</Breadcrumb.Item>
+                            <Breadcrumb.Item>修改个人信息</Breadcrumb.Item>
                         </Breadcrumb>
                         <div className="site-layout-content"style={{textAlign: 'center',fontSize:'30px'}}>
                             修改个人信息

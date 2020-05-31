@@ -178,24 +178,27 @@ export default class Board extends React.Component {
         }
     }
 
-    async is_Admin(item) {
+    is_Admin(item) {
         let formData = new FormData();
         formData.append('Authorization', this.state.token);
-        let ret = (await axios.post('/api/isAdmin', formData)).data;
-        let message = ret.message;
-        console.log(item.id);
-        if (message == 1) {
-            let actions = [<Button id="deletePost" htmlType="submit" style={{float: 'right', marginRight: "15%"}}
-                                   data-id={item.id}
-                                   onClick={this.handleDelete}>
-                删除
-            </Button>,<div>{item.time}</div>]
-            return actions
-        }
-        else {
-            let actions = [<div>{item.time}</div>]
-            return actions
-        }
+        axios.post('/api/isAdmin', formData)
+            .then((res)=>{
+            let resData = res.data;
+                let message = resData.message;
+                console.log(item.id);
+                if (message == 1) {
+                    let actions = [<Button id="deletePost" htmlType="submit" style={{float: 'right', marginRight: "15%"}}
+                                           data-id={item.id}
+                                           onClick={this.handleDelete}>
+                        删除
+                    </Button>,<div>{item.time}</div>]
+                    return actions
+                }
+                else {
+                    let actions = [<div>{item.time}</div>]
+                    return actions
+                }
+        });
     }
 
     async is_Admin_edit() {
@@ -214,8 +217,8 @@ export default class Board extends React.Component {
     }
 
     render() {
-        this.state.type = type()
-        this.state.boardId = postType(this.state.type)
+        this.state.type = type();
+        this.state.boardId = postType(this.state.type);
         if (cookie.load("token")) {
             return (
                 <div>
