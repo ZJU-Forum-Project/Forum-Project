@@ -15,6 +15,8 @@ import {HomeFilled} from "@ant-design/icons";
 import NavigateBar from "./components/navigate";
 import modifyinfo from "./pages/modifyinfo";
 import ReplyMe from "./pages/replyme";
+import modifyPost from './pages/modifyPost';
+
 
 const {Search} = Input;
 const {Header, Content, Footer, Sider} = Layout;
@@ -55,6 +57,7 @@ export default class Routing extends React.Component {
                                 <Route path="/post" component={post}/>
                                 <Route path="/myPosts" component={myPosts}/>
                                 <Route path="/myReplies" component={ReplyMe}/>
+                                <Route path="/mdpo" component={modifyPost}/>
                             </div>
                         </Content>
                     </Router>

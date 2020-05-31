@@ -18,6 +18,11 @@ export default class Board extends React.Component {
             content: "",
             postings: [],
             type: "",
+            introduction: "",
+            edit_intro_visible: false,
+            delete_visible: false,
+            id: "",//删除的帖子id
+            value: "",
         };
 
         //绑定需要调用的async函数
@@ -33,10 +38,12 @@ export default class Board extends React.Component {
             .then(response => {
                 let data = response.data
                 let posts = data.postings
+                let intro = data.intro
                 this.setState({
                     postings: posts,
                     token: token,
-                    type: type()
+                    type: type(),
+                    introduction: intro
                 });
             })
         
@@ -102,6 +109,89 @@ export default class Board extends React.Component {
         }
     }
 
+    async handleEdit(event) {
+        this.setState({
+            edit_intro_visible: true,
+        })
+    }
+
+    async handleEditOk() {
+        let formData = new FormData();
+        formData.append('Authorization', this.state.token);
+        formData.append('boardId',postType(this.state.id));
+        formData.append('introduction',this.state.introduction);
+        console.log(this.state.value);
+        let ret = (await axios.post('/api/boardmodify', formData)).data;
+                let state = ret.state;
+
+                if (state == true) {
+                    window.location.reload()//直接打开新网页
+                } else {
+                    let message = ret.message;
+                    alert(message);
+                }
+
+                this.setState({
+                    edit_intro_visible: false,
+                });
+    }
+
+    async handleDelete(event) {
+        this.setState({
+            delete_visible: true,
+            id: event.target.getAttribute("data-boardId")
+        })
+    }
+
+    async handleDeleteOk() {
+        let formData = new FormData();
+        this.setState({
+             delete_visible: false
+        });
+        formData.append('Authorization', this.state.token);
+        formData.append('postingID', this.state.id);
+
+        let ret = (await axios.post('/api/deleteposting', formData)).data;
+        let state = ret.state;
+        if (state == true) {
+            window.location.reload()//直接打开新网页
+        } else {
+            let message = ret.message;
+            alert(message);
+        }
+    }
+
+    async is_Admin(item) {
+        let formData = new FormData();
+        formData.append('Authorization', this.state.token);
+        let ret = (await axios.post('/api/isAdmin', formData)).data;
+        let message = ret.message;
+        console.log(item.id);
+        if (message == 1) {
+            let actions = [<Button id="deletePost" htmlType="submit" style={{float: 'right', marginRight: "15%"}}
+                                   data-boardId={item.id}
+                                   onClick={this.handleDelete}>
+                                        删除
+                           </Button>]
+            return actions
+        }
+    }
+
+    async is_Admin() {
+        let formData = new FormData();
+        formData.append('Authorization', this.state.token);
+        let ret = (await axios.post('/api/isAdmin', formData)).data;
+        let message = ret.message;
+        if (message == 1) {
+            let actions = [<Button type="primary" id="modifyIntro" className="headline"
+                                style={{position: "relative", bottom: "60px"}}
+                                onClick={this.handleEdit.bind(this)}>
+                                    修改版面简介
+                           </Button>]
+            return actions
+        }
+    }
+
     render() {
         this.state.type = type()
         if (cookie.load("token")) {
@@ -116,6 +206,12 @@ export default class Board extends React.Component {
                             onClick={this.handleDisplay.bind(this)}>
                         发表帖子
                     </Button>
+                    <Button type="primary" id="modifyIntro" className="headline"
+                        style={{position: "relative", bottom: "60px"}}
+                        onClick={this.handleEdit.bind(this)}>
+                            修改版面简介
+                    </Button>
+                    <p>{this.state.introduction}</p>
                     <Modal title="" visible={this.state.display_name} onCancel={this.handleCancel}
                            onOk={this.handleSubmit}>
                         <h3>新建帖子</h3>
@@ -150,7 +246,21 @@ export default class Board extends React.Component {
                             </Form>
                         </div>
                     </Modal>
-
+                    <Modal
+                        title="Edit"
+                        visible={this.state.eVisible}
+                        onOk={this.handleEditOk.bind(this)}
+                        onCancel={this.handleECancel.bind(this)}
+                    >
+                        <p>修改版面简介:</p>
+                        <textarea placeholder="版面简介"
+                                  style={{
+                                      width: "100%",
+                                      height: "300px",
+                                      textIndent: "8px"
+                                  }}
+                                  type="text" name="introduction" onChange={this.handleChange}/>
+                    </Modal>
                     <List
                         pagination={{
                             onChange: page => {
@@ -162,6 +272,7 @@ export default class Board extends React.Component {
                         dataSource={this.state.postings}
                         renderItem={item => (
                             <List.Item actions={[<div>{item.time}</div>]}>
+                                actions={this.is_Admin()}
                                 <List.Item.Meta
                                     avatar={<Avatar
                                         src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"/>}

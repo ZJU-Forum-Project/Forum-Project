@@ -272,9 +272,13 @@ export default class Post extends React.Component {
         });
     };
 
-    is_Current_User(item){
+    async is_Current_User(item){
         console.log(item);
-        if(this.state.name != item.author){
+        let formData = new FormData();
+        formData.append('Authorization', this.state.token);
+        let ret = (await axios.post('/api/isAdmin', formData)).data;
+        let message = ret.message;
+        if(this.state.name != item.author && message==0){
             let actions = [<span key="comment-basic-reply-to" data-floorId={item.floorId} data-floorUI={item.floorUI}
                                   onClick={this.handleReply.bind(this)}>Reply to</span>]
             return actions
@@ -347,7 +351,7 @@ export default class Post extends React.Component {
                         </InfiniteScroll>
                     </div>
                     <Modal
-                        title="Edit"
+                        title="Reply"
                         visible={this.state.rVisible}
                         onOk={this.handleSubmit}
                         onCancel={this.handleRCancel.bind(this)}
