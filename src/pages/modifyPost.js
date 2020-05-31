@@ -1,5 +1,4 @@
 ﻿import { Layout,Button, PageHeader, Card, Form} from 'antd';
-import NavigateBar from '../components/navigate';
 import React from 'react';
 import axios from 'axios';
 import cookie from 'react-cookies';
@@ -103,7 +102,6 @@ export default class modifyPost extends React.Component {
         if (this.state.token) {
             return (
                 <Layout className="layout">
-                    <NavigateBar/>
                     <PageHeader style={{ padding: '30px 50px' }}>
                         <h2>编辑帖子</h2>
                     </PageHeader>
@@ -173,7 +171,6 @@ export default class modifyPost extends React.Component {
         else {
             return (
                 <Layout className="layout">
-                    <NavigateBar />
                     <br /><br /><br />
                     <h1 align="center">
                         请先登录！
