@@ -273,18 +273,16 @@ export default class Post extends React.Component {
 
     is_Current_User(item) {
         console.log(item);
-        if (this.state.name != item.author && this.state.name != "admin" && this.state.name != "csq") {
-            let actions = [<span key="comment-basic-reply-to" data-floorId={item.floorId} data-floorUI={item.floorUI}
-                                 onClick={this.handleReply.bind(this)}>Reply to</span>]
-            return actions
+        if (this.state.name !== item.author && this.state.name !== "Admin" && this.state.name !== "csq") {
+            return [<span key="comment-basic-reply-to" data-floorId={item.floorId} data-floorUI={item.floorUI}
+                          onClick={this.handleReply.bind(this)}>Reply to</span>]
         } else {
-            let actions = [<span key="comment-basic-reply-to" data-floorId={item.floorId} data-floorUI={item.floorUI}
-                                 onClick={this.handleReply.bind(this)}>Reply to</span>,
+            return [<span key="comment-basic-reply-to" data-floorId={item.floorId} data-floorUI={item.floorUI}
+                          onClick={this.handleReply.bind(this)}>Reply to</span>,
                 <span key="comment-basic-edit" data-floorId={item.floorId} data-floorUI={item.floorUI}
                       onClick={this.handleEdit.bind(this)}>Edit</span>,
                 <span key="comment-basic-delete" data-floorId={item.floorId} data-floorUI={item.floorUI}
                       onClick={this.handleDelete.bind(this)}>Delete</span>]
-            return actions
         }
     }
 
