@@ -72,10 +72,20 @@ export default class Board extends React.Component {
     }
 
     // 显示对话框
-    handleDisplay() {
-        this.setState({
-            display_name: true,
-        })
+    async handleDisplay() {
+        let formData = new FormData();
+        formData.append('Authorization', this.state.token);
+        let ret = (await axios.post( '/api/checkIfBanned', formData)).data;
+        let state = ret.state;
+
+        if (state == true) {
+            let message = "你已被管理员禁言";
+            alert(message);
+        } else {
+            this.setState({
+                display_name: true,
+            })
+        }
     }
 
     // 关闭对话框
@@ -130,7 +140,7 @@ export default class Board extends React.Component {
         formData.append('boardId',postType(this.state.boardId));
         formData.append('introduction',this.state.introduction);
         console.log(this.state.value);
-        let ret = (await axios.post('/api/boardmodify', formData)).data;
+        let ret = (await axios.post('/api/board/boardmodify', formData)).data;
                 let state = ret.state;
 
                 if (state == true) {

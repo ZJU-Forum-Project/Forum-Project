@@ -46,6 +46,8 @@ export default class Post extends React.Component {
             eVisible: false,
             dVisible: false,
             rVisible: false,
+            bVisible: false,
+            fVisible: false,
             floorId: "",
             floorUI: ""
         }
@@ -138,13 +140,23 @@ export default class Post extends React.Component {
 
     };
 
-    handleReply(event) {
-        this.setState({
-            re_Author: false,
-            replyId: event.target.getAttribute("data-floorId"),
-            replyUI: event.target.getAttribute("data-floorUI"),
-            rVisible: true
-        })
+    async   handleReply(event) {
+        let formData = new FormData();
+        formData.append('Authorization', this.state.token);
+        let ret = (await axios.post( '/api/checkIfBanned', formData)).data;
+        let state = ret.state;
+
+        if (state == true) {
+            let message = "你已被管理员禁言";
+            alert(message);
+        } else {
+            this.setState({
+                re_Author: false,
+                replyId: event.target.getAttribute("data-floorId"),
+                replyUI: event.target.getAttribute("data-floorUI"),
+                rVisible: true
+            })
+        }
     }
 
     handleChange(event) {
@@ -175,27 +187,37 @@ export default class Post extends React.Component {
     }
 
     async handleEdit(event) {
-        let formData = new FormData();
-        formData.append("Authorization", this.state.token);
-        this.setState({
-            floorId: event.target.getAttribute("data-floorId")
-        });
-        console.log(this.state.floorId);
-        formData.append("floorId", this.state.floorId);
-        let ret = (await axios.post('/api/GetFloor', formData)).data;
-        let state = ret.state;
-        if (state == true) {
-            console.log(ret.content)
-            this.setState({
-                content: ret.content,
-                value: ret.content,
-                replyId: ret.replyId,
-                replyUI: ret.replyUI,
-                eVisible: true
-            })
-        } else {
-            let message = ret.message;
+        let checkUser = new FormData();
+        checkUser.append('Authorization', this.state.token);
+        let result = (await axios.post( '/api/checkIfBanned', checkUser)).data;
+        let banState = result.state;
+
+        if (banState == true) {
+            let message = "你已被管理员禁言";
             alert(message);
+        } else {
+            let formData = new FormData();
+            formData.append("Authorization", this.state.token);
+            this.setState({
+                floorId: event.target.getAttribute("data-floorId")
+            });
+            console.log(this.state.floorId);
+            formData.append("floorId", this.state.floorId);
+            let ret = (await axios.post('/api/GetFloor', formData)).data;
+            let state = ret.state;
+            if (state == true) {
+                console.log(ret.content)
+                this.setState({
+                    content: ret.content,
+                    value: ret.content,
+                    replyId: ret.replyId,
+                    replyUI: ret.replyUI,
+                    eVisible: true
+                })
+            } else {
+                let message = ret.message;
+                alert(message);
+            }
         }
     }
 
@@ -228,10 +250,20 @@ export default class Post extends React.Component {
     }
 
     async handleDelete(event) {
-        this.setState({
-            dVisible: true,
-            floorId: event.target.getAttribute("data-floorId")
-        })
+        let formData = new FormData();
+        formData.append('Authorization', this.state.token);
+        let ret = (await axios.post( '/api/checkIfBanned', formData)).data;
+        let state = ret.state;
+
+        if (state == true) {
+            let message = "你已被管理员禁言";
+            alert(message);
+        } else {
+            this.setState({
+                dVisible: true,
+                floorId: event.target.getAttribute("data-floorId")
+            })
+        }
     }
 
     async handleDeleteOk() {
@@ -271,18 +303,99 @@ export default class Post extends React.Component {
         });
     };
 
+    async handleBan(event) {
+        this.setState({
+            author: event.target.getAttribute("floor-authuor"),
+            bVisible: true
+        });
+    }
+    async handleFree(event) {
+        this.setState({
+            author: event.target.getAttribute("floor-authuor"),
+            fVisible: true
+        });
+    }
+    async handleBanOk() {
+        let formData = new FormData();
+        formData.append("author", this.state.author);
+        formData.append('Authorization', this.state.token);
+        formData.append("banningDays", this.state.value);
+
+        let ret = (await axios.post('/api/banUser', formData)).data;
+        let state = ret.state;
+
+        if (state == true) {
+            let message = ret.message;
+            alert(message);
+            window.location.reload()//直接打开新网页
+        } else {
+            let message = ret.message;
+            alert(message);
+        }
+
+        this.setState({
+            bVisible: false,
+        });
+    }
+    async handleFreeOk() {
+        let formData = new FormData();
+        formData.append("author", this.state.author);
+        formData.append('Authorization', this.state.token);
+
+        let ret = (await axios.post('/api/freeUser', formData)).data;
+        let state = ret.state;
+
+        if (state == true) {
+            let message = ret.message;
+            alert(message);
+            window.location.reload()//直接打开新网页
+        } else {
+            let message = ret.message;
+            alert(message);
+        }
+
+        this.setState({
+            fVisible: false,
+        });
+    }
+
+    handleBCancel() {
+        this.setState({
+            bVisible: false,
+        });
+    };
+
+    handleFCancel() {
+        this.setState({
+            fVisible: false,
+        });
+    };
+
+
+
     is_Current_User(item) {
         console.log(item);
         if (this.state.name !== item.author && this.state.name !== "Admin" && this.state.name !== "csq") {
             return [<span key="comment-basic-reply-to" data-floorId={item.floorId} data-floorUI={item.floorUI}
                           onClick={this.handleReply.bind(this)}>Reply to</span>]
-        } else {
+        } else if(this.state.name !== "Admin" ){
             return [<span key="comment-basic-reply-to" data-floorId={item.floorId} data-floorUI={item.floorUI}
                           onClick={this.handleReply.bind(this)}>Reply to</span>,
                 <span key="comment-basic-edit" data-floorId={item.floorId} data-floorUI={item.floorUI}
                       onClick={this.handleEdit.bind(this)}>Edit</span>,
                 <span key="comment-basic-delete" data-floorId={item.floorId} data-floorUI={item.floorUI}
                       onClick={this.handleDelete.bind(this)}>Delete</span>]
+        } else{
+            return [<span key="comment-basic-reply-to" data-floorId={item.floorId} data-floorUI={item.floorUI}
+                          onClick={this.handleReply.bind(this)}>Reply to</span>,
+                <span key="comment-basic-edit" data-floorId={item.floorId} data-floorUI={item.floorUI}
+                      onClick={this.handleEdit.bind(this)}>Edit</span>,
+                <span key="comment-basic-delete" data-floorId={item.floorId} data-floorUI={item.floorUI}
+                      onClick={this.handleDelete.bind(this)}>Delete</span>,
+                <span key="comment-basic-ban" floor-authuor={item.author}
+                      onClick={this.handleBan.bind(this)}>Ban</span>,
+                <span key="comment-basic-free" floor-authuor={item.author}
+                      onClick={this.handleFree.bind(this)}>Free</span>]
         }
     }
 
@@ -379,6 +492,29 @@ export default class Post extends React.Component {
                         onCancel={this.handleDCancel.bind(this)}
                     >
                         <p>是否确认删除该回复？</p>
+                    </Modal>
+                    <Modal
+                        title="Ban"
+                        visible={this.state.bVisible}
+                        onOk={this.handleBanOk(this)}
+                        onCancel={this.handleECancel.bind(this)}
+                    >
+                        <p>请填入禁言天数（1~2400）:</p>
+                        <textarea placeholder="正文"
+                                  style={{
+                                      width: "100%",
+                                      height: "300px",
+                                      textIndent: "8px"
+                                  }}
+                                  type="text" name="content" onChange={this.handleChange}/>
+                    </Modal>
+                    <Modal
+                        title="Free"
+                        visible={this.state.fVisible}
+                        onOk={this.handleFreeOk.bind(this)}
+                        onCancel={this.handleDCancel.bind(this)}
+                    >
+                        <p>确认解除禁言？</p>
                     </Modal>
                     <div className="edit-style">
                         <Editor
