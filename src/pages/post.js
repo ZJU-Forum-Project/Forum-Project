@@ -143,7 +143,7 @@ export default class Post extends React.Component {
     async   handleReply(event) {
         let formData = new FormData();
         formData.append('Authorization', this.state.token);
-        let ret = (await axios.post( '/api/checkIfBanned', formData)).data;
+        let ret = (await axios.post( '/api/checkIfBannedByAuthorization', formData)).data;
         let state = ret.state;
 
         if (state == true) {
@@ -189,7 +189,7 @@ export default class Post extends React.Component {
     async handleEdit(event) {
         let checkUser = new FormData();
         checkUser.append('Authorization', this.state.token);
-        let result = (await axios.post( '/api/checkIfBanned', checkUser)).data;
+        let result = (await axios.post( '/api/checkIfBannedByAuthorization', checkUser)).data;
         let banState = result.state;
 
         if (banState == true) {
@@ -252,7 +252,7 @@ export default class Post extends React.Component {
     async handleDelete(event) {
         let formData = new FormData();
         formData.append('Authorization', this.state.token);
-        let ret = (await axios.post( '/api/checkIfBanned', formData)).data;
+        let ret = (await axios.post( '/api/checkIfBannedByAuthorization', formData)).data;
         let state = ret.state;
 
         if (state == true) {
@@ -315,6 +315,7 @@ export default class Post extends React.Component {
             fVisible: true
         });
     }
+
     async handleBanOk() {
         let formData = new FormData();
         formData.append("author", this.state.author);
@@ -496,8 +497,8 @@ export default class Post extends React.Component {
                     <Modal
                         title="Ban"
                         visible={this.state.bVisible}
-                        onOk={this.handleBanOk(this)}
-                        onCancel={this.handleECancel.bind(this)}
+                        onOk={this.handleBanOk.bind(this)}
+                        onCancel={this.handleBCancel.bind(this)}
                     >
                         <p>请填入禁言天数（1~2400）:</p>
                         <textarea placeholder="正文"
@@ -512,7 +513,7 @@ export default class Post extends React.Component {
                         title="Free"
                         visible={this.state.fVisible}
                         onOk={this.handleFreeOk.bind(this)}
-                        onCancel={this.handleDCancel.bind(this)}
+                        onCancel={this.handleFCancel.bind(this)}
                     >
                         <p>确认解除禁言？</p>
                     </Modal>

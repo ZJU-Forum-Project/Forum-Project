@@ -75,7 +75,7 @@ export default class Board extends React.Component {
     async handleDisplay() {
         let formData = new FormData();
         formData.append('Authorization', this.state.token);
-        let ret = (await axios.post('/api/checkIfBanned', formData)).data;
+        let ret = (await axios.post('/api/checkIfBannedByAuthorization', formData)).data;
         let state = ret.state;
 
         if (state == true) {
