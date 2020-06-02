@@ -27,14 +27,11 @@ export default class ReplyMe extends React.Component {
 
     componentDidMount() {
         let token = cookie.load("token");
-        let receiver = cookie.load("name");
         let formData = new FormData();
         formData.append('Authorization', token);
-        formData.append('receiver', receiver);
         axios.post(global.constants.url + "/api/CheckReply", formData)
             .then(response => {
-                const data = response.data.ReplyMessage;
-                const replies = data.replies;
+                const replies = response.data.replies;
                 this.setState({
                     reply: replies,
                     token: token
@@ -49,7 +46,7 @@ export default class ReplyMe extends React.Component {
         element.setAttribute("style", "backgroundColor:#ffffff");
         formData.append('Authorization', token);
         formData.append('id', id);
-        axios.post(global.constants.url + "/api/seereply", formData);
+        axios.post(global.constants.url + "/api/seenReply", formData);
     };
 
 
@@ -68,13 +65,13 @@ export default class ReplyMe extends React.Component {
                         dataSource={this.state.reply}
                         renderItem={item => (
                             <li id={item.id} onClick={this.hasAlreadyRead.bind(this, item.id)}
-                                style={{backgroundColor: item.Rstate ? "#ffffff" : "#fafafa"}}>
+                                style={{backgroundColor: Boolean(item.replyState) ? "#ffffff" : "#fafafa"}}>
                                 <Comment
-                                    actions={[<Link to={"/post/" + Number(item.postid)}>{item.postname}</Link>]}
-                                    author={[<div>{item.author}在第{item.floor}楼回复了你</div>]}
+                                    actions={[<Link to={"/post/" + Number(item.postId)}>{item.postName}</Link>]}
+                                    author={[<div>{item.author}在第{item.floorNumber}楼回复了你</div>]}
                                     avatar='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'
                                     content={item.content}
-                                    datetime={item.time}
+                                    datetime={item.replyTime}
                                 />
                             </li>
                         )}

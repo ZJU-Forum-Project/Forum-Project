@@ -7,12 +7,6 @@ import {Carousel} from 'antd';
 import './config';
 
 
-// 添加走马灯图片
-import registerImg1 from '../asset/images/register-1.jpg';
-import registerImg2 from '../asset/images/register-2.jpg';
-import registerImg3 from '../asset/images/register-3.jpg';
-import registerImg4 from '../asset/images/register-4.jpg';
-
 // register部分
 class register extends React.Component {
     constructor(props) {
@@ -188,10 +182,10 @@ class register extends React.Component {
                     </Form></div>
                 <div>
                     <Carousel>
-                        <div><img src={registerImg1} className="logo-img"/></div>
-                        <div><img src={registerImg2} className="logo-img"/></div>
-                        <div><img src={registerImg3} className="logo-img"/></div>
-                        <div><img src={registerImg4} className="logo-img"/></div>
+                        <div><img src="http://106.12.27.104/register-1.595c113c.jpg" className="logo-img"/></div>
+                        <div><img src="http://106.12.27.104/register-2.cb554a83.jpg" className="logo-img"/></div>
+                        <div><img src="http://106.12.27.104/register-3.bdd2e843.jpg" className="logo-img"/></div>
+                        <div><img src="http://106.12.27.104/register-4.e1c5f9e9.jpg" className="logo-img"/></div>
                     </Carousel>
                 </div>
             </div>

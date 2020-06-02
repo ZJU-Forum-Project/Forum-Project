@@ -47,7 +47,7 @@ export default class Board extends React.Component {
                     introduction: intro
                 });
             })
-        
+
     }
 
 
@@ -75,7 +75,7 @@ export default class Board extends React.Component {
     async handleDisplay() {
         let formData = new FormData();
         formData.append('Authorization', this.state.token);
-        let ret = (await axios.post( '/api/checkIfBanned', formData)).data;
+        let ret = (await axios.post('/api/checkIfBanned', formData)).data;
         let state = ret.state;
 
         if (state == true) {
@@ -120,10 +120,10 @@ export default class Board extends React.Component {
         }
     }
 
-    async handleECancel(event){
+    async handleECancel(event) {
         this.setState(
             {
-                edit_intro_visible:false,
+                edit_intro_visible: false,
             }
         );
     }
@@ -137,22 +137,22 @@ export default class Board extends React.Component {
     async handleEditOk() {
         let formData = new FormData();
         formData.append('Authorization', this.state.token);
-        formData.append('boardId',postType(this.state.boardId));
-        formData.append('introduction',this.state.introduction);
+        formData.append('boardId', postType(this.state.boardId));
+        formData.append('introduction', this.state.introduction);
         console.log(this.state.value);
         let ret = (await axios.post('/api/board/boardmodify', formData)).data;
-                let state = ret.state;
+        let state = ret.state;
 
-                if (state == true) {
-                    window.location.reload()//直接打开新网页
-                } else {
-                    let message = ret.message;
-                    alert(message);
-                }
+        if (state == true) {
+            window.location.reload()//直接打开新网页
+        } else {
+            let message = ret.message;
+            alert(message);
+        }
 
-                this.setState({
-                    edit_intro_visible: false,
-                });
+        this.setState({
+            edit_intro_visible: false,
+        });
     }
 
     async handleDelete(event) {
@@ -165,7 +165,7 @@ export default class Board extends React.Component {
     async handleDeleteOk() {
         let formData = new FormData();
         this.setState({
-             delete_visible: false
+            delete_visible: false
         });
         formData.append('Authorization', this.state.token);
         formData.append('postingID', this.state.id);
@@ -190,11 +190,10 @@ export default class Board extends React.Component {
             let actions = [<Button id="deletePost" htmlType="submit" style={{float: 'right', marginRight: "15%"}}
                                    data-id={item.id}
                                    onClick={this.handleDelete}>
-                                        删除
-                           </Button>,<div>{item.time}</div>]
+                删除
+            </Button>, <div>{item.time}</div>]
             return actions
-        }
-        else {
+        } else {
             let actions = [<div>{item.time}</div>]
             return actions
         }
@@ -207,10 +206,10 @@ export default class Board extends React.Component {
         let message = ret.message;
         if (message == 1) {
             let actions = [<Button type="primary" id="modifyIntro" className="headline"
-                                style={{position: "relative", bottom: "60px"}}
-                                onClick={this.handleEdit.bind(this)}>
-                                    修改版面简介
-                           </Button>]
+                                   style={{position: "relative", bottom: "60px"}}
+                                   onClick={this.handleEdit.bind(this)}>
+                修改版面简介
+            </Button>]
             return actions
         }
     }
@@ -222,7 +221,7 @@ export default class Board extends React.Component {
             return (
                 <div>
                     <Avatar className="headline" shape="square" size={128}
-                            src={boardImg1}/>
+                            src={"http://106.12.27.104/board-1.ba94fb45.jpeg"}/>
                     <Button className="headline" type="dashed"
                             style={{position: "relative", bottom: "40px"}}>{title(this.state.type)}</Button>
                     <Button type="primary" id="createPost" className="headline"
@@ -231,9 +230,9 @@ export default class Board extends React.Component {
                         发表帖子
                     </Button>
                     <Button type="primary" id="modifyIntro" className="headline"
-                        style={{position: "relative", bottom: "40px"}}
-                        onClick={this.handleEdit.bind(this)}>
-                            修改版面简介
+                            style={{position: "relative", bottom: "40px"}}
+                            onClick={this.handleEdit.bind(this)}>
+                        修改版面简介
                     </Button>
                     <p>{this.state.introduction}</p>
                     <Modal title="" visible={this.state.display_name} onCancel={this.handleCancel}
