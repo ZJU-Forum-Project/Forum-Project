@@ -79,46 +79,36 @@ export default class Post extends React.Component {
     }
 
     async handleSubmit() {
-        let ret = null;
-        if (!this.state.value) {
-            this.setState({
-                submitting: false,
-            });
-            return;
-        }
-        this.setState({
-            submitting: true,
-        });
+        let checkUser = new FormData();
+        checkUser.append('Authorization', this.state.token);
+        let result = (await axios.post( '/api/checkIfBannedByAuthorization', checkUser)).data;
+        let banState = result.state;
 
-        let formData = new FormData();
-        formData.append('author', this.state.name);
-        formData.append('Authorization', this.state.token);
-        formData.append('postId', id());
-        console.log(this.state.token);
-        console.log(this.state.author);
-
-        if (this.state.re_Author == true) {
-            formData.append('content', this.state.value);
-            ret = (await axios.post('/api/ReplyPosting', formData)).data;
-            let state = ret.state;
-            //根据返回值进行处理
-            if (state == true) {
-                window.location.reload()//直接打开新网页
-            } else {
-                let message = ret.message;
-                alert(message);
-            }
+        if (banState == true) {
+            let message = "你已被管理员禁言";
+            alert(message);
         } else {
-            formData.append('content', "回复第" + this.state.replyUI + "楼：" + this.state.value);
-            formData.append("floorId", this.state.replyId);
-            ret = (await axios.post('/api/GetFloor', formData)).data;
-            let state = ret.state;
-            //根据返回值进行处理
-            if (state == true) {
-                formData.append('replyId', this.state.floorId);
-                formData.append('replyUI', ret.replyUI);
+            let ret = null;
+            if (!this.state.value) {
+                this.setState({
+                    submitting: false,
+                });
+                return;
+            }
+            this.setState({
+                submitting: true,
+            });
 
-                ret = (await axios.post('/api/ReplyFloor', formData)).data;
+            let formData = new FormData();
+            formData.append('author', this.state.name);
+            formData.append('Authorization', this.state.token);
+            formData.append('postId', id());
+            console.log(this.state.token);
+            console.log(this.state.author);
+
+            if (this.state.re_Author == true) {
+                formData.append('content', this.state.value);
+                ret = (await axios.post('/api/ReplyPosting', formData)).data;
                 let state = ret.state;
                 //根据返回值进行处理
                 if (state == true) {
@@ -128,35 +118,44 @@ export default class Post extends React.Component {
                     alert(message);
                 }
             } else {
-                let message = ret.message;
-                alert(message);
+                formData.append('content', "回复第" + this.state.replyUI + "楼：" + this.state.value);
+                formData.append("floorId", this.state.replyId);
+                ret = (await axios.post('/api/GetFloor', formData)).data;
+                let state = ret.state;
+                //根据返回值进行处理
+                if (state == true) {
+                    formData.append('replyId', this.state.floorId);
+                    formData.append('replyUI', ret.replyUI);
+
+                    ret = (await axios.post('/api/ReplyFloor', formData)).data;
+                    let state = ret.state;
+                    //根据返回值进行处理
+                    if (state == true) {
+                        window.location.reload()//直接打开新网页
+                    } else {
+                        let message = ret.message;
+                        alert(message);
+                    }
+                } else {
+                    let message = ret.message;
+                    alert(message);
+                }
             }
+
+            this.setState({
+                submitting: false,
+                re_Author: true
+            });
         }
-
-        this.setState({
-            submitting: false,
-            re_Author: true
-        });
-
     };
 
-    async   handleReply(event) {
-        let formData = new FormData();
-        formData.append('Authorization', this.state.token);
-        let ret = (await axios.post( '/api/checkIfBannedByAuthorization', formData)).data;
-        let state = ret.state;
-
-        if (state == true) {
-            let message = "你已被管理员禁言";
-            alert(message);
-        } else {
-            this.setState({
-                re_Author: false,
-                replyId: event.target.getAttribute("data-floorId"),
-                replyUI: event.target.getAttribute("data-floorUI"),
-                rVisible: true
-            })
-        }
+    handleReply(event) {
+        this.setState({
+            re_Author: false,
+            replyId: event.target.getAttribute("data-floorId"),
+            replyUI: event.target.getAttribute("data-floorUI"),
+            rVisible: true
+        })
     }
 
     handleChange(event) {
@@ -187,6 +186,31 @@ export default class Post extends React.Component {
     }
 
     async handleEdit(event) {
+        let formData = new FormData();
+        formData.append("Authorization", this.state.token);
+        this.setState({
+            floorId: event.target.getAttribute("data-floorId")
+        });
+        console.log(this.state.floorId);
+        formData.append("floorId", this.state.floorId);
+        let ret = (await axios.post('/api/GetFloor', formData)).data;
+        let state = ret.state;
+        if (state == true) {
+            console.log(ret.content)
+            this.setState({
+                content: ret.content,
+                value: ret.content,
+                replyId: ret.replyId,
+                replyUI: ret.replyUI,
+                eVisible: true
+            })
+        } else {
+            let message = ret.message;
+            alert(message);
+        }
+    }
+
+    async handleEditOk() {
         let checkUser = new FormData();
         checkUser.append('Authorization', this.state.token);
         let result = (await axios.post( '/api/checkIfBannedByAuthorization', checkUser)).data;
@@ -197,91 +221,66 @@ export default class Post extends React.Component {
             alert(message);
         } else {
             let formData = new FormData();
-            formData.append("Authorization", this.state.token);
-            this.setState({
-                floorId: event.target.getAttribute("data-floorId")
-            });
-            console.log(this.state.floorId);
             formData.append("floorId", this.state.floorId);
-            let ret = (await axios.post('/api/GetFloor', formData)).data;
+            formData.append('Authorization', this.state.token);
+            if (this.state.replyId != 0) {
+                formData.append("content", "回复" + this.state.replyUI + "楼：" + this.state.value);
+            }
+            else{
+                formData.append("content", this.state.value);
+                console.log(this.state.value)
+            }
+            formData.append("replyId", this.state.replyId);
+
+            let ret = (await axios.post('/api/ModifyFloor', formData)).data;
             let state = ret.state;
+
             if (state == true) {
-                console.log(ret.content)
-                this.setState({
-                    content: ret.content,
-                    value: ret.content,
-                    replyId: ret.replyId,
-                    replyUI: ret.replyUI,
-                    eVisible: true
-                })
+                window.location.reload()//直接打开新网页
             } else {
                 let message = ret.message;
                 alert(message);
             }
-        }
-    }
 
-    async handleEditOk() {
-        let formData = new FormData();
-        formData.append("floorId", this.state.floorId);
-        formData.append('Authorization', this.state.token);
-        if (this.state.replyId != 0) {
-            formData.append("content", "回复" + this.state.replyUI + "楼：" + this.state.value);
+            this.setState({
+                eVisible: false,
+            });
         }
-        else{
-            formData.append("content", this.state.value);
-            console.log(this.state.value)
-        }
-        formData.append("replyId", this.state.replyId);
-
-        let ret = (await axios.post('/api/ModifyFloor', formData)).data;
-        let state = ret.state;
-
-        if (state == true) {
-            window.location.reload()//直接打开新网页
-        } else {
-            let message = ret.message;
-            alert(message);
-        }
-
-        this.setState({
-            eVisible: false,
-        });
     }
 
     async handleDelete(event) {
-        let formData = new FormData();
-        formData.append('Authorization', this.state.token);
-        let ret = (await axios.post( '/api/checkIfBannedByAuthorization', formData)).data;
-        let state = ret.state;
-
-        if (state == true) {
-            let message = "你已被管理员禁言";
-            alert(message);
-        } else {
-            this.setState({
-                dVisible: true,
-                floorId: event.target.getAttribute("data-floorId")
-            })
-        }
+        this.setState({
+            dVisible: true,
+            floorId: event.target.getAttribute("data-floorId")
+        })
     }
 
     async handleDeleteOk() {
-        let formData = new FormData();
-        this.setState({
-            dVisible: false
-        });
-        formData.append("floorId", this.state.floorId);
-        formData.append('Authorization', this.state.token);
+        let checkUser = new FormData();
+        checkUser.append('Authorization', this.state.token);
+        let result = (await axios.post( '/api/checkIfBannedByAuthorization', checkUser)).data;
+        let banState = result.state;
 
-        let ret = (await axios.post('/api/DeleteReply', formData)).data;
-        let state = ret.state;
-
-        if (state == true) {
-            window.location.reload()//直接打开新网页
-        } else {
-            let message = ret.message;
+        if (banState == true) {
+            let message = "你已被管理员禁言";
             alert(message);
+        } else {
+            let formData = new FormData();
+            this.setState({
+                dVisible: false
+            });
+            formData.append("floorId", this.state.floorId);
+            formData.append('Authorization', this.state.token);
+
+            let ret = (await axios.post('/api/DeleteReply', formData)).data;
+            let state = ret.state;
+
+            if (state == true) {
+                window.location.reload()//直接打开新网页
+            } else {
+                let message = ret.message;
+                alert(message);
+            }
         }
     }
 
