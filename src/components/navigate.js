@@ -1,6 +1,6 @@
 import React from 'react';
 import '../asset/navigate.css';
-import {Avatar, Button, Dropdown, Menu} from 'antd';
+import {Avatar, Button, Dropdown, Menu, notification} from 'antd';
 import {DownSquareFilled} from '@ant-design/icons';
 import axios from 'axios';
 import cookie from 'react-cookies';
@@ -9,8 +9,16 @@ import {Link} from 'react-router-dom';
 
 const loginGithubUrl = "https://github.com/login/oauth/authorize?client_id=d25125e25fe36054a4de&redirect_uri=http://106.12.27.104/callback&scope=user&state=1";
 
-
 //上方菜单栏实现
+const openNotification = (r) => {
+    let replyNumber = r;
+    const args = {
+        message: "当前有" + Number(replyNumber) + "新消息",
+        duration: 0,
+    };
+    if (replyNumber !== 0)
+        notification.open(args);
+};
 
 const userCenter = (
     <Menu theme="dark">
@@ -25,13 +33,18 @@ const userCenter = (
             </Link>
         </Menu.Item>
         <Menu.Item className=" menuItemStyle">
-            <a target=" _blank" rel=" noopener noreferrer" href=" http://www.tmall.com/">
+            <Link to="/myReplies">
                 回复我的
-            </a>
+            </Link>
+        </Menu.Item>
+        <Menu.Item className=" menuItemStyle">
+            <Link to="/modifypwd">
+                修改密码
+            </Link>
         </Menu.Item>
         < Menu.Item
             className="menuItemStyle">
-            < Button
+            <Button
                 type="link"
                 size="large"
                 style={{position: "relative", bottom: "10px"}}
@@ -70,24 +83,16 @@ const notLogin = (
 const pages = (
     <Menu theme="dark">
         <Menu.Item key="sub1">
-            <Link to="/board/emotion">
-                <Button ghost type="link" style={{fontSize: "medium"}}>情感交流</Button>
-            </Link>
+            <Button ghost href="/board/emotion" type="link" style={{fontSize: "medium"}}>情感交流</Button>
         </Menu.Item>
         <Menu.Item key="sub2">
-            <Link to="/board/information">
-                <Button ghost type="link" style={{fontSize: "medium"}}>校园生活</Button>
-            </Link>
+            <Button ghost href="/board/information" type="link" style={{fontSize: "medium"}}>校园生活</Button>
         </Menu.Item>
         <Menu.Item key="sub3">
-            <Link to="/board/intern">
-                <Button ghost type="link" style={{fontSize: "medium"}}>实习信息</Button>
-            </Link>
+            <Button ghost href="/board/intern" type="link" style={{fontSize: "medium"}}>实习信息</Button>
         </Menu.Item>
         <Menu.Item key="sub4">
-            <Link to="/board/study">
-                <Button ghost type="link" style={{fontSize: "medium"}}>学习资料</Button>
-            </Link>
+            <Button ghost href="/board/study" type="link" style={{fontSize: "medium"}}>学习资料</Button>
         </Menu.Item>
     </Menu>
 );
@@ -99,7 +104,7 @@ async function ToLogin(urlParam) {
     formData.append('code', code);
     formData.append('state', state);
 
-    let person_info = (await axios.post('/api/githubLogin', formData)).data;
+    let person_info = (await axios.post(global.constants.url + '/api/githubLogin', formData)).data;
 
     let success = person_info.state;
     if (success) {
@@ -113,14 +118,26 @@ async function ToLogin(urlParam) {
     return person_info;
 }
 
+async function getUnreadReplyNumber() {
+    let token = cookie.load("token");
+    let name = cookie.load("name");
+    let formData = new FormData();
+    formData.append('Authorization', token);
+    formData.append('receiver', name);
+    return  (await axios.post(global.constants.url + "/api/getUnreadReplyNumber", formData)).data.num;
+};
 
 class NavigateBar extends React.Component {
-    async componentWillMount() {
+    componentWillMount() {
         let url = document.URL;
         if (url.search("callback") !== -1) {
             let urlParam = url.split("?")[1];
-            await ToLogin(urlParam);
-            this.forceUpdate();
+            ToLogin(urlParam).then(r => this.forceUpdate());
+
+        }
+
+        if(cookie.load('token')){
+            getUnreadReplyNumber().then(r => openNotification(r));
         }
     }
 
@@ -133,7 +150,7 @@ class NavigateBar extends React.Component {
                     </a>
                 </Dropdown>
             </Menu.Item>;
-        if (cookie.load('token') == undefined || cookie.load('token') == null)
+        if (cookie.load('token') === undefined || cookie.load('token') === null)
             this.loginButton =
                 <Menu.Item>
                     <Dropdown overlay={notLogin} className="menuItemStyle">
@@ -142,7 +159,7 @@ class NavigateBar extends React.Component {
                         </a>
                     </Dropdown>
                 </Menu.Item>;
-        else
+        else {
             this.loginButton =
                 <Menu.Item>
                     <Dropdown overlay={userCenter} className="menuItemStyle">
@@ -153,6 +170,7 @@ class NavigateBar extends React.Component {
                         </a>
                     </Dropdown>
                 </Menu.Item>;
+        }
 
         return (
             <Menu theme="dark" mode="inline">

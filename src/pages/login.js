@@ -3,11 +3,7 @@ import {Button, Carousel, Form, Input} from 'antd';
 import cookie from 'react-cookies';
 import axios from 'axios';
 import '../asset/register.css';
-
-import registerImg1 from "../img/register-1.jpg";
-import registerImg2 from "../img/register-2.jpg";
-import registerImg3 from "../img/register-3.jpg";
-import registerImg4 from "../img/register-4.jpg";
+import './config';
 
 class Login extends React.Component {
     constructor(props) {
@@ -37,7 +33,7 @@ class Login extends React.Component {
         formData.append('password', this.state.password);
         formData.append('email', this.state.email);
         ////调用后端api,并存储返回值
-        let ret = (await axios.post('api/login', formData)).data;
+        let ret = (await axios.post(global.constants.url + '/api/login', formData)).data;
         let state = ret.state;
         let name = ret.message.split(";")[1];
         //根据返回值进行处理
@@ -93,10 +89,10 @@ class Login extends React.Component {
                 </Form>
                 <div>
                     <Carousel>
-                        <div><img src={registerImg1} className="logo-img"/></div>
-                        <div><img src={registerImg2} className="logo-img"/></div>
-                        <div><img src={registerImg3} className="logo-img"/></div>
-                        <div><img src={registerImg4} className="logo-img"/></div>
+                        <div><img src="http://106.12.27.104/register-1.595c113c.jpg" className="logo-img"/></div>
+                        <div><img src="http://106.12.27.104/register-2.cb554a83.jpg" className="logo-img"/></div>
+                        <div><img src="http://106.12.27.104/register-3.bdd2e843.jpg" className="logo-img"/></div>
+                        <div><img src="http://106.12.27.104/register-4.e1c5f9e9.jpg" className="logo-img"/></div>
                     </Carousel>
                 </div>
             </div>

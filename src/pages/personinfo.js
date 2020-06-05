@@ -1,10 +1,10 @@
-import {Button, DatePicker, Form, Input} from 'antd';
+import {Button, DatePicker, Form, Input, Radio} from 'antd';
 import React from 'react';
 import axios from 'axios';
 import cookie from 'react-cookies';
 import {Link} from 'react-router-dom';
 import NotLogin from "../components/notlogin";
-import {Radio} from 'antd';
+import './config';
 
 
 class personinfo extends React.Component {
@@ -40,12 +40,12 @@ class personinfo extends React.Component {
         formData.append('Authorization', token);
 
         //调用后端queryinfo接口，发送token,返回InfoMessage类对象
-        let query_return = (await axios.post('/api/queryinfo', formData)).data;
+        let query_return = (await axios.post(global.constants.url + '/api/queryinfo', formData)).data;
         console.log("Show query_return:");
         console.log("%o", query_return);
 
         //如果查询失败，弹窗提示原因
-        if (query_return.state == false) {
+        if (query_return.state === false) {
             alert(query_return.message);
         }
 
@@ -54,42 +54,42 @@ class personinfo extends React.Component {
             console.log("Query Success!");
 
             //更新state
-            if (query_return.email != null) {
+            if (query_return.email !== null) {
                 this.setState({
                     email: query_return.email
                 });
             }
-            if (query_return.birth != null) {
+            if (query_return.birth !== null) {
                 this.setState({
                     birthday: query_return.birth
                 });
             }
-            if (query_return.gender != null && query_return.gender != "") {
+            if (query_return.gender !== null && query_return.gender !== "") {
                 this.setState({
                     gender: query_return.gender
                 });
             }
-            if (query_return.phone != null) {
+            if (query_return.phone !== null) {
                 this.setState({
                     phone: query_return.phone
                 });
             }
-            if (query_return.real_name != null) {
+            if (query_return.real_name !== null) {
                 this.setState({
                     real_name: query_return.real_name
                 });
             }
-            if (query_return.hometown != null) {
+            if (query_return.hometown !== null) {
                 this.setState({
                     hometown: query_return.hometown
                 });
             }
-            if (query_return.organization != null) {
+            if (query_return.organization !== null) {
                 this.setState({
                     organization: query_return.organization
                 });
             }
-            if (query_return.signature != null) {
+            if (query_return.signature !== null) {
                 this.setState({
                     signature: query_return.signature
                 });
@@ -116,7 +116,6 @@ class personinfo extends React.Component {
         if (cookie.load("token")) {
             let iemail = this.state.email;
             let ibirthday = this.state.birthday;
-            let igender = this.state.gender;
             let iphone = this.state.phone;
             let ireal_name = this.state.real_name;
             let ihometown = this.state.hometown;

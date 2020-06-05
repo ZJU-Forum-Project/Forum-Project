@@ -1,15 +1,10 @@
 import React from 'react';
 import '../asset/register.css';
-import {Button, Form, Input} from 'antd';
+import {Button, Carousel, Form, Input} from 'antd';
 import axios from 'axios';
 import cookie from 'react-cookies';
-import {Carousel} from 'antd';
+import './config';
 
-// 添加走马灯图片
-import registerImg1 from '../img/register-1.jpg';
-import registerImg2 from '../img/register-2.jpg';
-import registerImg3 from '../img/register-3.jpg';
-import registerImg4 from '../img/register-4.jpg';
 
 // register部分
 class register extends React.Component {
@@ -40,7 +35,7 @@ class register extends React.Component {
         formData.append('name', this.state.name);
         formData.append('password', this.state.password);
         formData.append('token', this.state.token);
-        let register_return = (await axios.post('/api/register', formData)).data;//调用后端register接口，返回消息
+        let register_return = (await axios.post(global.constants.url + '/api/register', formData)).data;//调用后端register接口，返回消息
         let success = register_return.state;
         if (success) {
             alert(register_return.message);//返回信息
@@ -73,7 +68,7 @@ class register extends React.Component {
         if (emailAddress != "") {
             let formData = new FormData();
             formData.append('email', emailAddress);
-            let ret = (await axios.post('/api/applyEmail', formData)).data;
+            let ret = (await axios.post(global.constants.url + '/api/applyEmail', formData)).data;
             let success = ret.state;
             if (success) {
                 alert("You have reived the email contains token!");
@@ -186,10 +181,10 @@ class register extends React.Component {
                     </Form></div>
                 <div>
                     <Carousel>
-                        <div><img src={registerImg1} className="logo-img"/></div>
-                        <div><img src={registerImg2} className="logo-img"/></div>
-                        <div><img src={registerImg3} className="logo-img"/></div>
-                        <div><img src={registerImg4} className="logo-img"/></div>
+                        <div><img src="http://106.12.27.104/register-1.595c113c.jpg" className="logo-img"/></div>
+                        <div><img src="http://106.12.27.104/register-2.cb554a83.jpg" className="logo-img"/></div>
+                        <div><img src="http://106.12.27.104/register-3.bdd2e843.jpg" className="logo-img"/></div>
+                        <div><img src="http://106.12.27.104/register-4.e1c5f9e9.jpg" className="logo-img"/></div>
                     </Carousel>
                 </div>
             </div>

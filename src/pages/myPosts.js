@@ -1,11 +1,11 @@
-import {Layout, Button, PageHeader, Avatar, List, Form, Input} from 'antd';
-import NavigateBar from '../components/navigate';
+import {Avatar, Button, List} from 'antd';
 import React from 'react';
 import axios from 'axios';
 import cookie from 'react-cookies';
 import "../asset/board.css"
 import {Link} from "react-router-dom";
 import NotLogin from "../components/notlogin";
+import './config';
 
 export default class myPosts extends React.Component {
     constructor(props) {
@@ -29,10 +29,10 @@ export default class myPosts extends React.Component {
         let token = cookie.load("token")
         let formData = new FormData()
         formData.append('Authorization', token)
-        axios.post("/api/personalposting", formData)
+        axios.post(global.constants.url + "/api/personalposting", formData)
             .then(response => {
-                const data = response.data
-                const posts = data.postings
+                const data = response.data;
+                const posts = data.postings;
                 this.setState({
                     postings: posts,
                     token: token
