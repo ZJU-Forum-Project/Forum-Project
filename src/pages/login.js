@@ -41,6 +41,7 @@ class Login extends React.Component {
             //存入cookie,直接跳转登陆状态
             cookie.save('token', ret.authorizeToken);
             cookie.save("name", name);
+            cookie.save("avatarUrl", ret.avatarUrl);
             window.location.href = "http://106.12.27.104/";//直接打开新网页
         } else {
             let message = ret.message;

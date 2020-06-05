@@ -65,7 +65,6 @@ export default class Post extends React.Component {
         axios.post("/api/postings/" + id(), formData)
             .then(response => {
                 const data = response.data;
-                console.log(data);
                 this.setState({
                     token: token,
                     title: data.title,
@@ -74,7 +73,6 @@ export default class Post extends React.Component {
                     content: data.content,
                     replyList: data.replyList,
                 });
-                cookie.save("token", this.state.token)
             })
     }
 
@@ -103,8 +101,6 @@ export default class Post extends React.Component {
             formData.append('author', this.state.name);
             formData.append('Authorization', this.state.token);
             formData.append('postId', id());
-            console.log(this.state.token);
-            console.log(this.state.author);
 
             if (this.state.re_Author == true) {
                 formData.append('content', this.state.value);
@@ -191,12 +187,10 @@ export default class Post extends React.Component {
         this.setState({
             floorId: event.target.getAttribute("data-floorId")
         });
-        console.log(this.state.floorId);
         formData.append("floorId", this.state.floorId);
         let ret = (await axios.post('/api/GetFloor', formData)).data;
         let state = ret.state;
         if (state == true) {
-            console.log(ret.content)
             this.setState({
                 content: ret.content,
                 value: ret.content,
@@ -228,7 +222,6 @@ export default class Post extends React.Component {
             }
             else{
                 formData.append("content", this.state.value);
-                console.log(this.state.value)
             }
             formData.append("replyId", this.state.replyId);
 
@@ -374,7 +367,6 @@ export default class Post extends React.Component {
 
 
     is_Current_User(item) {
-        console.log(item);
         if (this.state.name !== item.author && this.state.name !== "Admin" && this.state.name !== "csq") {
             return [<span key="comment-basic-reply-to" data-floorId={item.floorId} data-floorUI={item.floorUI}
                           onClick={this.handleReply.bind(this)}>Reply to</span>]

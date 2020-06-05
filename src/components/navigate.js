@@ -50,9 +50,9 @@ const userCenter = (
                 style={{position: "relative", bottom: "10px"}}
                 onClick={
                     function () {
-                        cookie.remove('name');
-                        cookie.remove('avatarUrl');
-                        cookie.remove('token');
+                        cookie.remove('name',null);
+                        cookie.remove('avatarUrl',null);
+                        cookie.remove('token',null);
                         window.location.reload();
                     }
                 }> 注销 </Button>
@@ -133,7 +133,6 @@ class NavigateBar extends React.Component {
         if (url.search("callback") !== -1) {
             let urlParam = url.split("?")[1];
             ToLogin(urlParam).then(r => this.forceUpdate());
-
         }
 
         if(cookie.load('token')){
