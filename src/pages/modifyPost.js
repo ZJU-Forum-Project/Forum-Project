@@ -1,9 +1,10 @@
-﻿import { Layout,Button, PageHeader, Card, Form} from 'antd';
+﻿import {Button, Form, Layout, PageHeader} from 'antd';
 import React from 'react';
 import axios from 'axios';
 import cookie from 'react-cookies';
 import "../asset/board.css";
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
+
 const { Footer, Content } = Layout;
 export default class modifyPost extends React.Component {
     constructor(props) {

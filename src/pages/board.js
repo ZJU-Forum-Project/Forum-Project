@@ -4,7 +4,6 @@ import axios from 'axios';
 import cookie from 'react-cookies';
 import "../asset/board.css"
 import NotLogin from "../components/notlogin";
-import boardImg1 from '../asset/images/board-1.jpeg';
 import './config';
 
 export default class Board extends React.Component {

@@ -1,9 +1,8 @@
 import React from 'react';
 import '../asset/register.css';
-import {Button, Form, Input} from 'antd';
+import {Button, Carousel, Form, Input} from 'antd';
 import axios from 'axios';
 import cookie from 'react-cookies';
-import {Carousel} from 'antd';
 import './config';
 
 
