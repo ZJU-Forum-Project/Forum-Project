@@ -263,19 +263,26 @@ class modifyinfo extends React.Component{
                     originalAvatar: query_return.avatarUrl
                 });
 
-            axios.get('/api/getBase64PictureByUrl', {
-                    params: {
-                        url: this.state.originalAvatar
-                    }
-                })
-                    .then(function (res) {
-                        this.state.originalSrc = res.data;
-                        console.log("Get Base64 AVATAR");
-                        console.log(this.state.originalSrc);
-                })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
+            let query_avatar = await axios.get('/api/getBase64PictureByUrl', {
+                params: {
+                    url: this.state.originalAvatar
+                }
+            });
+
+            if (query_avatar.status == 200) {
+                console.log(query_avatar);
+                console.log("Get Base64 AVATAR");
+                this.setState({
+                    originalSrc: query_avatar.data,
+                    preview: query_avatar.data,
+                });
+                console.log("originalSrc:" + this.state.originalSrc);
+                console.log("preview:" + this.state.preview);
+                }
+            if (query_avatar.status != 200) {
+                alert(query_return.message);
+                }
+             
             }
             //以下代码不能赋值，用于在控制台检查（url通过Promise和canvas解析的base64）与（后端api/getBase64PictureByUrl返回值）是否相符。
                 var imgUrl = this.state.originalAvatar
@@ -311,7 +318,6 @@ class modifyinfo extends React.Component{
                     }, function (err) {
                         console.log("Src Err!!");
                     });
-            this.state.preview = this.state.originalSrc;
             console.log("information loaded!")
             console.log("Show this.state:");
             console.log("%o",this.state);
@@ -397,9 +403,8 @@ class modifyinfo extends React.Component{
 
     async submitAvatar() {
         console.log("submitAvatar() is called");
-
+        this.state.originalSrc = this.state.preview
         let formData = new FormData();
-
         //读入cookie中的token
         let token = cookie.load('token');
         //读入state中的数据
@@ -421,7 +426,7 @@ class modifyinfo extends React.Component{
             for (i = 0; i < 12; i++) {
                 filename += $chars.charAt(Math.floor(Math.random() * maxPos));
             }
-            return new File([u8arr],filename+".jpg",{type: mime });
+            return new File([u8arr],filename+".png",{type: mime });
         }
         //调用
         this.state.file = dataURLtoFile(this.state.preview);
@@ -502,7 +507,7 @@ class modifyinfo extends React.Component{
                                 >
                                     <div style={{ Align: 'center' }}>
                                         <p>profile preview:</p>
-                                        <img src={this.state.preview} width="100px" height="100" alt="" />
+                                        <img src={this.state.preview} width="100px" height="100px" alt="" style={{ borderRadius: '100%', borderStyle: 'solid', borderColor:'#DCDCDC'}}/>
                                         <div class="slide" style={{ display: this.state.notdisplay_name, Align: 'center' }}>
                                             <Button id="mdAvatar" style={{ marginTop: '8px' }}
                                                 onClick={this.display_name.bind(this)}>
