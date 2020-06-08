@@ -33,8 +33,8 @@ class modifyinfo extends React.Component{
             signature:'',
             signature_hidden:0,
             token: '',
-            preview: null,
             //头像相关：
+            preview: null,
             src: '',
             file: '',
             originalAvatar: '',
@@ -276,8 +276,8 @@ class modifyinfo extends React.Component{
                     originalSrc: query_avatar.data,
                     preview: query_avatar.data,
                 });
-                console.log("originalSrc:" + this.state.originalSrc);
-                console.log("preview:" + this.state.preview);
+                //console.log("originalSrc:" + this.state.originalSrc);
+                //console.log("preview:" + this.state.preview);
                 }
             if (query_avatar.status != 200) {
                 alert(query_return.message);
@@ -285,7 +285,7 @@ class modifyinfo extends React.Component{
              
             }
             //以下代码不能赋值，用于在控制台检查（url通过Promise和canvas解析的base64）与（后端api/getBase64PictureByUrl返回值）是否相符。
-                var imgUrl = this.state.originalAvatar
+            {/*var imgUrl = this.state.originalAvatar
                 function getBase64(img) {//传入图片路径，返回base64
                     function getBase64Image(img, width, height) {//width、height调用时传入具体像素值，控制大小 ,不传则默认图像大小
                         var canvas = document.createElement("canvas");
@@ -317,7 +317,7 @@ class modifyinfo extends React.Component{
                         return Promise.resolve(base64)
                     }, function (err) {
                         console.log("Src Err!!");
-                    });
+                    });*/}
             console.log("information loaded!")
             console.log("Show this.state:");
             console.log("%o",this.state);

@@ -20,6 +20,10 @@ class personinfo extends React.Component {
             organization: '',
             signature: '',
             token: '',//token(若有)存储在本地cookie中
+            src: '',
+            originalAvatar: '',
+            originalSrc: '',
+            preview:'',
         }
 
         //绑定this指针（可以使用箭头函数来替代）
@@ -94,6 +98,35 @@ class personinfo extends React.Component {
                     signature: query_return.signature
                 });
             }
+            if (query_return.avatarUrl != null) {
+                this.setState({
+                    originalAvatar: query_return.avatarUrl
+                });
+                console.log(this.state.originalAvatar)
+                let query_avatar = await axios.get('/api/getBase64PictureByUrl', {
+                    params: {
+                        url: this.state.originalAvatar
+                    }
+                });
+                if (query_avatar.status == 200) {
+                    console.log(query_avatar);
+                    console.log("Get Base64 AVATAR");
+                    this.setState({
+                        originalSrc: query_avatar.data,
+                        preview: query_avatar.data,
+                    });
+                }
+                else if (query_avatar.status != 200) {
+                    alert(query_return.message);
+                }
+
+            }
+            else {
+                console.log("Avatar Url Fail")
+            }
+            console.log("information loaded!")
+            console.log("Show this.state:");
+            console.log("%o", this.state);
         }
 
 
@@ -125,7 +158,18 @@ class personinfo extends React.Component {
             return (
                 <div>
                     <h1 className="headline">个人信息</h1>
-                    <Form name="basic" initialValues={{remember: true}} className="headline">
+                    <Form name="basic" initialValues={{ remember: true }} className="headline">
+
+                        <Form.Item
+                            className={{ width: "40%", float: "left", marginRight: "50px" }}
+                            label="Profile"
+                            name="avatar"
+                        >
+                            <div style={{ Align: 'center' }}>
+                                <img src={this.state.preview} width="100px" height="100px" alt="" style={{ borderRadius: '100%', borderStyle: 'solid', borderColor: '#DCDCDC' }} />
+                            </div>
+                        </Form.Item>
+
                         <Form.Item label="邮箱" name="email"
                                    className={{width: "40%", float: "left", marginRight: "50px"}}>
                             <Input type="text" placeholder={iemail} disabled/>
