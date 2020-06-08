@@ -258,14 +258,27 @@ class modifyinfo extends React.Component{
                     signature: query_return.signature
                 });
             }
-            if (query_return.avatarUrl!= null) {
+            if (query_return.avatarUrl != null) {
                 this.setState({
                     originalAvatar: query_return.avatarUrl
                 });
-                console.log("Query AVATAR Success!");
-                //var imgUrl = "https://img.alicdn.com/bao/uploaded/TB1qimQIpXXXXXbXFXXSutbFXXX.jpg";
-                var imgUrl = this.state.originalAvatar;
-                //var imgUrl = "img/1.jpg";
+
+            axios.get('/api/getBase64PictureByUrl', {
+                    params: {
+                        url: this.state.originalAvatar
+                    }
+                })
+                    .then(function (res) {
+                        this.state.originalSrc = res.data;
+                        console.log("Get Base64 AVATAR");
+                        console.log(this.state.originalSrc);
+                })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            }
+            //以下代码不能赋值，用于在控制台检查（url通过Promise和canvas解析的base64）与（后端api/getBase64PictureByUrl返回值）是否相符。
+                var imgUrl = this.state.originalAvatar
                 function getBase64(img) {//传入图片路径，返回base64
                     function getBase64Image(img, width, height) {//width、height调用时传入具体像素值，控制大小 ,不传则默认图像大小
                         var canvas = document.createElement("canvas");
@@ -287,26 +300,23 @@ class modifyinfo extends React.Component{
                         return deferred.promise();//问题要让onload完成后再return sessionStorage['imgTest']
                     }
                 }
-                getBase64(imgUrl)//转了没有问题，本地可
+                getBase64(imgUrl)//本地可
                     .then(function (base64) {
-                        console.log("Src Transform Success!");
-                        console.log(base64);
-                        this.state.originalSrc = base64;//这一步有问题，base64怎么赋给originalSrc啊
+                        console.log("Src Resolve Success!");
+                        console.log("Promise与Canvas通过url解析的base64(非后端获取数据)："+base64);
+                        //this.state.originalSrc = base64是不能赋给originalSrc的，Promise拿不到只能console.log报在控制台
                         console.log(this.state.originalSrc);
                         $("#test").attr("src", base64)
+                        return Promise.resolve(base64)
                     }, function (err) {
                         console.log("Src Err!!");
                     });
-                this.state.preview = this.state.originalSrc;
-            }
-            console.log(this.state.originalSrc);
+            this.state.preview = this.state.originalSrc;
             console.log("information loaded!")
             console.log("Show this.state:");
             console.log("%o",this.state);
 
         }
-
-
     }
 
 
