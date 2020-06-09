@@ -345,12 +345,12 @@ function postType(type) {
         return 1;
     else {
         if (type === "emotion")
-            return 2;
-        else if (type === "information")
-            return 3;
-        else if (type === "intern")
-            return 4;
-        else if (type === "study")
             return 1;
+        else if (type === "information")
+            return 2;
+        else if (type === "intern")
+            return 3;
+        else if (type === "study")
+            return 4;
     }
 }
