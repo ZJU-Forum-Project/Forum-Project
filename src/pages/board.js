@@ -136,7 +136,7 @@ export default class Board extends React.Component {
     async handleEditOk() {
         let formData = new FormData();
         formData.append('Authorization', this.state.token);
-        formData.append('boardId', postType(this.state.boardId));
+        formData.append('boardId', this.state.boardId);
         formData.append('introduction', this.state.introduction);
         console.log(this.state.value);
         let ret = (await axios.post('/api/board/boardmodify', formData)).data;
