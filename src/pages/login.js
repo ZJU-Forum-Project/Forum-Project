@@ -42,7 +42,7 @@ class Login extends React.Component {
             cookie.save('token', ret.authorizeToken);
             cookie.save("name", name);
             cookie.save("avatarUrl", ret.avatarUrl);
-            window.location.href = "http://106.12.27.104/";//直接打开新网页
+            window.location.href = "https://www.zjuse2017.club/";//直接打开新网页
         } else {
             let message = ret.message;
             alert(message);
@@ -90,10 +90,10 @@ class Login extends React.Component {
                 </Form>
                 <div>
                     <Carousel>
-                        <div><img src="http://106.12.27.104/register-1.595c113c.jpg" className="logo-img"/></div>
-                        <div><img src="http://106.12.27.104/register-2.cb554a83.jpg" className="logo-img"/></div>
-                        <div><img src="http://106.12.27.104/register-3.bdd2e843.jpg" className="logo-img"/></div>
-                        <div><img src="http://106.12.27.104/register-4.e1c5f9e9.jpg" className="logo-img"/></div>
+                        <div><img src="https://www.zjuse2017.club/register-1.595c113c.jpg" className="logo-img"/></div>
+                        <div><img src="https://www.zjuse2017.club/register-2.cb554a83.jpg" className="logo-img"/></div>
+                        <div><img src="https://www.zjuse2017.club/register-3.bdd2e843.jpg" className="logo-img"/></div>
+                        <div><img src="https://www.zjuse2017.club/register-4.e1c5f9e9.jpg" className="logo-img"/></div>
                     </Carousel>
                 </div>
             </div>

@@ -42,7 +42,7 @@ class register extends React.Component {
             //加入cookie给跳转页面（token表示已登录)
             cookie.save("token", register_return.authorizeToken);
             cookie.save("name", this.state.name);
-            window.location.href = "http://106.12.27.104/";//返回初始页面，进入登录状态
+            window.location.href = "https://www.zjuse2017.club/";//返回初始页面，进入登录状态
         } else {
             let message = register_return.message;
             alert(message);
@@ -181,10 +181,10 @@ class register extends React.Component {
                     </Form></div>
                 <div>
                     <Carousel>
-                        <div><img src="http://106.12.27.104/register-1.595c113c.jpg" className="logo-img"/></div>
-                        <div><img src="http://106.12.27.104/register-2.cb554a83.jpg" className="logo-img"/></div>
-                        <div><img src="http://106.12.27.104/register-3.bdd2e843.jpg" className="logo-img"/></div>
-                        <div><img src="http://106.12.27.104/register-4.e1c5f9e9.jpg" className="logo-img"/></div>
+                        <div><img src="https://www.zjuse2017.club/register-1.595c113c.jpg" className="logo-img"/></div>
+                        <div><img src="https://www.zjuse2017.club/register-2.cb554a83.jpg" className="logo-img"/></div>
+                        <div><img src="https://www.zjuse2017.club/register-3.bdd2e843.jpg" className="logo-img"/></div>
+                        <div><img src="https://www.zjuse2017.club/register-4.e1c5f9e9.jpg" className="logo-img"/></div>
                     </Carousel>
                 </div>
             </div>

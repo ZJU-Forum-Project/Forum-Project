@@ -387,7 +387,7 @@ class modifyinfo extends React.Component{
 
         //如果查询成功
         else{
-            window.location.href = "http://106.12.27.104/personinfo";
+            window.location.href = "https://www.zjuse2017.club/personinfo";
         }
     }
 

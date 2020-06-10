@@ -95,7 +95,7 @@ export default class Post extends React.Component {
                     if(data[i].url == null){
                         urls.push(null);
                     } else {
-                        urls.push('http://106.12.27.104/'+data[i].url)
+                        urls.push('https://www.zjuse2017.club/'+data[i].url)
                     }
                 }
                 console.log(data)

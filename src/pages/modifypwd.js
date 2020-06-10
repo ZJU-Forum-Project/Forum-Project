@@ -15,11 +15,11 @@ async function onFinish(values) {
         .then(res => {
             let success = res.data.state;
             if (success) {
-                window.location.href = "http://106.12.27.104/";
+                window.location.href = "https://www.zjuse2017.club/";
             }
         }).catch(err => {
         alert("请先登录！" + err);
-        window.location.href = "http://106.12.27.104/";
+        window.location.href = "https://www.zjuse2017.club/";
     });
 };
 

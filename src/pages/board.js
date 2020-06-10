@@ -220,7 +220,7 @@ export default class Board extends React.Component {
             return (
                 <div>
                     <Avatar className="headline" shape="square" size={128}
-                            src={"http://106.12.27.104/board-1.ba94fb45.jpeg"}/>
+                            src={"https://www.zjuse2017.club/board-1.ba94fb45.jpeg"}/>
                     <Button className="headline" type="dashed"
                             style={{position: "relative", bottom: "40px"}}>{title(this.state.type)}</Button>
                     <Button type="primary" id="createPost" className="headline"
