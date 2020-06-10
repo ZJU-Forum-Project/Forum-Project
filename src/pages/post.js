@@ -1,11 +1,11 @@
-import {Upload, Button, Comment, Descriptions, Form, Input, List, message, Modal, Spin, Avatar, Progress} from 'antd';
+import {Avatar, Button, Comment, Descriptions, Form, Input, List, message, Modal, Progress, Spin, Upload} from 'antd';
 import axios from 'axios';
 import cookie from 'react-cookies';
 import InfiniteScroll from 'react-infinite-scroller';
 import "../asset/board.css"
 import NotLogin from "../components/notlogin";
 import React from 'react';
-import {  PlusOutlined } from '@ant-design/icons';
+import {PlusOutlined} from '@ant-design/icons';
 //import "./config"
 
 const {TextArea} = Input;

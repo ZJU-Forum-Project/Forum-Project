@@ -6,7 +6,6 @@ import {Link} from 'react-router-dom';
 import {Radio, RadioGroup} from 'react-radio-group'
 import NotLogin from "../components/notlogin";
 import Avatar from 'react-avatar-edit'
-import $ from 'jquery'
 
 const {Content} = Layout;
 const layout = {labelCol: { span: 8 },wrapperCol: { span: 16 }};
@@ -95,31 +94,17 @@ class modifyinfo extends React.Component{
 
     //当输入框内的值发生改变时，触发此函数
     handleInputChange(event){
-
-        console.log("handleInputChange(event) is called");
-        console.log("Show event.target");
-        console.log("%o",event.target);
-
         //由于多个组件需要监听Onchange，此处基于name修改对应的值
         this.setState({[event.target.name]: event.target.value});
     }
 
     handleBirthdayChange=(value, dateString)=>{
-        console.log("handleBirthdayChange(date,datestring) is called");
         this.setState({birthday: value,
             birthday_string:dateString });
-        console.log("Show this.state.birthday:");
-        console.log(this.state.birthday);
-        console.log("Show this.state.birthday_string:");
-        console.log("%o",this.state.birthday_string);
 
     }
     handleBirthdayOk=(value)=>{
-        console.log("handleBirthdayOk(value) is called");
         this.setState({birthday: value });
-        console.log("Show this.state.birthday:");
-        console.log(this.state.birthday);
-
     }
 
     //当以下单选框选择发生改变时，触发相应函数
@@ -162,11 +147,9 @@ class modifyinfo extends React.Component{
 
     //向后端发送token，接收InfoMessage类对象。若查询成功则将各项值加载到组件的state中，否则弹窗提示原因。
     async load_info(){
-        console.log("load_info() is called");
 
         //读入cookie中的token
         let token=cookie.load('token');
-        console.log("token: "+token);
 
         let formData = new FormData();
         //非登录状态传输数据的方式
@@ -175,8 +158,6 @@ class modifyinfo extends React.Component{
 
         //调用后端queryinfo接口，发送token,返回InfoMessage类对象
         let query_return=(await axios.post('/api/queryinfo',formData)).data;
-        console.log("Show query_return:");
-        console.log("%o",query_return);
 
         //如果查询失败，弹窗提示原因
         if(query_return.state == false){
@@ -185,7 +166,6 @@ class modifyinfo extends React.Component{
 
         //如果查询成功
         else{
-            console.log("Query Success!");
 
             //更新state
             if(query_return.email!=null){
@@ -329,14 +309,11 @@ class modifyinfo extends React.Component{
 
     //点击提交时，调用后端api，将修改后的数据传给服务器
     async submit(){
-        console.log("submit() is called");
-
         let formData = new FormData();
 
         //读入cookie中的token
         let token=cookie.load('token');
         //读入state中的数据
-        let email=this.state.email;
         var birth=this.state.birthday_string;
         let birth_hidden=this.state.birthday_hidden;
         let gender=this.state.gender;
@@ -476,7 +453,7 @@ class modifyinfo extends React.Component{
         //若用户已登录
         //以下两行代码：为方便前端进行界面，暂时使条件判断失效
         //if(1){
-        if(cookie.load("token")){
+        if(cookie.load("token")==null){
             var iemail = this.state.email;
             var ibirthday = this.state.birthday;//实际显示月份多1
             var iphone = this.state.phone;
@@ -640,7 +617,6 @@ class modifyinfo extends React.Component{
                             <br/><br/><br/>
                             <Form>
                                 <Form.Item
-                                    style={{margin: '16px 100px 15px 300px'}}
                                     label="是否隐藏生日"
                                     name=""
                                 >
@@ -654,10 +630,10 @@ class modifyinfo extends React.Component{
                                 </Form.Item>
 
                                 <Form.Item
-                                    style={{margin: '16px 100px 15px 300px'}}
                                     label="是否隐藏性别"
                                     name=""
                                 >
+                                    &nbsp;
                                     <RadioGroup
                                         name="gender_hidden"
                                         selectedValue={this.state.gender_hidden}
@@ -668,7 +644,6 @@ class modifyinfo extends React.Component{
                                 </Form.Item>
 
                                 <Form.Item
-                                    style={{margin: '16px 100px 15px 300px'}}
                                     label="是否隐藏电话"
                                     name=""
                                 >
@@ -682,7 +657,6 @@ class modifyinfo extends React.Component{
                                 </Form.Item>
 
                                 <Form.Item
-                                    style={{margin: '16px 100px 15px 300px'}}
                                     label="是否隐藏真实姓名"
                                     name=""
                                 >
@@ -696,7 +670,6 @@ class modifyinfo extends React.Component{
                                 </Form.Item>
 
                                 <Form.Item
-                                    style={{margin: '16px 100px 15px 300px'}}
                                     label="是否隐藏家乡"
                                     name=""
                                 >
@@ -710,7 +683,6 @@ class modifyinfo extends React.Component{
                                 </Form.Item>
 
                                 <Form.Item
-                                    style={{margin: '16px 100px 15px 300px'}}
                                     label="是否隐藏组织"
                                     name=""
                                 >

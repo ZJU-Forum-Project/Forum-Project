@@ -175,7 +175,6 @@ class NavigateBar extends React.Component {
             <Menu theme="dark" mode="inline">
                 {this.pageButton}
                 <Menu.Item className="menuItemStyle" key="2"><a className="menuItemStyle">最新发帖</a></Menu.Item>
-                <Menu.Item className="menuItemStyle" key="3"><a className="menuItemStyle">通知</a></Menu.Item>
                 {this.loginButton}
             </Menu>
         );
