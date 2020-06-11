@@ -453,7 +453,7 @@ class modifyinfo extends React.Component{
         //若用户已登录
         //以下两行代码：为方便前端进行界面，暂时使条件判断失效
         //if(1){
-        if(cookie.load("token")==null){
+        if(cookie.load("token")){
             var iemail = this.state.email;
             var ibirthday = this.state.birthday;//实际显示月份多1
             var iphone = this.state.phone;
