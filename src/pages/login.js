@@ -27,26 +27,30 @@ class Login extends React.Component {
     }
 
     //调用后端邮箱api
-    async submit() {
+    submit() {
         //非登录状态传输数据的方式:使用formData
         let formData = new FormData();
         formData.append('password', this.state.password);
         formData.append('email', this.state.email);
         ////调用后端api,并存储返回值
-        let ret = (await axios.post(global.constants.url + '/api/login', formData)).data;
-        let state = ret.state;
-        let name = ret.message.split(";")[1];
-        //根据返回值进行处理
-        if (state === true) {
-            //存入cookie,直接跳转登陆状态
-            cookie.save('token', ret.authorizeToken);
-            cookie.save("name", name);
-            cookie.save("avatarUrl", ret.avatarUrl);
-            window.location.href = "https://www.zjuse2017.club/";//直接打开新网页
-        } else {
-            let message = ret.message;
-            alert(message);
-        }
+        axios.post(global.constants.url + '/api/login', formData)
+            .then((res)=>{
+                let ret = res.data;
+                let state = ret.state;
+                let name = ret.message.split(";")[0];
+                let avatarUrl = ret.message.split(";")[1];
+                //根据返回值进行处理
+                if (state === true) {
+                    //存入cookie,直接跳转登陆状态
+                    cookie.save('token', ret.authorizeToken);
+                    cookie.save("name", name);
+                    cookie.save("avatarUrl", "https://www.zjuse2017.club/"+avatarUrl);
+                    window.location.href = "https://www.zjuse2017.club/";//直接打开新网页
+                } else {
+                    let message = ret.message;
+                    alert(message);
+                }
+            });
     }
 
     //实时更新state里面的值

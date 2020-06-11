@@ -50,9 +50,9 @@ const userCenter = (
                 style={{position: "relative", bottom: "10px"}}
                 onClick={
                     function () {
-                        cookie.remove('name',null);
-                        cookie.remove('avatarUrl',null);
-                        cookie.remove('token',null);
+                        cookie.remove('name');
+                        cookie.remove('avatarUrl');
+                        cookie.remove('token');
                         window.location.reload();
                     }
                 }> 注销 </Button>
