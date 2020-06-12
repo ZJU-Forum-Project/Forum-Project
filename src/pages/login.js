@@ -5,11 +5,6 @@ import axios from 'axios';
 import '../asset/register.css';
 import './config';
 
-import registerImg1 from "../img/register-1.jpg";
-import registerImg2 from "../img/register-2.jpg";
-import registerImg3 from "../img/register-3.jpg";
-import registerImg4 from "../img/register-4.jpg";
-
 class Login extends React.Component {
     constructor(props) {
         super(props);
@@ -32,25 +27,30 @@ class Login extends React.Component {
     }
 
     //调用后端邮箱api
-    async submit() {
+    submit() {
         //非登录状态传输数据的方式:使用formData
         let formData = new FormData();
         formData.append('password', this.state.password);
         formData.append('email', this.state.email);
         ////调用后端api,并存储返回值
-        let ret = (await axios.post(global.constants.url+'/api/login', formData)).data;
-        let state = ret.state;
-        let name = ret.message.split(";")[1];
-        //根据返回值进行处理
-        if (state === true) {
-            //存入cookie,直接跳转登陆状态
-            cookie.save('token', ret.authorizeToken);
-            cookie.save("name", name);
-            window.location.href = "http://106.12.27.104/";//直接打开新网页
-        } else {
-            let message = ret.message;
-            alert(message);
-        }
+        axios.post(global.constants.url + '/api/login', formData)
+            .then((res)=>{
+                let ret = res.data;
+                let state = ret.state;
+                let name = ret.message.split(";")[0];
+                let avatarUrl = ret.message.split(";")[1];
+                //根据返回值进行处理
+                if (state === true) {
+                    //存入cookie,直接跳转登陆状态
+                    cookie.save('token', ret.authorizeToken);
+                    cookie.save("name", name);
+                    cookie.save("avatarUrl", "https://www.zjuse2017.club/"+avatarUrl);
+                    window.location.href = "https://www.zjuse2017.club/";//直接打开新网页
+                } else {
+                    let message = ret.message;
+                    alert(message);
+                }
+            });
     }
 
     //实时更新state里面的值
@@ -94,10 +94,8 @@ class Login extends React.Component {
                 </Form>
                 <div>
                     <Carousel>
-                        <div><img src={registerImg1} className="logo-img"/></div>
-                        <div><img src={registerImg2} className="logo-img"/></div>
-                        <div><img src={registerImg3} className="logo-img"/></div>
-                        <div><img src={registerImg4} className="logo-img"/></div>
+                        <div><img src="https://www.zjuse2017.club/logo1.png" className="logo-img"/></div>
+                        <div><img src="https://www.zjuse2017.club/logo2.png" className="logo-img"/></div>
                     </Carousel>
                 </div>
             </div>

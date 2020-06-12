@@ -10,8 +10,11 @@
     "@testing-library/user-event": "^7.1.2",
     "antd": "^4.1.0",
     "axios": "^0.19.2",
+    "jquery": "^3.5.1",
     "mockjs": "^1.1.0",
+    "moment": "latest",
     "react": "^16.13.1",
+    "react-avatar-edit": "^0.8.3",
     "react-cookies": "^0.1.1",
     "react-dom": "^16.13.1",
     "react-infinite-scroller": "^1.2.4",
@@ -20,8 +23,7 @@
     "react-router-dom": "^5.1.2",
     "react-scripts": "^3.4.1",
     "showdown": "^1.9.1",
-    "xss": "^1.0.6",
-    "moment": "latest"
+    "xss": "^1.0.6"
   },
   "scripts": {
     "start": "react-scripts start",

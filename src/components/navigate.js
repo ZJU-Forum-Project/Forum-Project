@@ -8,10 +8,10 @@ import {Link} from 'react-router-dom';
 
 
 const loginGithubUrl = "https://github.com/login/oauth/authorize?client_id=d25125e25fe36054a4de&redirect_uri=http://106.12.27.104/callback&scope=user&state=1";
-let replyNumber = 0;
 
 //上方菜单栏实现
-const openNotification = () => {
+const openNotification = (r) => {
+    let replyNumber = r;
     const args = {
         message: "当前有" + Number(replyNumber) + "新消息",
         duration: 0,
@@ -37,6 +37,11 @@ const userCenter = (
                 回复我的
             </Link>
         </Menu.Item>
+        <Menu.Item className=" menuItemStyle">
+            <Link to="/modifypwd">
+                修改密码
+            </Link>
+        </Menu.Item>
         < Menu.Item
             className="menuItemStyle">
             <Button
@@ -44,10 +49,12 @@ const userCenter = (
                 size="large"
                 style={{position: "relative", bottom: "10px"}}
                 onClick={
-                    function () {
-                        cookie.remove('name');
-                        cookie.remove('avatarUrl');
-                        cookie.remove('token');
+                    function clearCookie () {
+                        var keys = document.cookie.match(/[^ =;]+(?=\=)/g);
+                        if(keys) { for(var i = keys.length - 1;i > -1; i--){
+                            document.cookie = keys[i] + '=0;expires=' + new Date(0).toUTCString() +';path=/;domain=https://www.zjuse2017.club/' + document.domain.split('.').slice(-2).join('.')
+                        }
+                        }
                         window.location.reload();
                     }
                 }> 注销 </Button>
@@ -78,24 +85,16 @@ const notLogin = (
 const pages = (
     <Menu theme="dark">
         <Menu.Item key="sub1">
-            <Link to="/board/emotion">
-                <Button ghost type="link" style={{fontSize: "medium"}}>情感交流</Button>
-            </Link>
+            <Button ghost href="/board/emotion" type="link" style={{fontSize: "medium"}}>情感交流</Button>
         </Menu.Item>
         <Menu.Item key="sub2">
-            <Link to="/board/information">
-                <Button ghost type="link" style={{fontSize: "medium"}}>校园生活</Button>
-            </Link>
+            <Button ghost href="/board/information" type="link" style={{fontSize: "medium"}}>校园生活</Button>
         </Menu.Item>
         <Menu.Item key="sub3">
-            <Link to="/board/intern">
-                <Button ghost type="link" style={{fontSize: "medium"}}>实习信息</Button>
-            </Link>
+            <Button ghost href="/board/intern" type="link" style={{fontSize: "medium"}}>实习信息</Button>
         </Menu.Item>
         <Menu.Item key="sub4">
-            <Link to="/board/study">
-                <Button ghost type="link" style={{fontSize: "medium"}}>学习资料</Button>
-            </Link>
+            <Button ghost href="/board/study" type="link" style={{fontSize: "medium"}}>学习资料</Button>
         </Menu.Item>
     </Menu>
 );
@@ -127,22 +126,19 @@ async function getUnreadReplyNumber() {
     let formData = new FormData();
     formData.append('Authorization', token);
     formData.append('receiver', name);
-    let number = (await axios.post(global.constants.url + "/api/getUnreadReplyNumber", formData)).data.message;
-    replyNumber = number;
+    return  (await axios.post(global.constants.url + "/api/getUnreadReplyNumber", formData)).data.num;
 };
 
 class NavigateBar extends React.Component {
-    async componentWillMount() {
+    componentWillMount() {
         let url = document.URL;
         if (url.search("callback") !== -1) {
             let urlParam = url.split("?")[1];
-            await ToLogin(urlParam);
-            this.forceUpdate();
+            ToLogin(urlParam).then(r => this.forceUpdate());
         }
 
         if(cookie.load('token')){
-            await getUnreadReplyNumber();
-            openNotification();
+            getUnreadReplyNumber().then(r => openNotification(r));
         }
     }
 
@@ -181,7 +177,6 @@ class NavigateBar extends React.Component {
             <Menu theme="dark" mode="inline">
                 {this.pageButton}
                 <Menu.Item className="menuItemStyle" key="2"><a className="menuItemStyle">最新发帖</a></Menu.Item>
-                <Menu.Item className="menuItemStyle" key="3"><a className="menuItemStyle">通知</a></Menu.Item>
                 {this.loginButton}
             </Menu>
         );

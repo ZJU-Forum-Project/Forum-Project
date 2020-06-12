@@ -1,10 +1,9 @@
-import {Avatar, Button, Form, Input, List, Modal} from 'antd';
+import {Divider, Avatar, Button, Form, Input, List, Modal, Descriptions} from 'antd';
 import React from 'react';
 import axios from 'axios';
 import cookie from 'react-cookies';
 import "../asset/board.css"
 import NotLogin from "../components/notlogin";
-import boardImg1 from '../img/board-1.jpeg';
 import './config';
 
 export default class Board extends React.Component {
@@ -18,6 +17,12 @@ export default class Board extends React.Component {
             content: "",
             postings: [],
             type: "",
+            introduction: "",
+            edit_intro_visible: false,
+            delete_visible: false,
+            id: "",//删除的帖子id
+            boardId: "",//版面id
+            value: "",
         };
 
         //绑定需要调用的async函数
@@ -33,10 +38,12 @@ export default class Board extends React.Component {
             .then(response => {
                 let data = response.data
                 let posts = data.postings
+                let intro = data.intro
                 this.setState({
                     postings: posts,
                     token: token,
-                    type: type()
+                    type: type(),
+                    introduction: intro
                 });
             })
 
@@ -64,10 +71,20 @@ export default class Board extends React.Component {
     }
 
     // 显示对话框
-    handleDisplay() {
-        this.setState({
-            display_name: true,
-        })
+    async handleDisplay() {
+        let formData = new FormData();
+        formData.append('Authorization', this.state.token);
+        let ret = (await axios.post('/api/checkIfBannedByAuthorization', formData)).data;
+        let state = ret.state;
+
+        if (state == true) {
+            let message = "你已被管理员禁言";
+            alert(message);
+        } else {
+            this.setState({
+                display_name: true,
+            })
+        }
     }
 
     // 关闭对话框
@@ -86,15 +103,70 @@ export default class Board extends React.Component {
         formData.append('content', this.state.content);
         formData.append('type', postType(this.state.type));
         formData.append('Authorization', this.state.token);
-        console.log(this.state.token);
-        console.log(this.state.type);
-        console.log(this.state.content);
-        console.log(this.state.title);
         ////调用后端api,并存储返回值
         let ret = (await axios.post(global.constants.url + '/api/post', formData)).data;
         let state = ret.state;
         //根据返回值进行处理
         if (state === true) {
+            window.location.reload()//刷新
+        } else {
+            let message = ret.message;
+            alert(message);
+        }
+    }
+
+    async handleECancel(event) {
+        this.setState(
+            {
+                edit_intro_visible: false,
+            }
+        );
+    }
+
+    async handleEdit(event) {
+        this.setState({
+            edit_intro_visible: true,
+        })
+    }
+
+    async handleEditOk() {
+        let formData = new FormData();
+        formData.append('Authorization', this.state.token);
+        formData.append('boardId', this.state.boardId);
+        formData.append('introduction', this.state.introduction);
+        let ret = (await axios.post('/api/board/boardmodify', formData)).data;
+        let state = ret.state;
+
+        if (state == true) {
+            window.location.reload()//直接打开新网页
+        } else {
+            let message = ret.message;
+            alert(message);
+        }
+
+        this.setState({
+            edit_intro_visible: false,
+        });
+    }
+
+    async handleDelete(event) {
+        this.setState({
+            delete_visible: true,
+            id: event.target.getAttribute("data-id")
+        })
+    }
+
+    async handleDeleteOk() {
+        let formData = new FormData();
+        this.setState({
+            delete_visible: false
+        });
+        formData.append('Authorization', this.state.token);
+        formData.append('postingID', this.state.id);
+
+        let ret = (await axios.post('/api/deleteposting', formData)).data;
+        let state = ret.state;
+        if (state == true) {
             window.location.reload()//直接打开新网页
         } else {
             let message = ret.message;
@@ -102,16 +174,56 @@ export default class Board extends React.Component {
         }
     }
 
+    async is_Admin(item) {
+        let formData = new FormData();
+        formData.append('Authorization', this.state.token);
+        let ret = (await axios.post('/api/isAdmin', formData)).data;
+        let message = ret.message;
+        if (message == 1) {
+            let actions = [<Button id="deletePost" htmlType="submit" style={{float: 'right', marginRight: "15%"}}
+                                   data-id={item.id}
+                                   onClick={this.handleDelete}>
+                删除
+            </Button>, <div>{item.time}</div>]
+            return actions
+        } else {
+            let actions = [<div>{item.time}</div>]
+            return actions
+        }
+    }
+
+    async is_Admin_edit() {
+        let formData = new FormData();
+        formData.append('Authorization', this.state.token);
+        let ret = (await axios.post('/api/isAdmin', formData)).data;
+        let message = ret.message;
+        if (message == 1) {
+            let actions = [<Button type="primary" id="modifyIntro" className="headline"
+                                   style={{position: "relative", bottom: "60px"}}
+                                   onClick={this.handleEdit.bind(this)}>
+                修改版面简介
+            </Button>]
+            return actions
+        }
+    }
+
     render() {
-        this.state.token = cookie.load("token");
-        this.state.type = type();
-        if (this.state.token) {
+        this.state.type = type()
+        this.state.boardId = postType(this.state.type)
+        if (cookie.load("token")) {
             return (
                 <div>
-                    <Avatar className="headline" shape="square" size={128}
-                            src={boardImg1}/>
-                    <Button className="headline" type="dashed"
-                            style={{position: "relative", bottom: "40px"}}>{title(this.state.type)}</Button>
+                    <div className="description-title">
+                        <Descriptions title={title(this.state.type)}>
+                            <Descriptions.Item label="版面简介：">{this.state.introduction}</Descriptions.Item>
+                        </Descriptions>
+                    </div>
+                    <br/><br/><br/>
+                    <Button type="primary" id="modifyIntro" className="headline"
+                            style={{position: "relative", bottom: "40px"}}
+                            onClick={this.handleEdit.bind(this)}>
+                        修改版面简介
+                    </Button>
                     <Button type="primary" id="createPost" className="headline"
                             style={{position: "relative", bottom: "40px"}}
                             onClick={this.handleDisplay.bind(this)}>
@@ -151,7 +263,21 @@ export default class Board extends React.Component {
                             </Form>
                         </div>
                     </Modal>
-
+                    <Modal
+                        title="Edit"
+                        visible={this.state.edit_intro_visible}
+                        onOk={this.handleEditOk.bind(this)}
+                        onCancel={this.handleECancel.bind(this)}
+                    >
+                        <p>修改版面简介:</p>
+                        <textarea placeholder="版面简介"
+                                  style={{
+                                      width: "100%",
+                                      height: "300px",
+                                      textIndent: "8px"
+                                  }}
+                                  type="text" name="introduction" onChange={this.handleChange}/>
+                    </Modal>
                     <List
                         pagination={{
                             onChange: page => {
@@ -162,7 +288,8 @@ export default class Board extends React.Component {
                         itemLayout="horizontal"
                         dataSource={this.state.postings}
                         renderItem={item => (
-                            <List.Item actions={[<div>{item.time}</div>]}>
+                            <List.Item actions={this.is_Admin(item)}>
+
                                 <List.Item.Meta
                                     avatar={<Avatar
                                         src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"/>}
@@ -213,12 +340,12 @@ function postType(type) {
         return 1;
     else {
         if (type === "emotion")
-            return 2;
-        else if (type === "information")
-            return 3;
-        else if (type === "intern")
-            return 4;
-        else if (type === "study")
             return 1;
+        else if (type === "information")
+            return 2;
+        else if (type === "intern")
+            return 3;
+        else if (type === "study")
+            return 4;
     }
 }

@@ -1,17 +1,10 @@
 import React from 'react';
 import '../asset/register.css';
-import {Button, Form, Input} from 'antd';
+import {Button, Carousel, Form, Input} from 'antd';
 import axios from 'axios';
 import cookie from 'react-cookies';
-import {Carousel} from 'antd';
 import './config';
 
-
-// 添加走马灯图片
-import registerImg1 from '../img/register-1.jpg';
-import registerImg2 from '../img/register-2.jpg';
-import registerImg3 from '../img/register-3.jpg';
-import registerImg4 from '../img/register-4.jpg';
 
 // register部分
 class register extends React.Component {
@@ -49,7 +42,7 @@ class register extends React.Component {
             //加入cookie给跳转页面（token表示已登录)
             cookie.save("token", register_return.authorizeToken);
             cookie.save("name", this.state.name);
-            window.location.href = "http://106.12.27.104/";//返回初始页面，进入登录状态
+            window.location.href = "https://www.zjuse2017.club/";//返回初始页面，进入登录状态
         } else {
             let message = register_return.message;
             alert(message);
@@ -188,10 +181,8 @@ class register extends React.Component {
                     </Form></div>
                 <div>
                     <Carousel>
-                        <div><img src={registerImg1} className="logo-img"/></div>
-                        <div><img src={registerImg2} className="logo-img"/></div>
-                        <div><img src={registerImg3} className="logo-img"/></div>
-                        <div><img src={registerImg4} className="logo-img"/></div>
+                        <div><img src="https://www.zjuse2017.club/logo1.png" className="logo-img"/></div>
+                        <div><img src="https://www.zjuse2017.club/logo2.png" className="logo-img"/></div>
                     </Carousel>
                 </div>
             </div>
