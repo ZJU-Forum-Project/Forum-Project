@@ -98,7 +98,6 @@ export default class Post extends React.Component {
                         urls.push('https://www.zjuse2017.club/'+data[i].url)
                     }
                 }
-                console.log(data)
                 this.setState({
                     pictureList: data,
                     urlList: urls
@@ -401,7 +400,6 @@ export default class Post extends React.Component {
         })
     }
     async handleUpdatePictureOk() {
-        console.log(this.state.pictureList)
         if(this.state.pictureList[this.state.floorUI].url!=null){
             let pictureId = this.state.pictureList[this.state.floorUI].pictureId
             let token = cookie.load("token");
@@ -423,7 +421,6 @@ export default class Post extends React.Component {
             await axios.post('/api/uploadPicture', formData)
                 .then(response => {
                     const data = response.data
-                    console.log(data)
                     this.setState({
                         rpVisible: false,
                     })
@@ -451,7 +448,6 @@ export default class Post extends React.Component {
         axios.post('/api/deletePicture', formData)
             .then(response => {
                 const data = response.data
-                console.log(data)
             })
         window.location.reload()//刷新
     }
@@ -549,7 +545,7 @@ export default class Post extends React.Component {
                                     <Comment
                                         avatar={
                                             <Avatar
-                                                src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
+                                                src={"https://www.zjuse2017.club/"+item.avatarUrl}
                                                 alt="Han Solo"
                                             />
                                         }
@@ -557,7 +553,7 @@ export default class Post extends React.Component {
                                         author={item.author}
                                         content={item.content}
                                         datetime={item.time}
-                                        children={<img className="pictureOfReply" src={this.state.urlList[item.floorUI]}></img>}
+                                        children={<img className="pictureOfReply" src={this.state.urlList[item.floorUI]}/>}
                                     />
                                     <Progress
                                         type="circle"

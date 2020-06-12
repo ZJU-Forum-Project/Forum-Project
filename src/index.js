@@ -16,6 +16,8 @@ import NavigateBar from "./components/navigate";
 import modifyinfo from "./pages/modifyinfo";
 import ReplyMe from "./pages/replyme";
 import modifyPost from './pages/modifyPost';
+import cookie from 'react-cookies';
+import axios from 'axios';
 
 
 const {Search} = Input;
@@ -36,7 +38,16 @@ export default class Routing extends React.Component {
                             twoToneColor/>DD98</Text>
                     </div>
                     <div className="search">
-                        <Search placeholder="搜索问题或找人" onSearch={value => console.log(value)} enterButton/>
+                        <Search placeholder="搜索问题或找人" onSearch={value => {
+                                    let formData = new FormData();
+                                    formData.append("content",value);
+                                    formData.append("Authorization",cookie.load("token"));
+                                    axios.post(global.constants.url + '/api/search',formData)
+                                        .then(responce=>{
+                                            let ret = responce.data;
+                                        });
+                                }
+                        } enterButton/>
                     </div>
                 </Header>
                 <Layout>

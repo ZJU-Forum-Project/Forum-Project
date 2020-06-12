@@ -1,4 +1,4 @@
-import {Avatar, Button, Form, Input, List, Modal} from 'antd';
+import {Divider, Avatar, Button, Form, Input, List, Modal, Descriptions} from 'antd';
 import React from 'react';
 import axios from 'axios';
 import cookie from 'react-cookies';
@@ -103,10 +103,6 @@ export default class Board extends React.Component {
         formData.append('content', this.state.content);
         formData.append('type', postType(this.state.type));
         formData.append('Authorization', this.state.token);
-        console.log(this.state.token);
-        console.log(this.state.type);
-        console.log(this.state.content);
-        console.log(this.state.title);
         ////调用后端api,并存储返回值
         let ret = (await axios.post(global.constants.url + '/api/post', formData)).data;
         let state = ret.state;
@@ -138,7 +134,6 @@ export default class Board extends React.Component {
         formData.append('Authorization', this.state.token);
         formData.append('boardId', this.state.boardId);
         formData.append('introduction', this.state.introduction);
-        console.log(this.state.value);
         let ret = (await axios.post('/api/board/boardmodify', formData)).data;
         let state = ret.state;
 
@@ -184,7 +179,6 @@ export default class Board extends React.Component {
         formData.append('Authorization', this.state.token);
         let ret = (await axios.post('/api/isAdmin', formData)).data;
         let message = ret.message;
-        console.log(item.id);
         if (message == 1) {
             let actions = [<Button id="deletePost" htmlType="submit" style={{float: 'right', marginRight: "15%"}}
                                    data-id={item.id}
@@ -219,21 +213,22 @@ export default class Board extends React.Component {
         if (cookie.load("token")) {
             return (
                 <div>
-                    <Avatar className="headline" shape="square" size={128}
-                            src={"https://www.zjuse2017.club/board-1.ba94fb45.jpeg"}/>
-                    <Button className="headline" type="dashed"
-                            style={{position: "relative", bottom: "40px"}}>{title(this.state.type)}</Button>
-                    <Button type="primary" id="createPost" className="headline"
-                            style={{position: "relative", bottom: "40px"}}
-                            onClick={this.handleDisplay.bind(this)}>
-                        发表帖子
-                    </Button>
+                    <div className="description-title">
+                        <Descriptions title={title(this.state.type)}>
+                            <Descriptions.Item label="版面简介：">{this.state.introduction}</Descriptions.Item>
+                        </Descriptions>
+                    </div>
+                    <br/><br/><br/>
                     <Button type="primary" id="modifyIntro" className="headline"
                             style={{position: "relative", bottom: "40px"}}
                             onClick={this.handleEdit.bind(this)}>
                         修改版面简介
                     </Button>
-                    <p>{this.state.introduction}</p>
+                    <Button type="primary" id="createPost" className="headline"
+                            style={{position: "relative", bottom: "40px"}}
+                            onClick={this.handleDisplay.bind(this)}>
+                        发表帖子
+                    </Button>
                     <Modal title="" visible={this.state.display_name} onCancel={this.handleCancel}
                            onOk={this.handleSubmit}>
                         <h3>新建帖子</h3>

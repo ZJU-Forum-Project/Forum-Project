@@ -49,10 +49,12 @@ const userCenter = (
                 size="large"
                 style={{position: "relative", bottom: "10px"}}
                 onClick={
-                    function () {
-                        cookie.remove('name');
-                        cookie.remove('avatarUrl');
-                        cookie.remove('token');
+                    function clearCookie () {
+                        var keys = document.cookie.match(/[^ =;]+(?=\=)/g);
+                        if(keys) { for(var i = keys.length - 1;i > -1; i--){
+                            document.cookie = keys[i] + '=0;expires=' + new Date(0).toUTCString() +';path=/;domain=https://www.zjuse2017.club/' + document.domain.split('.').slice(-2).join('.')
+                        }
+                        }
                         window.location.reload();
                     }
                 }> 注销 </Button>

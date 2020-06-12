@@ -94,10 +94,8 @@ class Login extends React.Component {
                 </Form>
                 <div>
                     <Carousel>
-                        <div><img src="https://www.zjuse2017.club/register-1.595c113c.jpg" className="logo-img"/></div>
-                        <div><img src="https://www.zjuse2017.club/register-2.cb554a83.jpg" className="logo-img"/></div>
-                        <div><img src="https://www.zjuse2017.club/register-3.bdd2e843.jpg" className="logo-img"/></div>
-                        <div><img src="https://www.zjuse2017.club/register-4.e1c5f9e9.jpg" className="logo-img"/></div>
+                        <div><img src="https://www.zjuse2017.club/logo1.png" className="logo-img"/></div>
+                        <div><img src="https://www.zjuse2017.club/logo2.png" className="logo-img"/></div>
                     </Carousel>
                 </div>
             </div>

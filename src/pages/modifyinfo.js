@@ -250,14 +250,10 @@ class modifyinfo extends React.Component{
             });
 
             if (query_avatar.status == 200) {
-                console.log(query_avatar);
-                console.log("Get Base64 AVATAR");
                 this.setState({
                     originalSrc: query_avatar.data,
                     preview: query_avatar.data,
                 });
-                //console.log("originalSrc:" + this.state.originalSrc);
-                //console.log("preview:" + this.state.preview);
                 }
             if (query_avatar.status != 200) {
                 alert(query_return.message);
@@ -298,10 +294,6 @@ class modifyinfo extends React.Component{
                     }, function (err) {
                         console.log("Src Err!!");
                     });*/}
-            console.log("information loaded!")
-            console.log("Show this.state:");
-            console.log("%o",this.state);
-
         }
     }
 
@@ -345,18 +337,8 @@ class modifyinfo extends React.Component{
         formData.append('organization',organization);
         formData.append('organization_hidden',organization_hidden);
         formData.append('signature', signature);
-
-        console.log("Show each var[a,b] in formData.entries()");
-        for (var [a, b] of formData.entries()) {
-            console.log(a, b);
-        }
-
         //调用后端queryinfo接口，发送信息,返回InfoMessage类对象
         let edit_return=(await axios.post('/api/editinfo',formData)).data;
-
-        console.log("Show edit_return:");
-        console.log("%o",edit_return);
-
         //如果查询失败，弹窗提示原因
         if(edit_return.state == false){
             alert(edit_return.message);
@@ -370,16 +352,12 @@ class modifyinfo extends React.Component{
 
     //在渲染前调用
     componentWillMount(){
-        console.log("componentWillMount() is called");
-
         if(cookie.load("token")){
-            console.log("call load_info()");
             this.load_info();
         }
     }
 
     async submitAvatar() {
-        console.log("submitAvatar() is called");
         this.state.originalSrc = this.state.preview
         let formData = new FormData();
         //读入cookie中的token
@@ -413,18 +391,8 @@ class modifyinfo extends React.Component{
         formData.append('token', token);
         formData.append('Authorization', token);
         formData.append('file', file);
-
-        console.log("Show each var[a,b] in formData.entries()");
-        for (var [a, b] of formData.entries()) {
-            console.log(a, b);
-        }
-
         //调用后端queryinfo接口，发送信息,返回InfoMessage类对象
         let edit_return = (await axios.post('/api/uploadAvatar', formData)).data;
-
-        console.log("Show edit_return:");
-        console.log("%o", edit_return);
-
         //如果查询失败，弹窗提示原因
         if (edit_return.state == false) {
             alert(edit_return.message);
@@ -438,18 +406,12 @@ class modifyinfo extends React.Component{
 
     //在渲染前调用
     componentWillMount() {
-        console.log("componentWillMount() is called");
-
         if (cookie.load("token")) {
-            console.log("call load_info()");
             this.load_info();
         }
     }
 
     render() {
-
-        console.log("render() is called");
-
         //若用户已登录
         //以下两行代码：为方便前端进行界面，暂时使条件判断失效
         //if(1){

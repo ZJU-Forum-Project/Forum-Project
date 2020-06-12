@@ -33,11 +33,9 @@ class personinfo extends React.Component {
 
     //向后端发送token，接收InfoMessage类对象。若查询成功则将各项值加载到组件的state中，否则弹窗提示原因。
     async load_info() {
-        console.log("load_info() is called");
 
         //读入cookie中的token
         let token = cookie.load('token');
-        console.log("token: " + token);
         let formData = new FormData();
         //非登录状态传输数据的方式
         formData.append('token', token);
@@ -45,8 +43,6 @@ class personinfo extends React.Component {
 
         //调用后端queryinfo接口，发送token,返回InfoMessage类对象
         let query_return = (await axios.post(global.constants.url + '/api/queryinfo', formData)).data;
-        console.log("Show query_return:");
-        console.log("%o", query_return);
 
         //如果查询失败，弹窗提示原因
         if (query_return.state === false) {
@@ -55,7 +51,6 @@ class personinfo extends React.Component {
 
         //如果查询成功
         else {
-            console.log("Query Success!");
 
             //更新state
             if (query_return.email !== null) {
@@ -102,15 +97,12 @@ class personinfo extends React.Component {
                 this.setState({
                     originalAvatar: query_return.avatarUrl
                 });
-                console.log(this.state.originalAvatar)
                 let query_avatar = await axios.get('/api/getBase64PictureByUrl', {
                     params: {
                         url: this.state.originalAvatar
                     }
                 });
                 if (query_avatar.status == 200) {
-                    console.log(query_avatar);
-                    console.log("Get Base64 AVATAR");
                     this.setState({
                         originalSrc: query_avatar.data,
                         preview: query_avatar.data,
@@ -122,11 +114,7 @@ class personinfo extends React.Component {
 
             }
             else {
-                console.log("Avatar Url Fail")
             }
-            console.log("information loaded!")
-            console.log("Show this.state:");
-            console.log("%o", this.state);
         }
 
 
@@ -135,17 +123,12 @@ class personinfo extends React.Component {
 
     //在渲染前调用
     componentWillMount() {
-        console.log("componentWillMount() is called");
-
         if (cookie.load("token")) {
-            console.log("call load_info()");
             this.load_info();
         }
     }
 
     render() {
-        console.log("render() is called");
-
         if (cookie.load("token")) {
             let iemail = this.state.email;
             let ibirthday = this.state.birthday;
