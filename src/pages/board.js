@@ -218,7 +218,6 @@ export default class Board extends React.Component {
                             <Descriptions.Item label="版面简介：">{this.state.introduction}</Descriptions.Item>
                         </Descriptions>
                     </div>
-                    <br/><br/><br/>
                     <Button type="primary" id="modifyIntro" className="headline"
                             style={{position: "relative", bottom: "40px"}}
                             onClick={this.handleEdit.bind(this)}>
@@ -279,6 +278,7 @@ export default class Board extends React.Component {
                                   type="text" name="introduction" onChange={this.handleChange}/>
                     </Modal>
                     <List
+                        style={{marginRight:"30px", marginLeft:"30px"}}
                         pagination={{
                             onChange: page => {
                                 console.log(page);
@@ -289,12 +289,11 @@ export default class Board extends React.Component {
                         dataSource={this.state.postings}
                         renderItem={item => (
                             <List.Item actions={this.is_Admin(item)}>
-
                                 <List.Item.Meta
                                     avatar={<Avatar
-                                        src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"/>}
+                                        src={"https://www.zjuse2017.club/" + item.avatarUrl}/>}
                                     title={[<div><a href={'/post/' + item.id}>{item.title}</a></div>]}
-                                    description={<div>description</div>}
+                                    description={<div>{item.content}</div>}
                                 />
                             </List.Item>
                         )}

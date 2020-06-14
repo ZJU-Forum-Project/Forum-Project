@@ -1,10 +1,25 @@
 import React from 'react';
 import '../asset/register.css';
-import {Button, Carousel, Form, Input} from 'antd';
+import {Button, Form, Input, Row, Col, Layout} from 'antd';
 import axios from 'axios';
 import cookie from 'react-cookies';
 import './config';
 
+const {Content} = Layout;
+const formItemLayout = {labelCol: { span: 8 },wrapperCol: { span: 16 }};
+
+const tailFormItemLayout = {
+    wrapperCol: {
+        xs: {
+            span: 24,
+            offset: 0,
+        },
+        sm: {
+            span: 16,
+            offset: 8,
+        },
+    },
+};
 
 // register部分
 class register extends React.Component {
@@ -103,89 +118,104 @@ class register extends React.Component {
 
     render() {
         return (
-            <div>
-                <div>
-                    <Form
-                        name="basic"
-                        initialValues={{remember: true}}
-                        style={{marginLeft: "2%", marginTop: "2%", width: "75%"}}
-                    >
-                        <Form.Item
-                            label="用户名"
-                            name="name"
-                            rules={[{
-                                required: true, message: '请输入用户名!'
-                            }
-                            ]}
+            <Layout className="layout">
+                <div><img src="https://www.zjuse2017.club/bg.jpg" className="logo-img"/></div>
+                <Content className='content-form'>
+                    <div className="register" style={{textAlign: 'center',fontSize:'30px'}}>
+                        使用邮箱进行注册
+                        <Form
+                            {...formItemLayout}
+                            name="basic"
+                            style={{minWidth:'700px', paddingRight:'40px', marginTop:'20px'}}
+                            initialValues={{remember: true}}
                         >
-                            <Input name="name" type="text" onChange={this.handleChange}/>
-                        </Form.Item>
-                        <Form.Item
-                            label="邮箱"
-                            name="email"
-                            rules={[{
-                                required: true, message: '请输入邮箱!'
-                            }, {
-                                validator: this.checkEmail.bind(this)
-                            }
-                            ]}
-                        >
-                            <Input name="email" type="text" onChange={this.handleChange}/>
-                        </Form.Item>
+                            <Form.Item
+                                style={{ margin: '16px 100px 15px -100px' }}
+                                label="用户名"
+                                name="name"
+                                rules={[{
+                                    required: true, message: '请输入用户名!'
+                                }
+                                ]}
+                            >
+                                <Input name="name" type="text" onChange={this.handleChange}/>
+                            </Form.Item>
+                            <Form.Item
+                                style={{ margin: '16px 100px 15px -100px' }}
+                                label="邮箱"
+                                name="email"
+                                rules={[{
+                                    required: true, message: '请输入邮箱!'
+                                }, {
+                                    validator: this.checkEmail.bind(this)
+                                }
+                                ]}
+                            >
+                                <Input name="email" type="text" onChange={this.handleChange}/>
+                            </Form.Item>
 
-                        <Form.Item
-                            label="密码"
-                            name="password"
-                            rules={[{required: true, message: '请输入密码!'}]}
-                        >
-                            <Input.Password name="password" onChange={this.handleChange}/>
-                        </Form.Item>
+                            <Form.Item
+                                style={{ margin: '16px 100px 15px -100px' }}
+                                label="密码"
+                                name="password"
+                                rules={[{required: true, message: '请输入密码!'}]}
+                            >
+                                <Input.Password name="password" onChange={this.handleChange}/>
+                            </Form.Item>
 
-                        <Form.Item
-                            label="确认密码"
-                            name="confirmpassword"
-                            dependencies={['password']}
-                            hasFeedback
-                            rules={[
-                                {required: true, message: '请确认密码!'},
-                                ({getFieldValue}) => ({
-                                    validator(rule, value) {
-                                        if (!value || getFieldValue('password') === value) {
-                                            return Promise.resolve();
-                                        }
-                                        return Promise.reject('两个密码不一致!');
-                                    },
-                                }),
-                            ]}
-                        >
-                            <Input.Password name="password" onChange={this.handleChange}/>
-                        </Form.Item>
-                        <Form.Item
-                            label="验证码"
-                            name="token"
-                            rules={[{required: true, message: '请输入验证码!'}]}
-                        >
-                            <Input name="token" allowClear={true}
-                                   onChange={this.handleChange}/>
-                        </Form.Item>
-
-                        <Form.Item>
-                            <Button onClick={this.applyEmail.bind(this)} loading={this.state.loading}
-                                    style={{marginRight: "5%"}}>
-                                {this.state.loading ? this.state.time + '秒' : '发送邮件验证'}
-                            </Button>
-                            <Button type="primary" htmlType="submit" onClick={this.submit}>
-                                提交
-                            </Button>
-                        </Form.Item>
-                    </Form></div>
-                <div>
-                    <Carousel>
-                        <div><img src="https://www.zjuse2017.club/logo1.png" className="logo-img"/></div>
-                        <div><img src="https://www.zjuse2017.club/logo2.png" className="logo-img"/></div>
-                    </Carousel>
-                </div>
-            </div>
+                            <Form.Item
+                                style={{ margin: '16px 100px 15px -100px' }}
+                                label="确认密码"
+                                name="confirmpassword"
+                                dependencies={['password']}
+                                hasFeedback
+                                rules={[
+                                    {required: true, message: '请确认密码!'},
+                                    ({getFieldValue}) => ({
+                                        validator(rule, value) {
+                                            if (!value || getFieldValue('password') === value) {
+                                                return Promise.resolve();
+                                            }
+                                            return Promise.reject('两个密码不一致!');
+                                        },
+                                    }),
+                                ]}
+                            >
+                                <Input.Password name="password" onChange={this.handleChange}/>
+                            </Form.Item>
+                            <Form.Item
+                                style={{ margin: '16px 100px 15px -100px' }}
+                                label="验证码"
+                                name="验证码"
+                            >
+                                <Row gutter={8}>
+                                    <Col span={12}>
+                                        <Form.Item
+                                            name="token"
+                                            noStyle
+                                            rules={[{ required: true, message: '请输入验证码!' }]}
+                                        >
+                                            <Input name="token" allowClear={true}
+                                                   onChange={this.handleChange}/>
+                                        </Form.Item>
+                                    </Col>
+                                    <Col span={12}>
+                                        <Button onClick={this.applyEmail.bind(this)} loading={this.state.loading}
+                                                style={{marginRight: "5%"}}>
+                                            {this.state.loading ? this.state.time + '秒' : '发送邮件验证'}
+                                        </Button>
+                                    </Col>
+                                </Row>
+                            </Form.Item>
+                            <Form.Item style={{textAlign: 'center', marginLeft:'100px'}}>
+                                <Button type="primary" htmlType="submit" onClick={this.submit}>
+                                    提交
+                                </Button>
+                            </Form.Item>
+                        </Form>
+                    </div>
+                </Content>
+            </Layout>
         )
     }
 }

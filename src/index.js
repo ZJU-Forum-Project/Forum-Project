@@ -18,6 +18,7 @@ import ReplyMe from "./pages/replyme";
 import modifyPost from './pages/modifyPost';
 import cookie from 'react-cookies';
 import axios from 'axios';
+import './asset/navigate.css';
 
 
 const {Search} = Input;
@@ -31,7 +32,7 @@ export default class Routing extends React.Component {
     render() {
         return (
             // 所有值应按照百分比形式进行赋值，请不要修改height的值
-            <Layout style={{width: "100%", height: "fit-content", minHeight: "650px"}}>
+            <Layout style={{width: "100%", height: "fit-content", minHeight: "720px"}}>
                 <Header>
                     <div className="logo">
                         <Text style={{color: '#1890ff', fontSize: "large"}}><HomeFilled
@@ -52,10 +53,10 @@ export default class Routing extends React.Component {
                 </Header>
                 <Layout>
                     <Router>
-                        <Sider breakpoint="lg" collapsedWidth="0">
+                        <Sider breakpoint="lg" collapsedWidth="0" className="site-layout-background">
                             <NavigateBar/>
                         </Sider>
-                        <Content>
+                        <Content style={{backgroundColor:"#ffffff"}}>
                             <div>
                                 <Route exact path="/" component={HomePage}/>
                                 <Route path="/callback" component={HomePage}/>

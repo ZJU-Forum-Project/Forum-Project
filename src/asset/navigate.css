@@ -1,7 +1,7 @@
 @import '../../node_modules/antd/dist/antd.css';
 
 .site-layout-content {
-    background: #fff;
+    background: #ffffff;
     min-height: 100%;
 }
 
@@ -26,3 +26,6 @@
     margin-right: 2%;
 }
 
+.site-layout-background {
+    background: #fff;
+}
