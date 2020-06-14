@@ -1,4 +1,4 @@
-import {Avatar, Button, List} from 'antd';
+import {Avatar, Breadcrumb, Button, Layout, List} from 'antd';
 import React from 'react';
 import axios from 'axios';
 import cookie from 'react-cookies';
@@ -6,6 +6,9 @@ import "../asset/board.css"
 import {Link} from "react-router-dom";
 import NotLogin from "../components/notlogin";
 import './config';
+
+const {Content} = Layout;
+const layout = {labelCol: { span: 8 },wrapperCol: { span: 16 }};
 
 export default class myPosts extends React.Component {
     constructor(props) {
@@ -45,34 +48,36 @@ export default class myPosts extends React.Component {
         this.handleChange = this.handleChange.bind(this);
         if (this.state.token) {
             return (
-                <div>
-                    <h1 className="headline">我的贴子</h1>
-                    <List
-                        pagination={{
-                            onChange: page => {
-                                console.log(page);
-                            },
-                            pageSize: 4,
-                        }}
-                        itemLayout="horizontal"
-                        dataSource={this.state.postings}
-                        renderItem={item => (
-                            <List.Item actions={[<div>{item.time}</div>,
-                                <Button>
-                                    <Link to={"/mdpo/" + item.id}>
-                                        编辑
-                                    </Link>
-                                </Button>]}>
-                                <List.Item.Meta
-                                    avatar={<Avatar
-                                        src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"/>}
-                                    title={[<div><a href={'/post/' + item.id}>{item.title}</a></div>]}
-                                    description={<div>description</div>}
-                                />
-                            </List.Item>
-                        )}
-                    />
-                </div>
+                <Layout className="layout">
+                    <Content style={{padding: '0 50px', backgroundColor: '#ffffff', paddingBottom: '20px'}}>
+                        <Breadcrumb style={{margin: '16px 0'}}>
+                            <Breadcrumb.Item>我的帖子</Breadcrumb.Item>
+                        </Breadcrumb>
+                        <List
+                            pagination={{
+                                onChange: page => {
+                                    console.log(page);
+                                },
+                                pageSize: 6,
+                            }}
+                            itemLayout="horizontal"
+                            dataSource={this.state.postings}
+                            renderItem={item => (
+                                <List.Item actions={[<div>{item.time}</div>,
+                                    <Button>
+                                        <Link to={"/mdpo/" + item.id}>
+                                            编辑
+                                        </Link>
+                                    </Button>]}>
+                                    <List.Item.Meta
+                                        title={[<div><a href={'/post/' + item.id}>{item.title}</a></div>]}
+                                        description={<div>{item.content}</div>}
+                                    />
+                                </List.Item>
+                            )}
+                        />
+                    </Content>
+                </Layout>
             );
         } else {
             return (
