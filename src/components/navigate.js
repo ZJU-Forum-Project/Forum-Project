@@ -1,10 +1,10 @@
 import React from 'react';
 import '../asset/navigate.css';
-import {Avatar, Button, Dropdown, Menu, notification} from 'antd';
-import {DownSquareFilled, AppstoreOutlined, LoginOutlined, AlertOutlined, UserOutlined} from '@ant-design/icons';
+import {Avatar, Button, Menu, notification} from 'antd';
+import {AlertOutlined, AppstoreOutlined, LoginOutlined, UserOutlined} from '@ant-design/icons';
 import axios from 'axios';
 import cookie from 'react-cookies';
-import {Link} from 'react-router-dom';
+
 const { SubMenu } = Menu;
 
 
@@ -165,11 +165,9 @@ class NavigateBar extends React.Component {
                             style={{position: "relative", bottom: "10px"}}
                             onClick={
                                 function clearCookie () {
-                                    var keys = document.cookie.match(/[^ =;]+(?=\=)/g);
-                                    if(keys) { for(var i = keys.length - 1;i > -1; i--){
-                                        document.cookie = keys[i] + '=0;expires=' + new Date(0).toUTCString() +';path=/;domain=https://www.zjuse2017.club/' + document.domain.split('.').slice(-2).join('.')
-                                    }
-                                    }
+                                    cookie.remove('token', { path: '/' });
+                                    cookie.remove('avatarUrl', { path: '/' });
+                                    cookie.remove('name', { path: '/' });
                                     window.location.reload();
                                 }
                             }> 注销 </Button>
