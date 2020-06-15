@@ -49,6 +49,7 @@ export default class ReplyMe extends React.Component {
         element.setAttribute("style", "backgroundColor:#ffffff");
         formData.append('Authorization', token);
         formData.append('id', id);
+        console.log(id)
         axios.post(global.constants.url + "/api/seenReply", formData);
     };
 
@@ -74,10 +75,14 @@ export default class ReplyMe extends React.Component {
                             itemLayout="horizontal"
                             dataSource={this.state.reply}
                             renderItem={item => (
-                                <List.Item actions={[<div>{item.replyTime}</div>]}>
+                                <List.Item actions={[<div>{item.replyTime}</div>]}
+                                           id={item.id}
+                                           onClick={this.hasAlreadyRead.bind(this, item.id)}
+                                           style={{backgroundColor: Boolean(item.replyState) ? "#ffffff" : "#40a9ff"}}
+                                >
                                     <List.Item.Meta
                                         title={[<div>
-                                                    <a onClick={this.hasAlreadyRead.bind(this, item.id)}
+                                                    <a
                                                        href={"/post/" + Number(item.postId)}>{item.postName}:{item.author}在第{item.floorNumber}楼回复了你
                                                     </a>
                                                 </div>]}
