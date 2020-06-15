@@ -49,7 +49,6 @@ export default class ReplyMe extends React.Component {
         element.setAttribute("style", "backgroundColor:#ffffff");
         formData.append('Authorization', token);
         formData.append('id', id);
-        console.log(id)
         axios.post(global.constants.url + "/api/seenReply", formData);
     };
 
