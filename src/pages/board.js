@@ -291,7 +291,8 @@ export default class Board extends React.Component {
                             <List.Item actions={this.is_Admin(item)}>
                                 <List.Item.Meta
                                     avatar={<Avatar
-                                        src={"https://www.zjuse2017.club/" + item.avatarUrl}/>}
+                                        src={"https://www.zjuse2017.club/" + item.avatarUrl}
+                                        onClick={()=>{window.location.href="https://www.zjuse2017.club/otherinfo/" + item.author}}/>}
                                     title={[<div><a href={'/post/' + item.id}>{item.title}</a></div>]}
                                     description={<div>{item.content}</div>}
                                 />

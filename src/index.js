@@ -19,6 +19,7 @@ import modifyPost from './pages/modifyPost';
 import search from './pages/search';
 import cookie from 'react-cookies';
 import './asset/navigate.css';
+import otherinfo from "./pages/otherinfo";
 
 
 const {Search} = Input;
@@ -66,6 +67,7 @@ export default class Routing extends React.Component {
                                 <Route path="/myReplies" component={ReplyMe}/>
                                 <Route path="/mdpo" component={modifyPost}/>
                                 <Route path="/search" component={search}/>
+                                <Route path="/otherinfo" component={otherinfo}/>
                             </div>
                         </Content>
                     </Router>
