@@ -1,4 +1,4 @@
-import {Breadcrumb, Button, Comment, Layout, List} from 'antd';
+import {Avatar, Breadcrumb, Button, Comment, Layout, List} from 'antd';
 import React from 'react';
 import axios from 'axios';
 import cookie from 'react-cookies';
@@ -85,7 +85,9 @@ export default class ReplyMe extends React.Component {
                                                        href={"/post/" + Number(item.postId)}>{item.postName}:{item.author}在第{item.floorNumber}楼回复了你
                                                     </a>
                                                 </div>]}
-                                        avatar={"https://www.zjuse2017.club/"+item.avatarUrl}
+                                        avatar={<Avatar
+                                            src={"https://www.zjuse2017.club/" + item.avatarUrl}
+                                            onClick={()=>{window.location.href="https://www.zjuse2017.club/otherinfo/" + item.author}}/>}
                                         description={item.content}
                                     />
                                 </List.Item>

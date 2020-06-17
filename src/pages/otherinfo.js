@@ -13,11 +13,11 @@ class otherinfo extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            email: '',
+            // email: '',
             birthday: new Date(1900, 1, 1),
             gender: "男",
-            phone: '',
-            real_name: '',
+            // phone: '',
+            // real_name: '',
             hometown: '',
             organization: '',
             signature: '',
@@ -36,15 +36,20 @@ class otherinfo extends React.Component {
     //向后端发送token，接收InfoMessage类对象。若查询成功则将各项值加载到组件的state中，否则弹窗提示原因。
     async load_info() {
 
-        //读入cookie中的token
+        // let username = 'csq';
+        let url = window.location.href;
+        let username = url.slice(url.lastIndexOf("/")+1);
+        console.log(url);
+        console.log(username);
+        if (url == undefined)
+            username = "url is null"
         let token = cookie.load('token');
         let formData = new FormData();
-        //非登录状态传输数据的方式
-        formData.append('token', token);
+        formData.append('username', username);
         formData.append('Authorization', token);
 
         //调用后端queryinfo接口，发送token,返回InfoMessage类对象
-        let query_return = (await axios.post(global.constants.url + '/api/queryinfo', formData)).data;
+        let query_return = (await axios.post(global.constants.url + '/api/info', formData)).data;
 
         //如果查询失败，弹窗提示原因
         if (query_return.state === false) {
@@ -55,29 +60,14 @@ class otherinfo extends React.Component {
         else {
 
             //更新state
-            if (query_return.email !== null) {
-                this.setState({
-                    email: query_return.email
-                });
-            }
             if (query_return.birth !== null) {
                 this.setState({
                     birthday: query_return.birth
                 });
             }
-            if (query_return.gender !== null && query_return.gender !== "") {
+            if (query_return.gender !== null) {
                 this.setState({
                     gender: query_return.gender
-                });
-            }
-            if (query_return.phone !== null) {
-                this.setState({
-                    phone: query_return.phone
-                });
-            }
-            if (query_return.real_name !== null) {
-                this.setState({
-                    real_name: query_return.real_name
                 });
             }
             if (query_return.hometown !== null) {
@@ -132,10 +122,7 @@ class otherinfo extends React.Component {
 
     render() {
         if (cookie.load("token")) {
-            let iemail = this.state.email;
             let ibirthday = this.state.birthday;
-            let iphone = this.state.phone;
-            let ireal_name = this.state.real_name;
             let ihometown = this.state.hometown;
             let iorganization = this.state.organization;
             let isignature = this.state.signature;
@@ -162,28 +149,16 @@ class otherinfo extends React.Component {
                                     </div>
                                 </Form.Item>
 
-                                <Form.Item label="邮箱" name="email"
-                                           style={{margin: '16px 100px 15px -200px'}}>
-                                    <Input type="text" placeholder={iemail} disabled/>
-                                </Form.Item>
                                 <Form.Item label="生日" name="birthday"style={{margin: '16px 100px 15px -200px'}}>
                                     <DatePicker placeholder={ibirthday} disabled/>
                                 </Form.Item>
 
                                 <Form.Item label="性别" style={{margin: '16px 100px 15px -200px'}}>
-                                    <Radio.Group name="gender" defaultValue={this.state.gender} disabled>
+                                    <Radio.Group name="gender" value={this.state.gender} disabled>
                                         <Radio.Button value="男" style={{width: "150px"}}>男孩纸</Radio.Button>
                                         <Radio.Button value="女" style={{width: "150px"}}>女孩纸</Radio.Button>
+                                        <Radio.Button value="" style={{width: "150px"}}>保密</Radio.Button>
                                     </Radio.Group>
-                                </Form.Item>
-
-                                <Form.Item label="手机号" name="phone" style={{margin: '16px 100px 15px -200px'}}>
-                                    <Input type="text" placeholder={iphone} disabled/>
-                                </Form.Item>
-
-                                <Form.Item label="真实姓名" name="real_name"
-                                           style={{margin: '16px 100px 15px -200px'}}>
-                                    <Input type="text" placeholder={ireal_name} disabled/>
                                 </Form.Item>
 
                                 <Form.Item label="故乡" name="hometown" style={{margin: '16px 100px 15px -200px'}}>
@@ -198,11 +173,6 @@ class otherinfo extends React.Component {
                                     <Input type="textarea" placeholder={isignature} disabled/>
                                 </Form.Item>
 
-                                <Link to="/modifyinfo">
-                                    <Button className="e-button" type="primary">
-                                        修改个人信息
-                                    </Button>
-                                </Link>
                             </Form>
                         </div>
                     </Content>
