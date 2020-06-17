@@ -1,4 +1,4 @@
-import {Divider, Avatar, Button, Form, Input, List, Modal, Descriptions} from 'antd';
+import {Avatar, Button, Descriptions, Form, Input, List, Modal} from 'antd';
 import React from 'react';
 import axios from 'axios';
 import cookie from 'react-cookies';

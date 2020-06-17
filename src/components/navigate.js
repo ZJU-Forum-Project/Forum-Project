@@ -1,7 +1,7 @@
 import React from 'react';
 import '../asset/navigate.css';
 import {Avatar, Button, Menu, notification} from 'antd';
-import {AlertOutlined, AppstoreOutlined, LoginOutlined, UserOutlined} from '@ant-design/icons';
+import {AppstoreOutlined, LoginOutlined, UserOutlined} from '@ant-design/icons';
 import axios from 'axios';
 import cookie from 'react-cookies';
 
@@ -178,10 +178,10 @@ class NavigateBar extends React.Component {
             <Menu theme="light" mode="inline" defaultSelectedKeys={['2']}>
                 {this.pageButton}
                 <Menu.Item key="sub2">
-                    <span>
-                        <AlertOutlined />
-                        <span>最新发帖</span>
-                    </span>
+                    <AppstoreOutlined />
+                    <a href="/latestPost" rel="noopener noreferrer">
+                        最新帖子
+                    </a>
                 </Menu.Item>
                 {this.loginButton}
             </Menu>

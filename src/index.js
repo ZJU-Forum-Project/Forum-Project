@@ -18,6 +18,7 @@ import ReplyMe from "./pages/replyme";
 import modifyPost from './pages/modifyPost';
 import search from './pages/search';
 import cookie from 'react-cookies';
+import axios from 'axios';
 import './asset/navigate.css';
 
 
@@ -39,9 +40,8 @@ export default class Routing extends React.Component {
                             twoToneColor/>DD98</Text>
                     </div>
                     <div className="search">
-                        <Search placeholder="搜索帖子..." onSearch={value => {
-                                    cookie.save("search",value);//cookie中存入搜索要信息
-                                    window.location.href = global.constants.url+'/search';//直接搜索网页，局部渲染
+                        <Search placeholder="搜索问题或找人" onSearch={value => {
+                                    window.location.href = global.constants.url+'/search?search='+value;//直接搜索网页，局部渲染
                                 }
                         } enterButton/>
                     </div>
@@ -66,6 +66,7 @@ export default class Routing extends React.Component {
                                 <Route path="/myReplies" component={ReplyMe}/>
                                 <Route path="/mdpo" component={modifyPost}/>
                                 <Route path="/search" component={search}/>
+                                <Route path="/latestPost" component={HomePage}/>
                             </div>
                         </Content>
                     </Router>
@@ -75,5 +76,4 @@ export default class Routing extends React.Component {
         )
     }
 }
-
 ReactDOM.render(<Routing/>, document.getElementById("root"));

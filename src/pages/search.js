@@ -19,27 +19,21 @@ export default class Board extends React.Component {
             edit_intro_visible: false,
             delete_visible: false,
             id: "",//删除的帖子id
-            boardId: "",//版面id
             value: "",
         };
 
         //绑定需要调用的async函数
         this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     componentDidMount() {
         let token = cookie.load("token");
         let formData = new FormData();
-        let searchValue=cookie.load("search");
+        let url = document.URL;
+        let urlParam = url.split("?")[1];
+        let searchValue=urlParam.split("&")[0].split("=")[1];
         formData.append("content",searchValue);
         formData.append('Authorization', token);
-        // let data=TestData;
-        // let posts = data.postingList;
-        // this.setState({
-        //       postings: posts,
-        //       token: token,
-        // })本地测试用，实际使用时删去这段即可
         axios.post(global.constants.url + '/api/search',formData)
              .then(responce=>{
                     let data=responce.data;
@@ -49,61 +43,11 @@ export default class Board extends React.Component {
                         token: token,
                     });
                });
-
     }
-
-
     //实时更新state里面的值
     handleChange(event) {
         this.setState({[event.target.name]: event.target.value});
     }
-
-
-    checkTitle(rule, value, callback) {//待定
-        const reg = /^[a-zA-Z0-9]+([-_.][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([-_.][a-zA-Z0-9]+)*\.[a-z]{2,}$/;
-        if (!reg.test(value)) {
-        }
-        callback();
-    }
-
-    checkContent(rule, value, callback) {//待定
-        const reg = /^[a-zA-Z0-9]+([-_.][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([-_.][a-zA-Z0-9]+)*\.[a-z]{2,}$/;
-        if (!reg.test(value)) {
-        }
-        callback();
-    }
-
-    // 显示对话框
-
-
-    // 关闭对话框
-    handleCancel = () => {
-        this.setState({
-            display_name: false,
-        });
-    };
-
-    async handleSubmit() {
-        let formData = new FormData();
-        this.setState({
-            display_name: false
-        });
-        formData.append('title', this.state.title);
-        formData.append('content', this.state.content);
-        formData.append('type', postType(this.state.type));
-        formData.append('Authorization', this.state.token);
-        ////调用后端api,并存储返回值
-        let ret = (await axios.post(global.constants.url + '/api/post', formData)).data;
-        let state = ret.state;
-        //根据返回值进行处理
-        if (state === true) {
-            window.location.reload()//刷新
-        } else {
-            let message = ret.message;
-            alert(message);
-        }
-    }
-
     async handleECancel(event) {
         this.setState(
             {
@@ -111,8 +55,6 @@ export default class Board extends React.Component {
             }
         );
     }
-
-    
 
     async handleDeleteOk() {
         let formData = new FormData();
@@ -150,24 +92,8 @@ export default class Board extends React.Component {
         }
     }
 
-    async is_Admin_edit() {
-        let formData = new FormData();
-        formData.append('Authorization', this.state.token);
-        let ret = (await axios.post('/api/isAdmin', formData)).data;
-        let message = ret.message;
-        if (message == 1) {
-            let actions = [<Button type="primary" id="modifyIntro" className="headline"
-                                   style={{position: "relative", bottom: "60px"}}
-                                   onClick={this.handleEdit.bind(this)}>
-                修改版面简介
-            </Button>]
-            return actions
-        }
-    }
-
     render() {
-        this.state.boardId = postType(this.state.type)
-        if (1||cookie.load("token")) {
+        if (cookie.load("token")) {
             return (
                 <div>
                     <List
@@ -202,19 +128,3 @@ export default class Board extends React.Component {
 
 }
 
-
-
-function postType(type) {
-    if (type == null)
-        return 1;
-    else {
-        if (type === "emotion")
-            return 1;
-        else if (type === "information")
-            return 2;
-        else if (type === "intern")
-            return 3;
-        else if (type === "study")
-            return 4;
-    }
-}
