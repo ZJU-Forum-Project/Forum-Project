@@ -1,4 +1,4 @@
-import {Avatar, Button, List} from 'antd';
+import {Avatar, Button, Descriptions, List} from 'antd';
 import React from 'react';
 import axios from 'axios';
 import cookie from 'react-cookies';
@@ -35,8 +35,8 @@ export default class Board extends React.Component {
         formData.append("content",searchValue);
         formData.append('Authorization', token);
         axios.post(global.constants.url + '/api/search',formData)
-             .then(responce=>{
-                    let data=responce.data;
+             .then(response=>{
+                    let data=response.data;
                     let posts = data.postings;
                     this.setState({
                         postings: posts,
@@ -96,6 +96,9 @@ export default class Board extends React.Component {
         if (cookie.load("token")) {
             return (
                 <div>
+                    <div className="description-title">
+                        <Descriptions title="搜索结果" />
+                    </div>
                     <List
                         style={{marginRight:"30px", marginLeft:"30px"}}
                         pagination={{

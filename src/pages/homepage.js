@@ -31,8 +31,8 @@ export default class Homepage extends React.Component {
         let formData = new FormData();
         formData.append('Authorization', token);
         axios.post(global.constants.url + '/api/checkLatestPostings',formData)
-             .then(responce=>{
-                    let data=responce.data;
+             .then(response=>{
+                    let data=response.data;
                     let posts = data.postings;
                     this.setState({
                         postings: posts,
