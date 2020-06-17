@@ -20,6 +20,7 @@ import search from './pages/search';
 import cookie from 'react-cookies';
 import axios from 'axios';
 import './asset/navigate.css';
+import otherinfo from "./pages/otherinfo";
 
 
 const {Search} = Input;
@@ -66,7 +67,11 @@ export default class Routing extends React.Component {
                                 <Route path="/myReplies" component={ReplyMe}/>
                                 <Route path="/mdpo" component={modifyPost}/>
                                 <Route path="/search" component={search}/>
+<<<<<<< HEAD
                                 <Route path="/latestPost" component={HomePage}/>
+=======
+                                <Route path="/otherinfo" component={otherinfo}/>
+>>>>>>> eab82ca3c204dd3bb1c7e53c2534d7d2a788f195
                             </div>
                         </Content>
                     </Router>
