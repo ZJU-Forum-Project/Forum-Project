@@ -127,6 +127,14 @@ class otherinfo extends React.Component {
             let iorganization = this.state.organization;
             let isignature = this.state.signature;
 
+            let temp;
+            if (ibirthday == "1900-02-01")
+                temp = <Radio.Group disabled>
+                    <Radio.Button value="" style={{width: "150px"}}>保密</Radio.Button>
+                </Radio.Group>
+            else
+                temp = <DatePicker placeholder={ibirthday} disabled/>
+
             return (
                 <Layout className="layout">
                     <Content style={{padding: '0 50px'}}>
@@ -150,7 +158,7 @@ class otherinfo extends React.Component {
                                 </Form.Item>
 
                                 <Form.Item label="生日" name="birthday"style={{margin: '16px 100px 15px -200px'}}>
-                                    <DatePicker placeholder={ibirthday} disabled/>
+                                    {temp}
                                 </Form.Item>
 
                                 <Form.Item label="性别" style={{margin: '16px 100px 15px -200px'}}>
