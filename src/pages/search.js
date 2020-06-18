@@ -1,4 +1,4 @@
-import {Avatar, Button, Descriptions, List} from 'antd';
+import {Avatar, Button, List} from 'antd';
 import React from 'react';
 import axios from 'axios';
 import cookie from 'react-cookies';
@@ -30,13 +30,13 @@ export default class Board extends React.Component {
         let token = cookie.load("token");
         let formData = new FormData();
         let url = document.URL;
-        let urlParam = url.split("?")[1];
-        let searchValue=urlParam.split("&")[0].split("=")[1];
+        let searchUrl = url.split("=")[1];
+        let searchValue=decodeURI(searchUrl);
         formData.append("content",searchValue);
         formData.append('Authorization', token);
         axios.post(global.constants.url + '/api/search',formData)
-             .then(response=>{
-                    let data=response.data;
+             .then(responce=>{
+                    let data=responce.data;
                     let posts = data.postings;
                     this.setState({
                         postings: posts,
@@ -96,9 +96,6 @@ export default class Board extends React.Component {
         if (cookie.load("token")) {
             return (
                 <div>
-                    <div className="description-title">
-                        <Descriptions title="搜索结果" />
-                    </div>
                     <List
                         style={{marginRight:"30px", marginLeft:"30px"}}
                         pagination={{
@@ -113,8 +110,7 @@ export default class Board extends React.Component {
                             <List.Item actions={this.is_Admin(item)}>
                                 <List.Item.Meta
                                     avatar={<Avatar
-                                        src={"https://www.zjuse2017.club/" + item.avatarUrl}
-                                        onClick={()=>{window.location.href="https://www.zjuse2017.club/otherinfo/" + item.author}}/>}
+                                        src={"https://www.zjuse2017.club/" + item.avatarUrl}/>}
                                     title={[<div><a href={'/post/' + item.id}>{item.title}</a></div>]}
                                     description={<div>{item.content}</div>}
                                 />
