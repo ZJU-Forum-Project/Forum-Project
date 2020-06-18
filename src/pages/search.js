@@ -1,4 +1,4 @@
-import {Avatar, Button, List} from 'antd';
+import {Avatar, Button, Descriptions, List} from 'antd';
 import React from 'react';
 import axios from 'axios';
 import cookie from 'react-cookies';
@@ -96,6 +96,9 @@ export default class Board extends React.Component {
         if (cookie.load("token")) {
             return (
                 <div>
+                    <div className="description-title">
+                        <Descriptions title="搜索结果" />
+                    </div>
                     <List
                         style={{marginRight:"30px", marginLeft:"30px"}}
                         pagination={{
