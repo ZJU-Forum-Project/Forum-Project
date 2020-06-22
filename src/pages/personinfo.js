@@ -171,7 +171,7 @@ class personinfo extends React.Component {
                                 </Form.Item>
 
                                 <Form.Item label="性别" style={{margin: '16px 100px 15px -200px'}}>
-                                    <Radio.Group name="gender" defaultValue={this.state.gender} disabled>
+                                    <Radio.Group name="gender" value={this.state.gender} disabled>
                                         <Radio.Button value="男" style={{width: "150px"}}>男孩纸</Radio.Button>
                                         <Radio.Button value="女" style={{width: "150px"}}>女孩纸</Radio.Button>
                                     </Radio.Group>

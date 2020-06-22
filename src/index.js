@@ -16,9 +16,9 @@ import NavigateBar from "./components/navigate";
 import modifyinfo from "./pages/modifyinfo";
 import ReplyMe from "./pages/replyme";
 import modifyPost from './pages/modifyPost';
-import cookie from 'react-cookies';
-import axios from 'axios';
+import search from './pages/search';
 import './asset/navigate.css';
+import otherinfo from "./pages/otherinfo";
 
 
 const {Search} = Input;
@@ -40,14 +40,7 @@ export default class Routing extends React.Component {
                     </div>
                     <div className="search">
                         <Search placeholder="搜索问题或找人" onSearch={value => {
-                                    let formData = new FormData();
-                                    formData.append("content",value);
-                                    formData.append("Authorization",cookie.load("token"));
-                                    axios.post(global.constants.url + '/api/search',formData)
-                                        .then(responce=>{
-                                            let ret = responce.data;
-                                            /*最终轮需完成的*/
-                                        });
+                                    window.location.href = global.constants.url+'/search?search='+value;//直接搜索网页，局部渲染
                                 }
                         } enterButton/>
                     </div>
@@ -71,6 +64,9 @@ export default class Routing extends React.Component {
                                 <Route path="/myPosts" component={myPosts}/>
                                 <Route path="/myReplies" component={ReplyMe}/>
                                 <Route path="/mdpo" component={modifyPost}/>
+                                <Route path="/search" component={search}/>
+                                <Route path="/latestPost" component={HomePage}/>
+                                <Route path="/otherinfo" component={otherinfo}/>
                             </div>
                         </Content>
                     </Router>
@@ -80,5 +76,4 @@ export default class Routing extends React.Component {
         )
     }
 }
-
 ReactDOM.render(<Routing/>, document.getElementById("root"));

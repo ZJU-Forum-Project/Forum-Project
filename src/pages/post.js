@@ -546,6 +546,7 @@ export default class Post extends React.Component {
                                         avatar={
                                             <Avatar
                                                 src={"https://www.zjuse2017.club/"+item.avatarUrl}
+                                                onClick={()=>{window.location.href="https://www.zjuse2017.club/otherinfo/" + item.author}}
                                                 alt="Han Solo"
                                             />
                                         }

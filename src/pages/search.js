@@ -6,7 +6,7 @@ import "../asset/board.css"
 import NotLogin from "../components/notlogin";
 import './config';
 
-export default class Homepage extends React.Component {
+export default class Board extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -29,10 +29,14 @@ export default class Homepage extends React.Component {
     componentDidMount() {
         let token = cookie.load("token");
         let formData = new FormData();
+        let url = document.URL;
+        let searchUrl = url.split("=")[1];
+        let searchValue=decodeURI(searchUrl);
+        formData.append("content",searchValue);
         formData.append('Authorization', token);
-        axios.post(global.constants.url + '/api/checkLatestPostings',formData)
-             .then(response=>{
-                    let data=response.data;
+        axios.post(global.constants.url + '/api/search',formData)
+             .then(responce=>{
+                    let data=responce.data;
                     let posts = data.postings;
                     this.setState({
                         postings: posts,
@@ -93,7 +97,7 @@ export default class Homepage extends React.Component {
             return (
                 <div>
                     <div className="description-title">
-                        <Descriptions title="最新帖子" />
+                        <Descriptions title="搜索结果" />
                     </div>
                     <List
                         style={{marginRight:"30px", marginLeft:"30px"}}
@@ -109,8 +113,7 @@ export default class Homepage extends React.Component {
                             <List.Item actions={this.is_Admin(item)}>
                                 <List.Item.Meta
                                     avatar={<Avatar
-                                        src={"https://www.zjuse2017.club/" + item.avatarUrl}
-                                        onClick={()=>{window.location.href="https://www.zjuse2017.club/otherinfo/" + item.author}}/>}
+                                        src={"https://www.zjuse2017.club/" + item.avatarUrl}/>}
                                     title={[<div><a href={'/post/' + item.id}>{item.title}</a></div>]}
                                     description={<div>{item.content}</div>}
                                 />
