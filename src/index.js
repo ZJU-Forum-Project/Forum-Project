@@ -9,6 +9,7 @@ import Board from './pages/board';
 import post from './pages/post';
 import myPosts from './pages/myPosts';
 import personinfo from './pages/personinfo'
+import {Link} from 'react-router-dom';
 import {Input, Layout} from "antd";
 import Text from "antd/es/typography/Text";
 import {HomeFilled} from "@ant-design/icons";
@@ -35,8 +36,11 @@ export default class Routing extends React.Component {
             <Layout style={{width: "100%", height: "fit-content", minHeight: "720px"}}>
                 <Header>
                     <div className="logo">
-                        <Text style={{color: '#1890ff', fontSize: "large"}}><HomeFilled
-                            twoToneColor/>DD98</Text>
+                        <a style={{color: '#1890ff', fontSize: "large"}} href="https://www.zjuse2017.club/">
+                            <HomeFilled
+                            twoToneColor/>
+                            DD98
+                        </a>
                     </div>
                     <div className="search">
                         <Search placeholder="搜索问题或找人" onSearch={value => {

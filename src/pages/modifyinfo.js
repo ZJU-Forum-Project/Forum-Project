@@ -431,7 +431,7 @@ class modifyinfo extends React.Component{
                         <Breadcrumb style={{margin: '16px 0'}}>
                             <Breadcrumb.Item>修改个人信息</Breadcrumb.Item>
                         </Breadcrumb>
-                        <div className="site-layout-content"style={{textAlign: 'center',fontSize:'30px'}}>
+                        <div className="site-layout-content"style={{textAlign: 'center',fontSize:'30px', marginLeft: '-15px'}}>
                             修改个人信息
                             <Form
                                 {...layout}
@@ -574,7 +574,7 @@ class modifyinfo extends React.Component{
                             </Form>
                         </div>
 
-                        <div className="site-layout-content"style={{textAlign: 'center',fontSize:'30px'}}>
+                        <div className="site-layout-content"style={{textAlign: 'center',fontSize:'30px', marginLeft: '-15px'}}>
                             隐私设置
                             <br/><br/><br/>
                             <Form>

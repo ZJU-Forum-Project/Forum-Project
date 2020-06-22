@@ -146,10 +146,10 @@ class personinfo extends React.Component {
                         <Breadcrumb style={{margin: '16px 0'}}>
                             <Breadcrumb.Item>个人信息</Breadcrumb.Item>
                         </Breadcrumb>
-                        <div className="site-layout-content"style={{textAlign: 'center',fontSize:'30px'}}>
+                        <div className="site-layout-content"style={{textAlign: 'center',fontSize:'30px', marginLeft: '-15px'}}>
                             个人信息
                             <Form {...layout}
-                                name="basic"
+                                 name="basic"
                                   initialValues={{ remember: true }}
                             >
                                 <Form.Item
