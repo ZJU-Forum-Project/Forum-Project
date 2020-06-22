@@ -39,8 +39,6 @@ class otherinfo extends React.Component {
         // let username = 'csq';
         let url = window.location.href;
         let username = url.slice(url.lastIndexOf("/")+1);
-        console.log(url);
-        console.log(username);
         if (url == undefined)
             username = "url is null"
         let token = cookie.load('token');
@@ -141,7 +139,7 @@ class otherinfo extends React.Component {
                         <Breadcrumb style={{margin: '16px 0'}}>
                             <Breadcrumb.Item>个人信息</Breadcrumb.Item>
                         </Breadcrumb>
-                        <div className="site-layout-content"style={{textAlign: 'center',fontSize:'30px'}}>
+                        <div className="site-layout-content"style={{textAlign: 'center',fontSize:'30px', marginLeft: '-15px', minHeight: "550px"}}>
                             个人信息
                             <Form {...layout}
                                   name="basic"

@@ -103,12 +103,12 @@ export default class Modifypwd extends React.Component {
     render() {
         if (cookie.load("token")) {
             return (
-                <Layout className="layout" style={{backgroundColor:"#ffffff"}}>
+                <Layout className="layout">
                     <Content style={{padding: '0 50px'}}>
                         <Breadcrumb style={{margin: '16px 0'}}>
                             <Breadcrumb.Item>修改密码</Breadcrumb.Item>
                         </Breadcrumb>
-                        <div className="site-layout-content" style={{textAlign: 'center',fontSize:'30px', marginRight:'50px'}}>
+                        <div className="site-layout-content" style={{textAlign: 'center',fontSize:'30px',  marginLeft: '-15px', minHeight: "550px"}}>
                             修改密码
                             <Form {...layout}
                                 name="basic"
@@ -181,9 +181,8 @@ export default class Modifypwd extends React.Component {
                                         </Col>
                                     </Row>
                                 </Form.Item>
-
-                                <Form.Item style={{textAlign: 'center'}}>
-                                    <Button type="primary" htmlType="submit" className="headline">
+                                <Form.Item style={{textAlign: 'center', marginRight: '-50'}}>
+                                    <Button type="primary" htmlType="submit">
                                         提交
                                     </Button>
                                 </Form.Item>
